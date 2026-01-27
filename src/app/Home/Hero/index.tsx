@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HeroImg from "../../../assets/images/hero1.png";
 import { ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
 import FloatingCallButton from "@/components/common/FloatingCallButoon.tsx";
+import AppButton from "@/components/ui/AppButton";
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -99,16 +100,19 @@ export default function Hero() {
                 </p>
 
                 <div className="flex flex-wrap gap-6 pt-10 font-kirovi">
-                  <button className="group relative bg-green-primary text-white   px-10 py-5 rounded-2xl text-lg font-bold transition-all duration-300 hover:bg-white hover:text-green-primary">
+                  {/* <button className="group relative bg-green-primary text-white   px-10 py-5 rounded-2xl text-lg font-bold transition-all duration-300 hover:bg-white hover:text-green-primary">
                     <span className="relative z-10 flex items-center gap-2">
                       გაიგე მეტი{" "}
                       <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </button>
-
                   <button className="group flex items-center gap-4 text-white px-8 py-5 rounded-2xl text-lg font-bold border-2 border-white/70 hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
                     ვრცლად
-                  </button>
+                  </button> */}
+                  <AppButton variant="arrowButton" showArrow={true}>
+                    გაიგე მეტი
+                  </AppButton>
+                  <AppButton variant="outline">ვრცლად</AppButton>
                 </div>
               </motion.div>
             </AnimatePresence>

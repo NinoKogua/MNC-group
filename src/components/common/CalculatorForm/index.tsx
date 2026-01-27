@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Loader } from "lucide-react";
 import Dropdown from "../Dropdown";
+import AppButton from "@/components/ui/AppButton";
 
 const LOAN_OPTIONS = ["იპოთეკა", "საკრედიტო ხაზი", "სამომხმარებლო"] as const;
 const TERM_OPTIONS = [2, 12, 24, 36, 60] as const;
@@ -50,10 +51,7 @@ const CalculatorForm: React.FC = () => {
   const progressPercent = ((area - minArea) / (maxArea - minArea)) * 100;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="p-8 md:p-10 bg-white rounded-2xl shadow-sm border border-gray-100"
-    >
+    <form onSubmit={handleSubmit} className="p-8 md:p-10 bg-white shadow-sm">
       <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2 font-kirovi">
         ფართის კალკულატორი
       </h2>
@@ -123,12 +121,7 @@ const CalculatorForm: React.FC = () => {
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={isCalculating}
-        className="w-full bg-[#1A7550] hover:bg-[#145c3f] text-white text-lg font-bold py-3 rounded-xl transition-all 
-        disabled:bg-gray-300 flex justify-center items-center gap-3 shadow-lg shadow-green-900/10"
-      >
+      <AppButton type="submit" variant="primary">
         {isCalculating ? (
           <>
             <Loader size={22} className="animate-spin" /> მიმდინარეობს...
@@ -136,7 +129,7 @@ const CalculatorForm: React.FC = () => {
         ) : (
           "გამოთვლა"
         )}
-      </button>
+      </AppButton>
     </form>
   );
 };
