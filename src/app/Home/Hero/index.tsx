@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import HeroImg from "../../../assets/images/hero1.png";
 import { ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
+import FloatingCallButton from "@/components/common/FloatingCallButoon.tsx";
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -150,6 +151,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <FloatingCallButton />
     </section>
   );
 }
