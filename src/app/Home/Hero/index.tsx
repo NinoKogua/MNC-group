@@ -16,8 +16,8 @@ export default function Hero() {
       id: 0,
       image: HeroImg,
       subtitle: "ეკოლოგიური პროექტი",
-      title: "მანგლისი",
-      highlight: "პინის",
+      title: "ფიჭვები",
+      highlight: "მანგლისი",
       description:
         "ფიჭვების პროექტი მიზნად ისახავს მაღალმთიან და ეკოლოგიურად მეგობრული სივრცეების შექმნას.",
     },
