@@ -11,6 +11,14 @@ export default buildConfig({
   admin: {
     user: 'users',
   },
+  localization: {
+    locales: [
+      { label: 'English', code: 'en' },
+      { label: 'ქართული', code: 'ka' },
+    ],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   collections: [
     {
       slug: 'users',
@@ -22,25 +30,51 @@ export default buildConfig({
       admin: {
         useAsTitle: 'title',
       },
+      hooks: {
+        beforeValidate: [
+          ({ data }) => {
+            if (!data) return data
+
+            const enTitle = typeof data.title === 'object' ? data.title.en : data.title
+
+            if (enTitle) {
+              data.slug = enTitle
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+            }
+
+            return data
+          },
+        ],
+      },
       fields: [
         {
           name: 'title',
           type: 'text',
           required: true,
+          localized: true,
         },
         {
           name: 'slug',
           type: 'text',
-          required: true,
           unique: true,
+          admin: {
+            readOnly: true,
+            description: 'ავტომატურად გენერირდება ინგლისური სათაურიდან',
+          },
         },
         {
           name: 'excerpt',
           type: 'textarea',
+          localized: true,
         },
         {
           name: 'content',
           type: 'richText',
+          localized: true,
         },
         {
           name: 'coverImage',
@@ -66,6 +100,7 @@ export default buildConfig({
         {
           name: 'alt',
           type: 'text',
+          localized: true,
         },
       ],
     },

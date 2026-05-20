@@ -1,50 +1,49 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import HeroImg from "../../../assets/images/hero1.png";
-import { ChevronRight, ChevronLeft } from "lucide-react";
-import FloatingCallButton from "@/app/(frontend)/components/common/FloatingCallButoon.tsx";
-import AppButton from "@/app/(frontend)/components/ui/AppButton";
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
+import HeroImg from '../../../../assets/images/hero1.png'
+import { ChevronRight, ChevronLeft } from 'lucide-react'
+import FloatingCallButton from '../../../components/common/FloatingCallButoon.tsx'
+import AppButton from '../../../components/ui/AppButton'
 
 export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   const slides = [
     {
       id: 0,
       image: HeroImg,
-      subtitle: "ეკოლოგიური პროექტი",
-      title: "ფიჭვები",
-      highlight: "მანგლისი",
+      subtitle: 'ეკოლოგიური პროექტი',
+      title: 'ფიჭვები',
+      highlight: 'მანგლისი',
       description:
-        "ფიჭვების პროექტი მიზნად ისახავს მაღალმთიან და ეკოლოგიურად მეგობრული სივრცეების შექმნას.",
+        'ფიჭვების პროექტი მიზნად ისახავს მაღალმთიან და ეკოლოგიურად მეგობრული სივრცეების შექმნას.',
     },
     {
       id: 1,
       image:
-        "https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000&auto=format&fit=crop",
-      subtitle: "ინოვაციური მშენებლობა",
-      title: "ბუნებასთან",
-      highlight: "ერთად",
+        'https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000&auto=format&fit=crop',
+      subtitle: 'ინოვაციური მშენებლობა',
+      title: 'ბუნებასთან',
+      highlight: 'ერთად',
       description:
-        "აღმოაჩინეთ თანამედროვე არქიტექტურა, რომელიც იდეალურად ერწყმის მანგლისის უნიკალურ ბუნებას.",
+        'აღმოაჩინეთ თანამედროვე არქიტექტურა, რომელიც იდეალურად ერწყმის მანგლისის უნიკალურ ბუნებას.',
     },
-  ];
+  ]
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () =>
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
 
   // Automatic Slide Logic
   useEffect(() => {
     const timer = setInterval(() => {
-      nextSlide();
-    }, 6000);
+      nextSlide()
+    }, 6000)
 
-    return () => clearInterval(timer);
-  }, [currentSlide]);
+    return () => clearInterval(timer)
+  }, [currentSlide])
 
   return (
     <section className="relative w-full h-[90vh] overflow-hidden bg-[#161616]">
@@ -54,7 +53,7 @@ export default function Hero() {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.5 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
           className="absolute inset-0 z-0"
         >
           <Image
@@ -135,27 +134,23 @@ export default function Hero() {
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-white font-bold text-lg">
-                0{currentSlide + 1}
-              </span>
+              <span className="text-white font-bold text-lg">0{currentSlide + 1}</span>
               <div className="w-32 h-[2px] bg-white/20 relative">
                 <motion.div
                   className="absolute top-0 left-0 h-full bg-green-primary"
-                  initial={{ width: "0%" }}
+                  initial={{ width: '0%' }}
                   animate={{
                     width: `${((currentSlide + 1) / slides.length) * 100}%`,
                   }}
                   transition={{ duration: 0.5 }}
                 />
               </div>
-              <span className="text-white/40 font-bold text-lg">
-                0{slides.length}
-              </span>
+              <span className="text-white/40 font-bold text-lg">0{slides.length}</span>
             </div>
           </div>
         </div>
       </div>
       <FloatingCallButton />
     </section>
-  );
+  )
 }

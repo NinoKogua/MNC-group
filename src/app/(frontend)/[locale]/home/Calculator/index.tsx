@@ -1,6 +1,6 @@
-import React from "react";
-import CalculatorForm from "@/app/(frontend)/components/common/CalculatorForm";
-import InfoCardsGrid from "@/app/(frontend)/components/common/InfoCardsGrid";
+import React from 'react'
+import CalculatorForm from '../../../components/common/CalculatorForm'
+import InfoCardsGrid from '../../../components/common/InfoCardsGrid'
 
 export default function CalculatorSection() {
   return (
@@ -10,5 +10,5 @@ export default function CalculatorSection() {
         <InfoCardsGrid />
       </div>
     </section>
-  );
+  )
 }

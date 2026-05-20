@@ -1,28 +1,33 @@
-import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import Link from 'next/link'
+import Image from 'next/image'
 
-export default async function BlogPage() {
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function BlogPage({ params }: Props) {
+  const { locale } = await params
+
   const payload = await getPayload({ config })
 
   const { docs: posts } = await payload.find({
     collection: 'posts',
+    locale: locale as 'en' | 'ka',
     where: {
-      status: {
-        equals: 'published',
-      },
+      status: { equals: 'published' },
     },
     sort: '-publishedAt',
   })
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold mb-12">ბლოგი</h1>
+    <main className="max-w-6xl mx-auto px-4 py-16 min-h-screen">
+      <h1 className="text-4xl font-bold mb-12">{locale === 'ka' ? 'ბლოგი' : 'Blog'}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map((post) => (
-          <Link href={`/blog/${post.slug}`} key={post.id}>
+          <Link href={`/${locale}/blog/${post.slug}`} key={post.id}>
             <div className="group rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
               {post.coverImage && typeof post.coverImage === 'object' && (
                 <div className="relative w-full h-48">
@@ -35,7 +40,7 @@ export default async function BlogPage() {
                 </div>
               )}
               <div className="p-6">
-                <h2 className="text-xl font-semibold mb-2 group-hover:text-green-600 transition-colors">
+                <h2 className="text-xl font-semibold mb-2 group-hover:text-green-primary transition-colors">
                   {post.title}
                 </h2>
                 {post.excerpt && (
@@ -43,7 +48,9 @@ export default async function BlogPage() {
                 )}
                 {post.publishedAt && (
                   <p className="text-xs text-gray-400 mt-4">
-                    {new Date(post.publishedAt).toLocaleDateString('ka-GE')}
+                    {new Date(post.publishedAt).toLocaleDateString(
+                      locale === 'ka' ? 'ka-GE' : 'en-US',
+                    )}
                   </p>
                 )}
               </div>
@@ -52,7 +59,11 @@ export default async function BlogPage() {
         ))}
       </div>
 
-      {posts.length === 0 && <p className="text-gray-400 text-center mt-20">პოსტები არ მოიძებნა</p>}
+      {posts.length === 0 && (
+        <p className="text-gray-400 text-center mt-20">
+          {locale === 'ka' ? 'პოსტები არ მოიძებნა' : 'No posts found'}
+        </p>
+      )}
     </main>
   )
 }

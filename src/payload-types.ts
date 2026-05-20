@@ -88,10 +88,10 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ka') | ('en' | 'ka')[];
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'en' | 'ka';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -151,7 +151,10 @@ export interface User {
 export interface Post {
   id: number;
   title: string;
-  slug: string;
+  /**
+   * ავტომატურად გენერირდება ინგლისური სათაურიდან
+   */
+  slug?: string | null;
   excerpt?: string | null;
   content?: {
     root: {
