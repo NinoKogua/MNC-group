@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     posts: Post;
     media: Media;
+    'contact-info': ContactInfo;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -198,6 +200,34 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-info".
+ */
+export interface ContactInfo {
+  id: number;
+  /**
+   * მხოლოდ ადმინისთვის (მაგ: "მთავარი საკონტაქტო")
+   */
+  label?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  /**
+   * Google Maps embed URL
+   */
+  mapEmbed?: string | null;
+  /**
+   * მაგ: "არ დაელოდო დაგვიკავშირდი დღესვე"
+   */
+  tagline?: string | null;
+  /**
+   * მაგ: "საკონტაქტო ინფორმაცია"
+   */
+  title?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -231,6 +261,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'contact-info';
+        value: number | ContactInfo;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -328,6 +362,21 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-info_select".
+ */
+export interface ContactInfoSelect<T extends boolean = true> {
+  label?: T;
+  phone?: T;
+  email?: T;
+  address?: T;
+  mapEmbed?: T;
+  tagline?: T;
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

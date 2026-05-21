@@ -1,11 +1,21 @@
-import ContactHero from "./ContactHero";
-import ContactSection from "./ContactPageContainer";
+import ContactHero from './ContactHero'
+import ContactSection from './ContactPageContainer'
 
-export default function ContactPage() {
-    return (
-        <main className="w-full bg-[#F8F6F1] min-h-screen">
-            <ContactHero />
-            <ContactSection />
-        </main>
-    );
+type Locale = 'en' | 'ka'
+
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function ContactPage({ params }: Props) {
+  const { locale } = await params
+
+  const currentLocale: Locale = locale === 'ka' ? 'ka' : 'en'
+
+  return (
+    <main className="w-full bg-[#F8F6F1] min-h-screen">
+      <ContactHero />
+      <ContactSection locale={currentLocale} />
+    </main>
+  )
 }

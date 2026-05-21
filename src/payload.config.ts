@@ -11,6 +11,7 @@ export default buildConfig({
   admin: {
     user: 'users',
   },
+
   localization: {
     locales: [
       { label: 'English', code: 'en' },
@@ -19,12 +20,14 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
+
   collections: [
     {
       slug: 'users',
       auth: true,
       fields: [],
     },
+
     {
       slug: 'posts',
       admin: {
@@ -93,6 +96,7 @@ export default buildConfig({
         },
       ],
     },
+
     {
       slug: 'media',
       upload: true,
@@ -104,14 +108,70 @@ export default buildConfig({
         },
       ],
     },
+
+    {
+      slug: 'contact-info',
+      admin: {
+        useAsTitle: 'label',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          admin: {
+            description: 'მხოლოდ ადმინისთვის (მაგ: "მთავარი საკონტაქტო")',
+          },
+        },
+        {
+          name: 'phone',
+          type: 'text',
+        },
+        {
+          name: 'email',
+          type: 'text',
+        },
+        {
+          name: 'address',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'mapEmbed',
+          type: 'textarea',
+          admin: {
+            description: 'Google Maps embed URL',
+          },
+        },
+        {
+          name: 'tagline',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'მაგ: "არ დაელოდო დაგვიკავშირდი დღესვე"',
+          },
+        },
+        {
+          name: 'title',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'მაგ: "საკონტაქტო ინფორმაცია"',
+          },
+        },
+      ],
+    },
   ],
+
   editor: lexicalEditor({}),
+
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI,
     },
   }),
+
   secret: process.env.PAYLOAD_SECRET || '',
+
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

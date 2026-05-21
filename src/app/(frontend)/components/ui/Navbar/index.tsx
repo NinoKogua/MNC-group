@@ -100,13 +100,28 @@ export default function Navbar() {
             : 'The future of construction, worldwide'}
         </span>
         <div className="flex items-center gap-4">
-          <Link href="#" className="hover:opacity-80">
+          <Link
+            href="https://www.facebook.com/profile.php?id=61580922035190"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80"
+          >
             <Facebook />
           </Link>
-          <Link href="#" className="hover:opacity-80">
+          <Link
+            href="https://www.instagram.com/pinesmanglisi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80"
+          >
             <Instagram />
           </Link>
-          <Link href="#" className="hover:opacity-80">
+          <Link
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80"
+          >
             <Twitter />
           </Link>
         </div>

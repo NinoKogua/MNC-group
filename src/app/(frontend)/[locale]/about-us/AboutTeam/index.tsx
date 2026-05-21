@@ -44,25 +44,25 @@ const TeamMember = ({ name, role, image }: MemberProps) => (
 export default function AboutTeam() {
   const members = [
     {
-      name: 'მარიამ ბაგრატიონი',
-      role: 'Project Manager',
+      name: 'ნინო კოღუა',
+      role: 'მარკეტინგის დირექტორი',
       image:
         'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80',
     },
     {
-      name: 'გიორგი მებურიშვილი',
-      role: 'Architect',
+      name: 'ოთარ წიბილაშვილი',
+      role: 'გენერალური დირექტორი',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80',
     },
     {
-      name: 'ნინო აბაშიძე',
-      role: 'Interior Designer',
+      name: 'ნინო არზიანი',
+      role: 'ინტერიერის დიზაინერი',
       image:
         'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80',
     },
     {
-      name: 'დავით ბერიძე',
-      role: 'Structural Engineer',
+      name: 'გიორგი ქურციკიძე',
+      role: 'არქიტექტორი',
       image:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80',
     },

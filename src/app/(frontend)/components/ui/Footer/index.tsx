@@ -1,56 +1,56 @@
-"use client";
+'use client'
 
-import React from "react";
-import Link from "next/link"; // შემოვიტანეთ Link
-import Instagram from "@/app/assets/icons/Instagram";
-import Facebook from "@/app/assets/icons/Facebook";
-import Twitter from "@/app/assets/icons/Twitter";
-import Logo from "@/app/assets/icons/Logo";
+import React from 'react'
+import Link from 'next/link' // შემოვიტანეთ Link
+import Instagram from '@/app/assets/icons/Instagram'
+import Facebook from '@/app/assets/icons/Facebook'
+import Twitter from '@/app/assets/icons/Twitter'
+import Logo from '@/app/assets/icons/Logo'
 
 interface FooterLink {
-  label: string;
-  href: string;
+  label: string
+  href: string
 }
 
 interface FooterSection {
-  title: string;
-  links: FooterLink[];
+  title: string
+  links: FooterLink[]
 }
 
 const FOOTER_LINKS: FooterSection[] = [
   {
-    title: "ჩვენ შესახებ",
+    title: 'ჩვენ შესახებ',
     links: [
-      { label: "ისტორია", href: "/About/#history" },
-      { label: "მისია და ხედვა", href: "/About/#mission" },
-      { label: "გუნდი", href: "/About/#our-team" },
+      { label: 'ისტორია', href: '/About/#history' },
+      { label: 'მისია და ხედვა', href: '/About/#mission' },
+      { label: 'გუნდი', href: '/About/#our-team' },
     ],
   },
   {
-    title: "პროექტები",
+    title: 'პროექტები',
     links: [
-      { label: "მიმდინარე პროექტები", href: "#" },
-      { label: "დასრულებული პროექტები", href: "#" },
-      { label: "გალერეა", href: "#" },
+      { label: 'მიმდინარე პროექტები', href: '#' },
+      { label: 'დასრულებული პროექტები', href: '#' },
+      { label: 'გალერეა', href: '#' },
     ],
   },
   {
-    title: "მომსახურება",
+    title: 'მომსახურება',
     links: [
-      { label: "კონსულტაცია", href: "#" },
-      { label: "კალკულატორი", href: "#" },
-      { label: "იპოთეკა", href: "#" },
+      { label: 'კონსულტაცია', href: '#' },
+      { label: 'კალკულატორი', href: '#' },
+      { label: 'იპოთეკა', href: '#' },
     ],
   },
   {
-    title: "კონტაქტი",
+    title: 'კონტაქტი',
     links: [
-      { label: "მისამართი", href: "/Contact" },
-      { label: "დაგვიკავშირდით", href: "/Contact" },
-      { label: "ლოკაცია", href: "/Contact" },
+      { label: 'მისამართი', href: '/Contact' },
+      { label: 'დაგვიკავშირდით', href: '/Contact' },
+      { label: 'ლოკაცია', href: '/Contact' },
     ],
   },
-];
+]
 
 export default function Footer() {
   return (
@@ -64,9 +64,7 @@ export default function Footer() {
 
           {FOOTER_LINKS.map((section, index) => (
             <div key={index} className="lg:col-span-1 flex flex-col gap-4">
-              <h3 className="text-lg font-bold uppercase mb-2 font-kirovi">
-                {section.title}
-              </h3>
+              <h3 className="text-lg font-bold uppercase mb-2 font-kirovi">{section.title}</h3>
               <ul className="space-y-2">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
@@ -86,15 +84,34 @@ export default function Footer() {
 
         <div className="pt-6 border-t border-white/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex gap-4 order-2 md:order-1">
-            <Instagram href="#" />
-            <Facebook href="#" />
-            <Twitter href="#" />
+            <a
+              href="https://www.instagram.com/pinesmanglisi"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <Instagram />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61580922035190"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <Facebook />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+            >
+              <Twitter />
+            </a>
           </div>
 
           <div className="text-center md:text-left text-sm text-beige-primary order-1 md:order-2">
-            <p className="font-mtavruli">
-              საავტორო უფლებები 2024. ყველა უფლება დაცულია.
-            </p>
+            <p className="font-mtavruli">საავტორო უფლებები 2024. ყველა უფლება დაცულია.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 text-sm text-beige-primary order-3">
@@ -105,5 +122,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }

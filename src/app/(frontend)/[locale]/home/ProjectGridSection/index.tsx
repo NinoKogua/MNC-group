@@ -42,7 +42,7 @@ export default function ProjectsGridSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-kirovi text-gray-800 mb-4">
-            დასრულებული პროექტები
+            მიმდინარე პროექტები
           </h2>
           <p className="text-lg text-gray-600 font-medium max-w-3xl mx-auto">
             მაღალხარისხიანი დიზაინი, მზად თქვენი განვითარებისთვის
