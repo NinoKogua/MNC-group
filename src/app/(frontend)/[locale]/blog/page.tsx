@@ -10,11 +10,9 @@ type Props = {
 }
 
 export default async function BlogPage({ params, searchParams }: Props) {
-  // Next.js 15-ის სტანდარტით params და searchParams არის Promises
   const { locale } = await params
   const resolvedSearchParams = await searchParams
 
-  // ვიღებთ სორტირების პარამეტრს URL-დან. თუ არ არის, default-ად იქნება '-publishedAt' (უახლესი)
   const isAscending = resolvedSearchParams?.sort === 'asc'
   const sortQuery = isAscending ? 'publishedAt' : '-publishedAt'
 
@@ -26,16 +24,14 @@ export default async function BlogPage({ params, searchParams }: Props) {
     where: {
       status: { equals: 'published' },
     },
-    sort: sortQuery, // ვაწვდით დინამიურ სორტირებას
+    sort: sortQuery,
   })
 
   return (
     <main className="w-full min-h-screen bg-[#FFFFFF]">
       
-      {/* Hero სექცია თანამედროვე არქიტექტურული ხაზებით - შემცირებული სიმაღლით */}
       <section className="relative w-full h-[40vh] min-h-[350px] max-h-[500px] flex flex-col justify-end overflow-hidden mb-16">
         
-        {/* ფონის სურათი */}
         <Image
           src={cover}
           alt="Construction News Header"
@@ -44,23 +40,19 @@ export default async function BlogPage({ params, searchParams }: Props) {
           className="object-cover"
         />
         
-        {/* გრადიენტული ფილტრი - ოდნავ უფრო გამუქებული მთლიანად */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/90 via-[#000000]/50 to-[#000000]/30"></div>
 
         {/* არქიტექტურული ბადე (თხელი თეთრი/ღია ხაზები) */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="max-w-[1408px] mx-auto h-full px-4 sm:px-6 lg:px-8">
             <div className="w-full h-full border-x border-[#FFFFFF]/15 flex">
-              {/* შიდა დამხმარე ვერტიკალური ხაზები */}
               <div className="w-1/3 h-full border-r border-[#FFFFFF]/10 hidden md:block"></div>
               <div className="w-1/3 h-full border-r border-[#FFFFFF]/10 hidden md:block"></div>
             </div>
           </div>
-          {/* ჰორიზონტალური დამხმარე ხაზი ტექსტის თავზე */}
           <div className="absolute bottom-[35%] w-full border-b border-[#FFFFFF]/15"></div>
         </div>
 
-        {/* კონტენტი - მარცხნივ გასწორებული */}
         <div className="relative z-10 w-full max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-4 mb-4">
