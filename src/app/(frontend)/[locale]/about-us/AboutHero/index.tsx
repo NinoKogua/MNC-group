@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from 'react'
 import { ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { motion, Variants, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
+import restaurantImg from '@/app/assets/images/restaurant.png'
+import entrance from '@/app/assets/images/entrance.png'
 
 function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const [displayValue, setDisplayValue] = React.useState(0)
@@ -128,24 +130,14 @@ export default function AboutHero() {
               variants={cardVariants}
               className="relative rounded-[32px] overflow-hidden min-h-[180px] shadow-lg"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&q=80"
-                alt="Pool"
-                fill
-                className="object-cover"
-              />
+              <Image src={entrance} alt="Pool" fill className="object-cover" />
             </motion.div>
 
             <motion.div
               variants={cardVariants}
               className="relative rounded-[32px] overflow-hidden min-h-[180px] shadow-lg"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80"
-                alt="Architecture"
-                fill
-                className="object-cover"
-              />
+              <Image src={restaurantImg} alt="Architecture" fill className="object-cover" />
             </motion.div>
 
             {/* მაცხოვრებელი */}

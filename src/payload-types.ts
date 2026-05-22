@@ -208,6 +208,28 @@ export interface ContactInfo {
    * მხოლოდ ადმინისთვის (მაგ: "მთავარი საკონტაქტო")
    */
   label?: string | null;
+  /**
+   * მაგ: "ნებისმიერ დროს"
+   */
+  heroBadge?: string | null;
+  /**
+   * მაგ: "დაგვიკავშირდით"
+   */
+  heroTitle?: string | null;
+  /**
+   * მაგ: "ჩვენი გუნდი მზად არის დაგეხმაროთ ნებისმიერ საკითხში"
+   */
+  heroDescription?: string | null;
+  formBadge?: string | null;
+  formTitle?: string | null;
+  formDescription?: string | null;
+  namePlaceholder?: string | null;
+  emailPlaceholder?: string | null;
+  phonePlaceholder?: string | null;
+  messagePlaceholder?: string | null;
+  submitButtonText?: string | null;
+  loadingButtonText?: string | null;
+  successMessage?: string | null;
   phone?: string | null;
   email?: string | null;
   address?: string | null;
@@ -369,6 +391,19 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface ContactInfoSelect<T extends boolean = true> {
   label?: T;
+  heroBadge?: T;
+  heroTitle?: T;
+  heroDescription?: T;
+  formBadge?: T;
+  formTitle?: T;
+  formDescription?: T;
+  namePlaceholder?: T;
+  emailPlaceholder?: T;
+  phonePlaceholder?: T;
+  messagePlaceholder?: T;
+  submitButtonText?: T;
+  loadingButtonText?: T;
+  successMessage?: T;
   phone?: T;
   email?: T;
   address?: T;

@@ -46,7 +46,7 @@ export default async function ContactSection({ locale }: Props) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          <ContactForm />
+          <ContactForm info={info} />
 
           <div className="flex flex-col gap-6">
             <div className="bg-white rounded-[32px] overflow-hidden shadow-xl flex-grow border border-gray-50">
@@ -64,7 +64,7 @@ export default async function ContactSection({ locale }: Props) {
               </div>
 
               {info.mapEmbed && (
-                <div className="h-[500px] w-full">
+                <div className="h-[590px] w-full">
                   <iframe
                     src={info.mapEmbed}
                     width="100%"

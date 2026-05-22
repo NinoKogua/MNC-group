@@ -7,7 +7,6 @@ import { Phone } from 'lucide-react'
 import Logo from '@/app/assets/icons/Logo'
 import Facebook from '@/app/assets/icons/Facebook'
 import Instagram from '@/app/assets/icons/Instagram'
-import Twitter from '@/app/assets/icons/Twitter'
 import CallModal from '@/app/(frontend)/components/Modals'
 
 interface BurgerProps {
@@ -114,14 +113,6 @@ export default function Navbar() {
             className="hover:opacity-80"
           >
             <Instagram />
-          </Link>
-          <Link
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80"
-          >
-            <Twitter />
           </Link>
         </div>
       </div>

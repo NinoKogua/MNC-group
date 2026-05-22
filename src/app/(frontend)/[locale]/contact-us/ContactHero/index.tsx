@@ -1,6 +1,23 @@
-import React from "react";
+import React from 'react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-const ContactHero = () => {
+type Props = {
+  locale: 'en' | 'ka'
+}
+
+const ContactHero = async ({ locale }: Props) => {
+  const payload = await getPayload({ config })
+
+  const { docs } = await payload.find({
+    collection: 'contact-info',
+    locale,
+    fallbackLocale: false,
+    limit: 1,
+  })
+
+  const info = docs[0]
+
   return (
     <div className="flex justify-center bg-[#F8F6F1]">
       <section className="relative bg-[#135544] pt-20 pb-32 overflow-hidden w-full max-w-[1440px]">
@@ -109,10 +126,7 @@ const ContactHero = () => {
                 <feOffset dy="4" />
                 <feGaussianBlur stdDeviation="2" />
                 <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                />
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
@@ -128,17 +142,25 @@ const ContactHero = () => {
             </defs>
           </svg>
         </div>
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 mb-6">
-            <span className="text-white text-sm font-bold">ნებისმიერ დროს</span>
-          </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold text-beige-primary tracking-wider mb-6 font-kirovi">
-            დაგვიკავშირდით
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 font-medium max-w-2xl mx-auto">
-            ჩვენი გუნდი მზად არის დაგეხმაროთ ნებისმიერ საკითხში
-          </p>
+        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          {info?.heroBadge && (
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 mb-6">
+              <span className="text-white text-sm font-bold">{info.heroBadge}</span>
+            </div>
+          )}
+
+          {info?.heroTitle && (
+            <h1 className="text-4xl md:text-6xl font-extrabold text-beige-primary tracking-wider mb-6 font-kirovi">
+              {info.heroTitle}
+            </h1>
+          )}
+
+          {info?.heroDescription && (
+            <p className="text-lg md:text-xl text-white/80 font-medium max-w-2xl mx-auto">
+              {info.heroDescription}
+            </p>
+          )}
         </div>
 
         <div className="absolute left-1/2 -translate-x-1/2 mx-auto w-full leading-[0] flex justify-center">
@@ -157,7 +179,7 @@ const ContactHero = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default ContactHero;
+export default ContactHero

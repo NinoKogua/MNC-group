@@ -1,6 +1,8 @@
 import React from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
+import toiletImg from '@/app/assets/images/hall.png'
+import tablesImg from '@/app/assets/images/tables.png'
 
 export default function AboutMission() {
   return (
@@ -36,23 +38,13 @@ export default function AboutMission() {
         </div>
 
         <div className="relative rounded-[16px] overflow-hidden h-[400px]">
-          <Image
-            src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
-            alt="office"
-            fill
-            className="object-cover"
-          />
+          <Image src={toiletImg} alt="office" fill className="object-cover" />
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-green-primary overflow-hidden p-4 md:p-12 text-white">
         <div className="relative rounded-[16px] overflow-hidden h-[400px] order-2 md:order-1">
-          <Image
-            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80"
-            alt="vision"
-            fill
-            className="object-cover"
-          />
+          <Image src={tablesImg} alt="vision" fill className="object-cover" />
         </div>
 
         <div className="space-y-6 p-6 order-1 md:order-2">

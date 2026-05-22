@@ -123,6 +123,89 @@ export default buildConfig({
           },
         },
         {
+          name: 'heroBadge',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'მაგ: "ნებისმიერ დროს"',
+          },
+        },
+        {
+          name: 'heroTitle',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'მაგ: "დაგვიკავშირდით"',
+          },
+        },
+        {
+          name: 'heroDescription',
+          type: 'textarea',
+          localized: true,
+          admin: {
+            description: 'მაგ: "ჩვენი გუნდი მზად არის დაგეხმაროთ ნებისმიერ საკითხში"',
+          },
+        },
+        {
+          name: 'formBadge',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'formTitle',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'formDescription',
+          type: 'textarea',
+          localized: true,
+        },
+
+        {
+          name: 'namePlaceholder',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'emailPlaceholder',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'phonePlaceholder',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'messagePlaceholder',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'submitButtonText',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'loadingButtonText',
+          type: 'text',
+          localized: true,
+        },
+
+        {
+          name: 'successMessage',
+          type: 'text',
+          localized: true,
+        },
+        {
           name: 'phone',
           type: 'text',
         },

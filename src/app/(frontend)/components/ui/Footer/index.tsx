@@ -4,7 +4,6 @@ import React from 'react'
 import Link from 'next/link' // შემოვიტანეთ Link
 import Instagram from '@/app/assets/icons/Instagram'
 import Facebook from '@/app/assets/icons/Facebook'
-import Twitter from '@/app/assets/icons/Twitter'
 import Logo from '@/app/assets/icons/Logo'
 
 interface FooterLink {
@@ -100,14 +99,6 @@ export default function Footer() {
             >
               <Facebook />
             </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-            >
-              <Twitter />
-            </a>
           </div>
 
           <div className="text-center md:text-left text-sm text-beige-primary order-1 md:order-2">
@@ -115,7 +106,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 text-sm text-beige-primary order-3">
-            <span className="font-semibold">570 200 800</span>
+            <span className="font-semibold">551 55 55 99</span>
             <span className="hidden sm:inline">|</span>
             <span>თბილისი, საქართველო</span>
           </div>
