@@ -60,6 +60,12 @@ const nextConfig: NextConfig = {
         hostname: 'image.architonic.com',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/api/media/**',
+      },
     ],
   },
   webpack: (webpackConfig) => {

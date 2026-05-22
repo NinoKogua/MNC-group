@@ -151,7 +151,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={openModal}
-              className="bg-green-primary hidden md:flex text-beige-primary px-4 py-2 rounded-xl items-center gap-2 font-kirovi lg:px-2 transition-all hover:opacity-90"
+              className="bg-green-primary hidden md:flex text-beige-primary px-4 py-2 rounded-xl items-center gap-2 font-kirovi lg:px-3 transition-all hover:opacity-90"
             >
               <Phone size={18} />
               <span className="hidden lg:inline">

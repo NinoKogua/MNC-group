@@ -15,7 +15,6 @@ export default function Hero() {
     {
       id: 0,
       image: HeroImg,
-      subtitle: 'ეკოლოგიური პროექტი',
       title: 'ფიჭვები',
       highlight: 'მანგლისი',
       description:
@@ -25,7 +24,6 @@ export default function Hero() {
       id: 1,
       image:
         'https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000&auto=format&fit=crop',
-      subtitle: 'ინოვაციური მშენებლობა',
       title: 'ბუნებასთან',
       highlight: 'ერთად',
       description:
@@ -80,13 +78,6 @@ export default function Hero() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="w-12 h-[2px] bg-white" />
-                  <span className="text-white font-bold uppercase -beige-primary tracking-[0.3em] text-sm">
-                    {slides[currentSlide].subtitle}
-                  </span>
-                </div>
-
                 <h1 className="text-white text-6xl md:text-8xl font-black leading-tight font-kirovi mb-8">
                   {slides[currentSlide].title} <br />
                   <span className="text-white italic font-light">
