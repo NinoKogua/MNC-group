@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import HeroImg from '../../../../assets/images/hero1.png'
+import HeroImg from '../../../../assets/images/hero1.jpg'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import FloatingCallButton from '../../../components/common/FloatingCallButoon.tsx'
 import AppButton from '../../../components/ui/AppButton'

@@ -27,7 +27,7 @@ export default function AppButton({
 
   const variants = {
     arrowButton:
-      "bg-green-primary text-white px-10 py-5 hover:bg-white hover:text-green-primary",
+      "bg-green-primary text-white px-9 py-3 hover:bg-white hover:text-green-primary",
     primary:
       "w-full bg-green-primary hover:bg-green-primary/80 text-white text-lg font-bold py-3 rounded-xl transition-all disabled:bg-gray-300 flex justify-center items-center gap-3 shadow-lg shadow-green-900/10",
     outline: `text-base text-white font-bold py-3 border-2 border-white/70 backdrop-blur-sm hover:bg-white hover:text-green-primary font-kirovi ${

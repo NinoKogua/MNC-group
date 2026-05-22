@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { Globe, Phone } from 'lucide-react'
+import { Phone } from 'lucide-react'
 import Logo from '@/app/assets/icons/Logo'
 import Facebook from '@/app/assets/icons/Facebook'
 import Instagram from '@/app/assets/icons/Instagram'
@@ -46,13 +46,12 @@ function LocaleSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-1 font-medium">
-      <Globe size={18} />
+    <div className="flex px-1 items-center gap-1 font-medium">
       <button
         onClick={() => switchLocale('ka')}
         className={`text-sm px-1 transition-colors ${currentLocale === 'ka' ? 'text-green-primary font-bold' : 'text-gray-500 hover:text-green-primary'}`}
       >
-        ქა
+        KA
       </button>
       <span className="text-gray-300">|</span>
       <button
