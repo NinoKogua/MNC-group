@@ -69,6 +69,14 @@ export default async function BlogPage({ params, searchParams }: Props) {
     sort: sortQuery,
   })
 
+  const { docs: blogPageDocs } = await payload.find({
+    collection: 'blog-page',
+    locale: locale as 'en' | 'ka',
+    fallbackLocale: false,
+    limit: 1,
+  })
+
+  const blogPage = blogPageDocs[0]
   // დამხმარე ფუნქცია, რომელიც ინარჩუნებს სხვა პარამეტრებს URL-ში
   const createQueryString = (name: string, value: string) => {
     const params = new URLSearchParams()
@@ -96,18 +104,13 @@ export default async function BlogPage({ params, searchParams }: Props) {
           <div className="absolute bottom-[35%] w-full border-b border-[#FFFFFF]/15"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-16">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-4 mb-4">
-              <span className="text-[#D1C09B] text-sm md:text-base font-semibold tracking-widest uppercase block">
-                {locale === 'ka' ? 'აღმოაჩინე სიახლეები' : 'Discover the latest'}
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-[#FFFFFF] tracking-tight">
-              {locale === 'ka' ? 'სიახლეები & ბლოგი' : 'News & Blog'}
-            </h1>
-          </div>
-        </div>
+        <span className="text-[#D1C09B] text-sm md:text-base font-semibold tracking-widest uppercase block">
+          {blogPage?.heroBadge}
+        </span>
+
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-[#FFFFFF] tracking-tight">
+          {blogPage?.heroTitle}
+        </h1>
       </section>
 
       <section className="max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">

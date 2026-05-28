@@ -29,6 +29,25 @@ export default buildConfig({
     },
 
     {
+      slug: 'blog-page',
+      admin: {
+        useAsTitle: 'heroTitle',
+      },
+      fields: [
+        {
+          name: 'heroBadge',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'heroTitle',
+          type: 'text',
+          localized: true,
+        },
+      ],
+    },
+
+    {
       slug: 'posts',
       admin: {
         useAsTitle: 'title',
@@ -95,6 +114,89 @@ export default buildConfig({
           defaultValue: 'draft',
         },
       ],
+    },
+
+    {
+      slug: 'projects',
+      admin: {
+        useAsTitle: 'title',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'slug',
+          type: 'text',
+          unique: true,
+          admin: {
+            readOnly: true,
+            description: 'ავტომატურად გენერირდება ინგლისური სათაურიდან',
+          },
+        },
+        {
+          name: 'description',
+          type: 'richText',
+          localized: true,
+        },
+        {
+          name: 'status',
+          type: 'select',
+          localized: true,
+          options: [
+            { label: 'მიმდინარე / Ongoing', value: 'ongoing' },
+            { label: 'დასრულებული / Completed', value: 'completed' },
+          ],
+          defaultValue: 'ongoing',
+        },
+        {
+          name: 'location',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'category',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'coverImage',
+          type: 'upload',
+          relationTo: 'media',
+        },
+        {
+          name: 'gallery',
+          type: 'array',
+          fields: [
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+            },
+          ],
+        },
+      ],
+      hooks: {
+        beforeValidate: [
+          ({ data }) => {
+            if (!data) return data
+            const enTitle = typeof data.title === 'object' ? data.title.en : data.title
+            if (enTitle) {
+              data.slug = enTitle
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+            }
+            return data
+          },
+        ],
+      },
     },
 
     {

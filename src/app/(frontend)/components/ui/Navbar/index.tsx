@@ -83,8 +83,8 @@ export default function Navbar() {
       to: `/${currentLocale}/about-us`,
       label: currentLocale === 'ka' ? 'ჩვენ შესახებ' : 'About Us',
     },
-    { to: `/${currentLocale}`, label: currentLocale === 'ka' ? 'პროექტები' : 'Projects' },
-    { to: `/${currentLocale}`, label: currentLocale === 'ka' ? 'რეზიდენციები' : 'Residences' },
+    { to: `/${currentLocale}/projects`, label: currentLocale === 'ka' ? 'პროექტები' : 'Projects' },
+    { to: `/${currentLocale}`, label: currentLocale === 'ka' ? 'რესტორანი' : 'Restaurant' },
     { to: `/${currentLocale}/blog`, label: currentLocale === 'ka' ? 'ახალი ამბები' : 'News' },
     { to: `/${currentLocale}/contact-us`, label: currentLocale === 'ka' ? 'კონტაქტი' : 'Contact' },
   ]
