@@ -71,6 +71,7 @@ export interface Config {
     'blog-page': BlogPage;
     posts: Post;
     projects: Project;
+    'restaurant-page': RestaurantPage;
     media: Media;
     'contact-info': ContactInfo;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     'blog-page': BlogPageSelect<false> | BlogPageSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'restaurant-page': RestaurantPageSelect<false> | RestaurantPageSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -254,6 +256,20 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "restaurant-page".
+ */
+export interface RestaurantPage {
+  id: number;
+  heroTitle?: string | null;
+  heroDescription?: string | null;
+  menuTitle?: string | null;
+  reservationTitle?: string | null;
+  reservationDescription?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-info".
  */
 export interface ContactInfo {
@@ -341,6 +357,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'restaurant-page';
+        value: number | RestaurantPage;
       } | null)
     | ({
         relationTo: 'media';
@@ -457,6 +477,19 @@ export interface ProjectsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "restaurant-page_select".
+ */
+export interface RestaurantPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroDescription?: T;
+  menuTitle?: T;
+  reservationTitle?: T;
+  reservationDescription?: T;
   updatedAt?: T;
   createdAt?: T;
 }

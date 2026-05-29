@@ -200,6 +200,40 @@ export default buildConfig({
     },
 
     {
+      slug: 'restaurant-page',
+      admin: {
+        useAsTitle: 'heroTitle',
+      },
+      fields: [
+        {
+          name: 'heroTitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'heroDescription',
+          type: 'textarea',
+          localized: true,
+        },
+        {
+          name: 'menuTitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'reservationTitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'reservationDescription',
+          type: 'textarea',
+          localized: true,
+        },
+      ],
+    },
+
+    {
       slug: 'media',
       upload: true,
       fields: [
