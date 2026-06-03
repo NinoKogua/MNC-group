@@ -253,7 +253,7 @@ export default async function BlogPostPage({ params }: Props) {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
-              })}
+              })} 
             </time>
           )}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#000000] leading-[1.2] tracking-tight">
