@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { motion, Variants, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
-import restaurantImg from '@/app/assets/images/restaurant.png'
+import restaurantImg from '../../../../assets/restaurant.png'
 import entrance from '@/app/assets/images/entrance.png'
 
 function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {

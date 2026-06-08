@@ -13,7 +13,7 @@ export default async function ContactPage({ params }: Props) {
   const currentLocale: Locale = locale === 'ka' ? 'ka' : 'en'
 
   return (
-    <main className="w-full bg-[#F8F6F1] min-h-screen">
+    <main className="w-full bg-[#ffffff] min-h-screen">
       <ContactHero locale={currentLocale} />
       <ContactSection locale={currentLocale} />
     </main>
