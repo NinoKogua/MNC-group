@@ -15,9 +15,6 @@ const statusLabel = (status: string, locale: string) => {
   return locale === 'ka' ? 'მიმდინარე' : 'Ongoing'
 }
 
-const statusColor = (status: string) =>
-  status === 'completed' ? 'bg-[#006341]/10 text-[#006341]' : 'bg-[#D1C09B]/30 text-[#6B4F2A]'
-
 export default async function ProjectPage({ params }: Props) {
   const { locale, slug } = await params
 
@@ -36,10 +33,20 @@ export default async function ProjectPage({ params }: Props) {
 
   const gallery = ((project.gallery || []) as any[]).map((g: any) => g.image).filter(Boolean)
 
+  // მსგავსი პროექტები
+  const { docs: similar } = await payload.find({
+    collection: 'projects' as any,
+    locale: locale as 'en' | 'ka',
+    depth: 2,
+    limit: 4,
+    where: { slug: { not_equals: slug } },
+  })
+
   return (
-    <main className="w-full min-h-screen bg-[#FFFFFF]">
-      {/* Hero Cover */}
-      <section className="relative w-full h-[55vh] min-h-[400px] max-h-[620px] overflow-hidden">
+    <main className="w-full min-h-screen bg-white">
+
+      {/* Hero */}
+      <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
         {project.coverImage && typeof project.coverImage === 'object' ? (
           <Image
             src={(project.coverImage as any).url!}
@@ -49,103 +56,169 @@ export default async function ProjectPage({ params }: Props) {
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-[#D1C09B]/20" />
+          <div className="w-full h-full bg-gray-100" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-[#000000]/40 to-transparent" />
+        <div className="absolute inset-0 bg-black/35" />
 
-        <div className="absolute bottom-0 left-0 right-0 max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-          {/* Back */}
+        {/* უკან */}
+        <div className="absolute top-8 left-6 md:left-12 z-10">
           <Link
             href={`/${locale}/projects`}
-            className="inline-flex items-center gap-2 text-[#D1C09B] text-sm mb-6 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M19 12H5M12 5l-7 7 7 7" />
-            </svg>
-            {locale === 'ka' ? 'პროექტები' : 'Projects'}
+             {locale === 'ka' ? 'პროექტები' : 'Projects'}
           </Link>
+        </div>
 
-          <div className="flex flex-wrap gap-3 mb-4">
-            {project.status && (
-              <span
-                className={`px-3 pt-[6px] pb-[3px] rounded-xl text-xs font-semibold ${statusColor(project.status)}`}
-              >
-                {statusLabel(project.status, locale)}
-              </span>
-            )}
-            {project.category && (
-              <span className="px-3 pt-[6px] pb-[3px] rounded-xl text-xs font-semibold bg-white/10 text-white">
-                {project.category}
-              </span>
-            )}
-          </div>
-
-          <h1 className="text-3xl md:text-5xl font-medium text-white tracking-tight mb-3">
+        {/* სათაური */}
+        <div className="absolute bottom-12 left-6 md:left-12 z-10">
+          {project.category && (
+            <p className="text-white/50 text-xs uppercase tracking-[0.3em] mb-3">
+              {project.category}
+            </p>
+          )}
+          <h1 className="font-kirovi text-5xl md:text-7xl text-white leading-none mb-4">
             {project.title}
           </h1>
-
           {project.location && (
-            <span className="flex items-center gap-2 text-[#D1C09B] text-sm">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
+            <p className="text-white/60 text-sm uppercase tracking-widest">
               {project.location}
-            </span>
+            </p>
           )}
         </div>
       </section>
 
-      {/* Content */}
-      <section className="max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="max-w-3xl">
+      {/* დეტალები + აღწერა */}
+      <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+        {/* მარცხენა — metadata */}
+        <div className="lg:col-span-3 flex flex-col gap-7 border-t border-gray-100 pt-8">
+          {project.status && (
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                {locale === 'ka' ? 'სტატუსი' : 'Status'}
+              </p>
+              <span className={`text-xs uppercase tracking-widest px-3 pt-[6px] pb-[3px] rounded-full inline-block ${
+                project.status === 'completed'
+                  ? 'bg-green-50 text-green-700'
+                  : 'bg-amber-50 text-amber-700'
+              }`}>
+                {statusLabel(project.status, locale)}
+              </span>
+            </div>
+          )}
+          {project.location && (
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                {locale === 'ka' ? 'ლოკაცია' : 'Location'}
+              </p>
+              <p className="text-gray-800 text-sm">{project.location}</p>
+            </div>
+          )}
+          {project.category && (
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                {locale === 'ka' ? 'კატეგორია' : 'Category'}
+              </p>
+              <p className="text-gray-800 text-sm">{project.category}</p>
+            </div>
+          )}
+          {project.year && (
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                {locale === 'ka' ? 'წელი' : 'Year'}
+              </p>
+              <p className="text-gray-800 text-sm">{project.year}</p>
+            </div>
+          )}
+          {project.client && (
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                {locale === 'ka' ? 'კლიენტი' : 'Client'}
+              </p>
+              <p className="text-gray-800 text-sm">{project.client}</p>
+            </div>
+          )}
+        </div>
+
+        {/* მარჯვენა — აღწერა */}
+        <div className="lg:col-span-9 border-t border-gray-100 pt-8">
           {project.description && (
-            <div className="prose prose-lg text-gray-700 leading-relaxed">
+            <div className="prose prose-lg text-gray-600 leading-relaxed max-w-3xl">
               <RichText data={project.description as SerializedEditorState} />
             </div>
           )}
         </div>
+
       </section>
 
-      {/* Gallery */}
+      {/* გალერეა */}
       {gallery.length > 0 && (
-        <section className="max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-          <h2 className="text-2xl font-medium text-[#000000] mb-8 pb-4 border-b border-[#D1C09B]/40">
-            {locale === 'ka' ? 'გალერეა' : 'Gallery'}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {gallery.map((img: any, i: number) => (
-              <div
-                key={i}
-                className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1C09B]/10"
+        <section className="max-w-7xl mx-auto px-6 pb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {gallery.map((img: any, i: number) => {
+              const isWide = i === 0 || i % 5 === 0
+              return (
+                <div
+                  key={i}
+                  className={`relative overflow-hidden bg-gray-100 ${
+                    isWide ? 'md:col-span-2 aspect-[16/7]' : 'aspect-[4/3]'
+                  }`}
+                >
+                  <Image
+                    src={img.url!}
+                    alt={img.alt || `${project.title} — ${i + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    unoptimized={process.env.NODE_ENV === 'development'}
+                    className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* მსგავსი პროექტები */}
+      {similar.length > 0 && (
+        <section className="max-w-7xl mx-auto px-6 pb-24">
+          <div className="border-t border-gray-200 pt-12 mb-10">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">
+              {locale === 'ka' ? 'სხვა პროექტები' : 'Other Projects'}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {(similar as any[]).map((p: any) => (
+              <Link
+                key={p.id}
+                href={`/${locale}/projects/${p.slug}`}
+                className="group flex flex-col"
               >
-                <Image
-                  src={img.url!}
-                  alt={img.alt || `${project.title} — ${i + 1}`}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  unoptimized={process.env.NODE_ENV === 'development'}
-                  className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 mb-4">
+                  {p.coverImage && typeof p.coverImage === 'object' && (
+                    <Image
+                      src={(p.coverImage as any).url!}
+                      alt={(p.coverImage as any).alt || p.title}
+                      fill
+                      sizes="25vw"
+                      unoptimized={process.env.NODE_ENV === 'development'}
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  )}
+                </div>
+                <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">
+                  {p.location}
+                </p>
+                <h3 className="font-kirovi text-xl text-gray-900 group-hover:text-[#1a2e2a] transition-colors">
+                  {p.title}
+                </h3>
+              </Link>
             ))}
           </div>
         </section>
       )}
+
     </main>
   )
 }

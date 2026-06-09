@@ -95,29 +95,6 @@ export default function Navbar() {
   return (
     <header className="w-full relative">
       <div className="w-full bg-green-primary text-white text-sm py-1.5 px-4 flex justify-between">
-        <span className="text-beige-primary">
-          {currentLocale === 'ka'
-            ? 'მშენებლობის მომავალი, მსოფლიოს მასშტაბით'
-            : 'The future of construction, worldwide'}
-        </span>
-        <div className="flex items-center gap-4">
-          <Link
-            href="https://www.facebook.com/profile.php?id=61580922035190"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80"
-          >
-            <Facebook />
-          </Link>
-          <Link
-            href="https://www.instagram.com/pinesmanglisi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80"
-          >
-            <Instagram />
-          </Link>
-        </div>
       </div>
 
       <div className="bg-white shadow-sm py-4">

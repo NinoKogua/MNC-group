@@ -6,73 +6,90 @@ import tablesImg from '@/app/assets/images/tables.png'
 
 export default function AboutMission() {
   return (
-    <div className="w-full pb-20">
-      <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-[#1A1A1A] overflow-hidden p-4 md:p-12 text-white">
-        <div className="space-y-6 p-6">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-green-primary rounded-lg flex items-center justify-center font-bold">
-              +
-            </div>
-            <span className="font-bold uppercase tracking-widest text-sm opacity-80">მისია</span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
-            ვქმნით სივრცეებს, <br />
-            <span className="text-green-primary">რომლებიც შთააგონებენ</span>
+    <div className="w-full pb-20 px-4 md:px-8 space-y-8">
+
+      {/* მისია */}
+      <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl">
+
+        {/* ტექსტი */}
+        <div className="bg-green-primary p-10 md:p-14 flex flex-col justify-center space-y-7">
+          <h2 className="font-kirovi text-4xl md:text-5xl text-white leading-tight">
+            ვქმნით სივრცეებს,{' '}
+            <span className="text-beige-primary">რომლებიც შთააგონებენ</span>
           </h2>
-          <p className="text-gray-400 leading-relaxed font-mtavruli">
+          <p className="text-white/50 text-sm leading-relaxed">
             ჩვენი მისიაა, კურორტი მანგლისში, შეიქმნას თანამედროვე სტანდარტების ცხოვრების სტილი.
           </p>
-          <ul className="space-y-3">
+          <ul className="space-y-3 pt-2">
             {[
               'ქართულ-ევროპული რესტორანი',
               'ხარისხის გარანტია',
               'თანამედროვე დიზაინი',
               'კონსიერჟი/ლობი/ღია აუზი/საუნა',
             ].map((item) => (
-              <li key={item} className="flex items-center gap-3 text-sm font-medium">
-                <CheckCircle2 size={18} className="text-green-primary" />
+              <li key={item} className="flex items-center gap-3 text-sm text-white/70">
+                <CheckCircle2 size={16} className="text-beige-primary shrink-0" />
                 {item}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="relative rounded-[16px] overflow-hidden h-[400px]">
-          <Image src={toiletImg} alt="office" fill className="object-cover" />
+        {/* ფოტო */}
+        <div className="relative h-[420px] md:h-auto">
+          <Image
+            src={toiletImg}
+            alt="mission"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/10" />
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-green-primary overflow-hidden p-4 md:p-12 text-white">
-        <div className="relative rounded-[16px] overflow-hidden h-[400px] order-2 md:order-1">
-          <Image src={tablesImg} alt="vision" fill className="object-cover" />
+      {/* ხედვა */}
+      <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl">
+
+        {/* ფოტო */}
+        <div className="relative h-[420px] md:h-auto order-2 md:order-1">
+          <Image
+            src={tablesImg}
+            alt="vision"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/10" />
         </div>
 
-        <div className="space-y-6 p-6 order-1 md:order-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-beige-primary rounded-lg flex items-center justify-center font-bold text-green-primary">
-              ◎
-            </div>
-            <span className="font-bold uppercase tracking-widest text-sm">ხედვა</span>
-          </div>
-          <h2 className="text-3xl md:text-5xl  font-extrabold leading-tight">
-            მომავალი, სადაც <span className="text-beige-primary">ბუნება და არქიტექტურა ერთია</span>
+        {/* ტექსტი */}
+        <div className="bg-[#F8F6F1] p-10 md:p-14 flex flex-col justify-center space-y-7 order-1 md:order-2">
+          <h2 className="font-kirovi text-4xl md:text-5xl text-[#1a2e2a] leading-tight">
+            მომავალი, სადაც{' '}
+            <span className="text-green-primary">ბუნება და არქიტექტურა ერთია</span>
           </h2>
-          <div className="flex gap-10 pt-6 border-t border-white/10">
+          <p className="text-gray-500 text-sm leading-relaxed">
+            ვისახავთ მომავალს, სადაც თითოეული სივრცე ბუნებასთან ჰარმონიაშია ესთეტიკა და ფუნქციონალურობა ერთ მთლიანობაში.
+          </p>
+
+          {/* სტატისტიკა */}
+          <div className="flex gap-10 pt-6 border-t border-gray-200">
             <div>
-              <p className="text-3xl font-bold text-beige-primary">500+</p>
-              <p className="text-xs uppercase opacity-70 italic mt-1 font-mtavruli">
+              <p className="font-kirovi text-4xl text-[#1a2e2a]">500+</p>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
                 ბედნიერი ოჯახი
               </p>
             </div>
+            <div className="w-px bg-gray-200" />
             <div>
-              <p className="text-3xl font-bold text-beige-primary">15+</p>
-              <p className="text-xs uppercase opacity-70 italic mt-1 font-mtavruli">
+              <p className="font-kirovi text-4xl text-[#1a2e2a]">15+</p>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
                 წლიანი გამოცდილება
               </p>
             </div>
           </div>
         </div>
       </section>
+
     </div>
   )
 }

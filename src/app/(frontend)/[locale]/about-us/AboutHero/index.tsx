@@ -59,7 +59,7 @@ export default function AboutHero() {
   }
 
   return (
-    <section className="relative pt-16 pb-20 px-4 overflow-hidden bg-gradient-to-b from-[#B5CDC3] via-[#D1DFD9] to-[#F8F6F1]">
+    <section className="relative pt-16 pb-20 px-4 overflow-hidden ">
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
@@ -79,7 +79,7 @@ export default function AboutHero() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           <motion.div
             variants={cardVariants}
-            className="col-span-12 md:col-span-6 bg-[#161616] rounded-[32px] p-10 flex flex-col justify-between min-h-[450px] text-white relative font-kirovi group overflow-hidden"
+            className="col-span-12 md:col-span-6 bg-[#161616] rounded-[20px] p-10 flex flex-col justify-between min-h-[450px] text-white relative font-kirovi group overflow-hidden"
           >
             <div className="space-y-6 relative z-10">
               <motion.span className="text-xs font-bold tracking-widest opacity-50 uppercase block">
@@ -98,7 +98,7 @@ export default function AboutHero() {
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-14 h-14 mt-12 border border-white/20 rounded-full flex items-center justify-center relative z-10"
+              className="w-14 h-14 mt-12 border border-white/20 rounded-[20px] flex items-center justify-center relative z-10"
             >
               <ArrowDown className="text-white" size={24} />
             </motion.div>
@@ -106,14 +106,14 @@ export default function AboutHero() {
             <motion.div
               animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="absolute top-0 right-0 w-64 h-64 bg-green-primary/10 rounded-full -mr-20 -mt-20 blur-3xl pointer-events-none"
+              className="absolute top-0 right-0 w-64 h-64 bg-green-primary/10 rounded-[20px] -mr-20 -mt-20 blur-3xl pointer-events-none"
             />
           </motion.div>
 
           <div className="col-span-12 md:col-span-6 grid grid-cols-2 gap-4 font-kirovi">
             <motion.div
               variants={cardVariants}
-              className="bg-green-primary rounded-[32px] p-8 flex flex-col justify-between text-white shadow-xl"
+              className="bg-green-primary rounded-[20px] p-8 flex flex-col justify-between text-white shadow-xl"
             >
               <span className="text-sm font-bold uppercase tracking-widest opacity-70">
                 გამოცდილება
@@ -128,14 +128,14 @@ export default function AboutHero() {
 
             <motion.div
               variants={cardVariants}
-              className="relative rounded-[32px] overflow-hidden min-h-[180px] shadow-lg"
+              className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
             >
               <Image src={entrance} alt="Pool" fill className="object-cover" />
             </motion.div>
 
             <motion.div
               variants={cardVariants}
-              className="relative rounded-[32px] overflow-hidden min-h-[180px] shadow-lg"
+              className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
             >
               <Image src={restaurantImg} alt="Architecture" fill className="object-cover" />
             </motion.div>
@@ -143,7 +143,7 @@ export default function AboutHero() {
             {/* მაცხოვრებელი */}
             <motion.div
               variants={cardVariants}
-              className="bg-white rounded-[32px] p-8 flex flex-col justify-between border border-gray-100 shadow-sm text-green-primary"
+              className="bg-white rounded-[20px] p-8 flex flex-col justify-between border border-gray-100 shadow-sm text-green-primary"
             >
               <span className="text-sm font-bold uppercase tracking-widest">მაცხოვრებელი</span>
               <div className="flex flex-col">
