@@ -3,7 +3,9 @@ import React from 'react'
 import { Share2, AtSign, MessageCircle } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
-import Image from 'next/image'
+import nino from '@/app/assets/images/nino_kogua.jpg'
+import otar from '@/app/assets/images/otar_tsibilashvili.png'
+import Image, { StaticImageData } from 'next/image'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -11,7 +13,7 @@ import 'swiper/css/pagination'
 interface MemberProps {
   name: string
   role: string
-  image: string
+  image: string | StaticImageData
 }
 
 const TeamMember = ({ name, role, image }: MemberProps) => (
@@ -46,13 +48,12 @@ export default function AboutTeam() {
     {
       name: 'ნინო კოღუა',
       role: 'მარკეტინგის დირექტორი',
-      image:
-        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80',
+      image: nino,
     },
     {
       name: 'ოთარ წიბილაშვილი',
       role: 'გენერალური დირექტორი',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80',
+      image: otar,
     },
     {
       name: 'ნინო არზიანი',

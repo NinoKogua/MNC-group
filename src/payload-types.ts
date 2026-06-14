@@ -251,6 +251,23 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  apartments?:
+    | {
+        title: string;
+        area: number;
+        balcony?: number | null;
+        totalArea?: number | null;
+        planImage?: (number | null) | Media;
+        rooms?:
+          | {
+              name: string;
+              area: number;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -475,6 +492,23 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        id?: T;
+      };
+  apartments?:
+    | T
+    | {
+        title?: T;
+        area?: T;
+        balcony?: T;
+        totalArea?: T;
+        planImage?: T;
+        rooms?:
+          | T
+          | {
+              name?: T;
+              area?: T;
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;
