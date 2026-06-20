@@ -68,6 +68,8 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    'hero-slides': HeroSlide;
+    'why-us': WhyUs;
     'blog-page': BlogPage;
     posts: Post;
     projects: Project;
@@ -82,6 +84,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    'hero-slides': HeroSlidesSelect<false> | HeroSlidesSelect<true>;
+    'why-us': WhyUsSelect<false> | WhyUsSelect<true>;
     'blog-page': BlogPageSelect<false> | BlogPageSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
@@ -154,6 +158,71 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero-slides".
+ */
+export interface HeroSlide {
+  id: number;
+  title: string;
+  highlight?: string | null;
+  description?: string | null;
+  image: number | Media;
+  /**
+   * სლაიდების თანმიმდევრობა (0, 1, 2...)
+   */
+  order?: number | null;
+  primaryButtonText?: string | null;
+  secondaryButtonText?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "why-us".
+ */
+export interface WhyUs {
+  id: number;
+  sectionTitle?: string | null;
+  sectionSubtitle?: string | null;
+  features?:
+    | {
+        icon?: ('home' | 'shield' | 'cube' | 'stars') | null;
+        title?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  ctaBadges?:
+    | {
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog-page".
  */
 export interface BlogPage {
@@ -198,25 +267,6 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
@@ -248,23 +298,6 @@ export interface Project {
   gallery?:
     | {
         image: number | Media;
-        id?: string | null;
-      }[]
-    | null;
-  apartments?:
-    | {
-        title: string;
-        area: number;
-        balcony?: number | null;
-        totalArea?: number | null;
-        planImage?: (number | null) | Media;
-        rooms?:
-          | {
-              name: string;
-              area: number;
-              id?: string | null;
-            }[]
-          | null;
         id?: string | null;
       }[]
     | null;
@@ -364,6 +397,14 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'hero-slides';
+        value: number | HeroSlide;
+      } | null)
+    | ({
+        relationTo: 'why-us';
+        value: number | WhyUs;
+      } | null)
+    | ({
         relationTo: 'blog-page';
         value: number | BlogPage;
       } | null)
@@ -453,6 +494,47 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero-slides_select".
+ */
+export interface HeroSlidesSelect<T extends boolean = true> {
+  title?: T;
+  highlight?: T;
+  description?: T;
+  image?: T;
+  order?: T;
+  primaryButtonText?: T;
+  secondaryButtonText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "why-us_select".
+ */
+export interface WhyUsSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  sectionSubtitle?: T;
+  features?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  ctaTitle?: T;
+  ctaDescription?: T;
+  ctaBadges?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog-page_select".
  */
 export interface BlogPageSelect<T extends boolean = true> {
@@ -492,23 +574,6 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        id?: T;
-      };
-  apartments?:
-    | T
-    | {
-        title?: T;
-        area?: T;
-        balcony?: T;
-        totalArea?: T;
-        planImage?: T;
-        rooms?:
-          | T
-          | {
-              name?: T;
-              area?: T;
-              id?: T;
-            };
         id?: T;
       };
   updatedAt?: T;

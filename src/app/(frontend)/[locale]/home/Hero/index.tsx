@@ -1,47 +1,63 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import HeroImg from '../../../../assets/images/hero1.jpg'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import FloatingCallButton from '../../../components/common/FloatingCallButoon.tsx'
 import AppButton from '../../../components/ui/AppButton'
 
-export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0)
+type Slide = {
+  id: string
+  title: string
+  highlight: string
+  description: string
+  image: {
+    url: string
+    alt?: string
+  }
+  primaryButtonText?: string
+  secondaryButtonText?: string
+}
 
-  const slides = [
-    {
-      id: 0,
-      image: HeroImg,
-      title: 'ფიჭვები',
-      highlight: 'მანგლისი',
-      description:
-        'ფიჭვების პროექტი მიზნად ისახავს, კურორტ მანგლისში, ინოვაციური არქიტექტურისა და ტრადიციების შერწყმით ახალი მულტიფუნქციური საცხოვრებელი სივრცის შექმნას.',
-    },
-    {
-      id: 1,
-      image:
-        'https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000&auto=format&fit=crop',
-      title: 'ბუნებასთან',
-      highlight: 'ერთად',
-      description:
-        'აღმოაჩინეთ თანამედროვე არქიტექტურა, რომელიც იდეალურად ერწყმის მანგლისის უნიკალურ ბუნებას.',
-    },
-  ]
+async function getSlides(locale: string): Promise<Slide[]> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_PAYLOAD_URL}/api/hero-slides?locale=${locale}&sort=order&depth=1`,
+    { next: { revalidate: 60 } },
+  )
+  const data = await res.json()
+  return data.docs ?? []
+}
+
+export default function Hero() {
+  const params = useParams()
+  const locale = (params?.locale as string) ?? 'ka'
+  const [slides, setSlides] = useState<Slide[]>([])
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getSlides(locale).then((data) => {
+      setSlides(data)
+      setLoading(false)
+    })
+  }, [locale])
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
 
-  // Automatic Slide Logic
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide()
-    }, 6000)
-
+    if (slides.length === 0) return
+    const timer = setInterval(nextSlide, 6000)
     return () => clearInterval(timer)
-  }, [currentSlide])
+  }, [currentSlide, slides.length])
+
+  if (loading || slides.length === 0) {
+    return <section className="relative w-full h-[90vh] bg-[#161616]" />
+  }
+
+  const current = slides[currentSlide]
 
   return (
     <section className="relative w-full h-[90vh] overflow-hidden bg-[#161616]">
@@ -55,8 +71,8 @@ export default function Hero() {
           className="absolute inset-0 z-0"
         >
           <Image
-            src={slides[currentSlide].image}
-            alt={slides[currentSlide].title}
+            src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${current.image.url}`}
+            alt={current.image.alt ?? current.title}
             fill
             className="object-cover"
             priority
@@ -64,7 +80,6 @@ export default function Hero() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Dark Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-transparent to-transparent z-10" />
 
       <div className="relative z-20 max-w-7xl mx-auto h-full px-6 flex flex-col justify-center">
@@ -79,30 +94,19 @@ export default function Hero() {
                 transition={{ duration: 0.6 }}
               >
                 <h1 className="text-white text-6xl md:text-8xl font-black leading-tight font-kirovi mb-8">
-                  {slides[currentSlide].title} <br />
-                  <span className="text-white italic font-light">
-                    {slides[currentSlide].highlight}
-                  </span>
+                  {current.title} <br />
+                  <span className="text-white italic font-light">{current.highlight}</span>
                 </h1>
 
                 <p className="text-white text-lg md:text-xl max-w-xl leading-relaxed font-mtavruli opacity-90">
-                  {slides[currentSlide].description}
+                  {current.description}
                 </p>
 
                 <div className="flex flex-wrap gap-6 pt-10 font-kirovi">
-                  {/* <button className="group relative bg-green-primary text-white   px-10 py-5 rounded-2xl text-lg font-bold transition-all duration-300 hover:bg-white hover:text-green-primary">
-                    <span className="relative z-10 flex items-center gap-2">
-                      გაიგე მეტი{" "}
-                      <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </button>
-                  <button className="group flex items-center gap-4 text-white px-8 py-5 rounded-2xl text-lg font-bold border-2 border-white/70 hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
-                    ვრცლად
-                  </button> */}
                   <AppButton variant="arrowButton" showArrow={true}>
-                    გაიგე მეტი
+                    {current.primaryButtonText || 'გაიგე მეტი'}
                   </AppButton>
-                  <AppButton variant="outline">ვრცლად</AppButton>
+                  <AppButton variant="outline">{current.secondaryButtonText || 'ვრცლად'}</AppButton>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -130,9 +134,7 @@ export default function Hero() {
                 <motion.div
                   className="absolute top-0 left-0 h-full bg-green-primary"
                   initial={{ width: '0%' }}
-                  animate={{
-                    width: `${((currentSlide + 1) / slides.length) * 100}%`,
-                  }}
+                  animate={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
                   transition={{ duration: 0.5 }}
                 />
               </div>
@@ -141,6 +143,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
       <FloatingCallButton />
     </section>
   )

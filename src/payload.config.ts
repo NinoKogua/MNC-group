@@ -29,6 +29,121 @@ export default buildConfig({
     },
 
     {
+      slug: 'hero-slides',
+      admin: {
+        useAsTitle: 'title',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'highlight',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          localized: true,
+        },
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'order',
+          type: 'number',
+          defaultValue: 0,
+          admin: {
+            description: 'სლაიდების თანმიმდევრობა (0, 1, 2...)',
+          },
+        },
+        {
+          name: 'primaryButtonText',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'secondaryButtonText',
+          type: 'text',
+          localized: true,
+        },
+      ],
+    },
+
+    {
+      slug: 'why-us',
+      admin: {
+        useAsTitle: 'sectionTitle',
+      },
+      fields: [
+        {
+          name: 'sectionTitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'sectionSubtitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'features',
+          type: 'array',
+          fields: [
+            {
+              name: 'icon',
+              type: 'select',
+              options: [
+                { label: 'Home', value: 'home' },
+                { label: 'Shield', value: 'shield' },
+                { label: 'Cube', value: 'cube' },
+                { label: 'Stars', value: 'stars' },
+              ],
+            },
+            {
+              name: 'title',
+              type: 'text',
+              localized: true,
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              localized: true,
+            },
+          ],
+        },
+        {
+          name: 'ctaTitle',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'ctaDescription',
+          type: 'textarea',
+          localized: true,
+        },
+        {
+          name: 'ctaBadges',
+          type: 'array',
+          fields: [
+            {
+              name: 'text',
+              type: 'text',
+              localized: true,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
       slug: 'blog-page',
       admin: {
         useAsTitle: 'heroTitle',
