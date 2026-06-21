@@ -1,7 +1,6 @@
-'use client'
-
-import React, { ComponentType, useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import React, { ComponentType } from 'react'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 import FeatureCard from '../../../components/common/FeaturedCard'
 import CtaBanner from '../../../components/common/CtaBanner'
 import HomeIcon from '@/app/assets/icons/Home'
@@ -18,35 +17,24 @@ const iconMap: Record<string, IconType> = {
   stars: StarsIcon,
 }
 
-type Feature = {
-  icon: string
-  title: string
-  description: string
-}
+export default async function WhyUsSection({ locale }: { locale: string }) {
+  const payload = await getPayload({ config: configPromise })
 
-type WhyUsData = {
-  sectionTitle: string
-  sectionSubtitle: string
-  features: Feature[]
-  ctaTitle?: string
-  ctaDescription?: string
-  ctaBadges?: { text: string }[]
-}
+  const { docs } = await payload.find({
+    collection: 'why-us',
+    locale: locale as 'en' | 'ka',
+    limit: 1,
+    depth: 1,
+  })
 
-export default function WhyUsSection() {
-  const params = useParams()
-  const locale = (params?.locale as string) ?? 'ka'
-  const [data, setData] = useState<WhyUsData | null>(null)
-
-  useEffect(() => {
-    fetch(`/api/why-us?locale=${locale}&limit=1`)
-      .then((r) => r.json())
-      .then((res) => setData(res.docs?.[0] ?? null))
-  }, [locale])
+  const data = docs?.[0]
 
   const sectionTitle = data?.sectionTitle ?? 'რატომ ფიჭვები?'
   const sectionSubtitle = data?.sectionSubtitle ?? 'უნიკალური უპირატესობა თქვენი კომფორტისთვის'
-  const features = data?.features ?? []
+  const features = (data?.features ?? []) as { icon: string; title: string; description: string }[]
+  const ctaBadges = (data?.ctaBadges ?? []).filter(
+    (badge): badge is { text: string } => typeof badge?.text === 'string',
+  )
 
   return (
     <section className="bg-beige-50 py-12 lg:py-16">
@@ -71,9 +59,9 @@ export default function WhyUsSection() {
         </div>
 
         <CtaBanner
-          title={data?.ctaTitle}
-          description={data?.ctaDescription}
-          badges={data?.ctaBadges}
+          title={data?.ctaTitle ?? undefined}
+          description={data?.ctaDescription ?? undefined}
+          badges={ctaBadges.length ? ctaBadges : undefined}
         />
       </div>
     </section>
