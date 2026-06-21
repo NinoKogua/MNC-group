@@ -51,10 +51,8 @@ export default async function ProjectsGridSection() {
           {largeProject && (
             <ProjectFeatureCard
               image={resolveImageUrl(largeProject.image)}
-              title={largeProject.title}
-              description={largeProject.description}
-              tags={largeProject.tags}
-              isLarge={true}
+              alt={typeof largeProject.image === 'object' ? (largeProject.image?.alt ?? '') : ''}
+              isLarge={largeProject.isLarge}
             />
           )}
 
@@ -64,9 +62,7 @@ export default async function ProjectsGridSection() {
                 <ProjectFeatureCard
                   key={project.id}
                   image={resolveImageUrl(project.image)}
-                  title={project.title}
-                  description={project.description}
-                  tags={project.tags}
+                  alt={typeof project.image === 'object' ? (project.image?.alt ?? '') : ''}
                   isLarge={false}
                 />
               ))}

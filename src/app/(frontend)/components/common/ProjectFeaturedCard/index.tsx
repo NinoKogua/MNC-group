@@ -3,17 +3,17 @@ import Image from 'next/image'
 import AppButton from '@/app/(frontend)/components/ui/AppButton'
 
 interface ProjectFeatureProps {
-  title: string
   description?: string
   image: string
+  alt: string
   isLarge?: boolean
   tags?: string
 }
 
 const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
-  title,
   description,
   image,
+  alt = '',
   isLarge = false,
   tags,
 }) => {
@@ -25,7 +25,7 @@ const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
       {/* ფონური სურათი Next.js Image-ით (background-image-ის ეფექტით) */}
       <Image
         src={image}
-        alt={title}
+        alt={alt}
         fill
         className="object-cover transition-transform duration-500 group-hover:scale-110"
         priority={isLarge}
@@ -43,8 +43,6 @@ const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
             </span>
           </div>
         )}
-
-        <h3 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">{title}</h3>
 
         {isLarge && description && (
           <p className="text-base font-medium mb-6 max-w-lg">{description}</p>
