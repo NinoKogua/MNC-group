@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link' // შემოვიტანეთ Link
+import Link from 'next/link'
 import Instagram from '@/app/assets/icons/Instagram'
 import Facebook from '@/app/assets/icons/Facebook'
 import Logo from '@/app/assets/icons/Logo'

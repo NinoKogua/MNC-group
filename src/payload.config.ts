@@ -30,6 +30,9 @@ export default buildConfig({
 
     {
       slug: 'hero-slides',
+      access: {
+        read: () => true,
+      },
       admin: {
         useAsTitle: 'title',
       },
@@ -79,6 +82,9 @@ export default buildConfig({
 
     {
       slug: 'why-us',
+      access: {
+        read: () => true,
+      },
       admin: {
         useAsTitle: 'sectionTitle',
       },
@@ -139,6 +145,44 @@ export default buildConfig({
               localized: true,
             },
           ],
+        },
+      ],
+    },
+
+    {
+      slug: 'projects-featured',
+      access: {
+        read: () => true,
+      },
+      admin: {
+        useAsTitle: 'order',
+        defaultColumns: ['order', 'isLarge', 'image', 'updatedAt'],
+        description: 'Homepage-ის featured projects grid-ის სურათები.',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'isLarge',
+          type: 'checkbox',
+          label: 'Large Card (full width)',
+          defaultValue: false,
+          admin: {
+            description: 'მონიშნე თუ ეს ბარათი სრულ სიგანეზე უნდა გამოჩნდეს. მხოლოდ ერთი.',
+          },
+        },
+        {
+          name: 'order',
+          type: 'number',
+          defaultValue: 0,
+          admin: {
+            description: 'თანმიმდევრობა — large card უნდა იყოს 0.',
+            position: 'sidebar',
+          },
         },
       ],
     },

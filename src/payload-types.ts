@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     'hero-slides': HeroSlide;
     'why-us': WhyUs;
+    'projects-featured': ProjectsFeatured;
     'blog-page': BlogPage;
     posts: Post;
     projects: Project;
@@ -86,6 +87,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'hero-slides': HeroSlidesSelect<false> | HeroSlidesSelect<true>;
     'why-us': WhyUsSelect<false> | WhyUsSelect<true>;
+    'projects-featured': ProjectsFeaturedSelect<false> | ProjectsFeaturedSelect<true>;
     'blog-page': BlogPageSelect<false> | BlogPageSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
@@ -218,6 +220,26 @@ export interface WhyUs {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Homepage-ის featured projects grid-ის სურათები.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-featured".
+ */
+export interface ProjectsFeatured {
+  id: number;
+  image: number | Media;
+  /**
+   * მონიშნე თუ ეს ბარათი სრულ სიგანეზე უნდა გამოჩნდეს. მხოლოდ ერთი.
+   */
+  isLarge?: boolean | null;
+  /**
+   * თანმიმდევრობა — large card უნდა იყოს 0.
+   */
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -405,6 +427,10 @@ export interface PayloadLockedDocument {
         value: number | WhyUs;
       } | null)
     | ({
+        relationTo: 'projects-featured';
+        value: number | ProjectsFeatured;
+      } | null)
+    | ({
         relationTo: 'blog-page';
         value: number | BlogPage;
       } | null)
@@ -530,6 +556,17 @@ export interface WhyUsSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-featured_select".
+ */
+export interface ProjectsFeaturedSelect<T extends boolean = true> {
+  image?: T;
+  isLarge?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }

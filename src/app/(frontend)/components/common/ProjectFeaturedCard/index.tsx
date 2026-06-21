@@ -1,13 +1,13 @@
-import React from "react";
-import Image from "next/image";
-import AppButton from "@/app/(frontend)/components/ui/AppButton";
+import React from 'react'
+import Image from 'next/image'
+import AppButton from '@/app/(frontend)/components/ui/AppButton'
 
 interface ProjectFeatureProps {
-  title: string;
-  description?: string;
-  image: string;
-  isLarge?: boolean;
-  tags?: string;
+  title: string
+  description?: string
+  image: string
+  isLarge?: boolean
+  tags?: string
 }
 
 const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
@@ -18,14 +18,10 @@ const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
   tags,
 }) => {
   // Grid განლაგება შენი ნიმუშის მიხედვით
-  const cardClasses = isLarge
-    ? "col-span-1 h-[500px] md:h-full"
-    : "col-span-1 row-span-1 h-[450px]";
+  const cardClasses = isLarge ? 'col-span-1 h-[500px] md:h-full' : 'col-span-1 row-span-1 h-[450px]'
 
   return (
-    <div
-      className={`relative rounded-2xl overflow-hidden shadow-xl group ${cardClasses}`}
-    >
+    <div className={`relative rounded-2xl overflow-hidden shadow-xl group ${cardClasses}`}>
       {/* ფონური სურათი Next.js Image-ით (background-image-ის ეფექტით) */}
       <Image
         src={image}
@@ -48,18 +44,14 @@ const ProjectFeatureCard: React.FC<ProjectFeatureProps> = ({
           </div>
         )}
 
-        <h3 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">
-          {title}
-        </h3>
+        <h3 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">{title}</h3>
 
         {isLarge && description && (
           <p className="text-base font-medium mb-6 max-w-lg">{description}</p>
         )}
-
-        <AppButton variant="outline">ვრცლად</AppButton>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProjectFeatureCard;
+export default ProjectFeatureCard
