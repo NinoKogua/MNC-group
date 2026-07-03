@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* დეტალები + აღწერა */}
       <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* მარცხენა — metadata */}
-        <div className="lg:col-span-3 flex flex-col gap-7 border-t border-gray-100 pt-8">
+        <div className="flex gap-7 border-t border-gray-100 pt-8">
           {project.status && (
             <div>
               <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
@@ -180,9 +180,10 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(apartments as any[]).map((apt: any) => (
-              /* დაემატა 'group' კლასი ჰოვერის სამართავად */
-              <div
+              /* დაემატა 'group' კლასი ჰოვერის სამართავად + Link აპარტამენტის შიდა გვერდზე */
+              <Link
                 key={apt.id}
+                href={`/${locale}/projects/${slug}/apartments/${apt.id}`}
                 className="group border border-gray-100 rounded-lg overflow-hidden bg-gray-50/50 flex flex-col hover:shadow-lg hover:border-gray-200 transition-all duration-300"
               >
                 {/* ბინის მთავარი გეგმარების ფოტო */}
@@ -322,7 +323,7 @@ export default async function ProjectPage({ params }: Props) {
                     </div>
                   )}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

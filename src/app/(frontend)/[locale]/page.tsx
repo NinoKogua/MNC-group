@@ -4,7 +4,12 @@ import ProjectSection from '../components/common/ProjectSection'
 import ProjectsGridSection from './home/ProjectGridSection'
 import CalculatorSection from './home/Calculator'
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+type Props = {
+  params: Promise<{ locale: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function Home({ params, searchParams }: Props) {
   const { locale } = await params
 
   return (
@@ -13,7 +18,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <WhyUsSection locale={locale} />
       <ProjectSection />
       <ProjectsGridSection />
-      <CalculatorSection />
+      <CalculatorSection searchParams={searchParams} />
     </main>
   )
 }
