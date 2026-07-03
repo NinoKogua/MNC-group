@@ -26,7 +26,7 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: {
-          prefix: '',
+          prefix: 'media',
           generateFileURL: ({ filename }: { filename: string }) => {
             return `${process.env.NEXT_PUBLIC_S3_PUBLIC_URL}/media/${filename}`
           },
@@ -35,7 +35,8 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET || '',
       config: {
         endpoint: process.env.S3_ENDPOINT,
-        region: 'auto',
+        region: 'us-east-1',
+        forcePathStyle: true,
         credentials: {
           accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
           secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
@@ -299,11 +300,45 @@ export default buildConfig({
     },
 
     {
+      slug: 'project-categories',
+      admin: {
+        useAsTitle: 'name',
+        description: 'მშობელი მიმართულებები / კატეგორიები (მაგ: ფიჭვები, რესტორანი)',
+      },
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          localized: true,
+        },
+      ],
+    },
+
+    {
       slug: 'projects',
       admin: {
         useAsTitle: 'title',
       },
       fields: [
+        {
+          name: 'parentCategory',
+          type: 'relationship',
+          relationTo: 'project-categories',
+          required: true,
+          label: 'მშობელი კატეგორია (ფიჭვები, რესტორანი...)',
+          admin: {
+            position: 'sidebar',
+          },
+        },
         {
           name: 'title',
           type: 'text',
@@ -380,7 +415,124 @@ export default buildConfig({
         ],
       },
     },
-
+    {
+      slug: 'apartments',
+      admin: {
+        useAsTitle: 'apartmentNumber',
+        defaultColumns: ['apartmentNumber', 'project', 'area', 'status'],
+        description: 'პროექტების ბინები და აპარტამენტები',
+      },
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'project',
+          type: 'relationship',
+          relationTo: 'projects',
+          required: true,
+          label: 'აირჩიეთ პროექტი (მაგ: ფიჭვები)',
+        },
+        {
+          name: 'apartmentNumber',
+          type: 'text',
+          required: true,
+          label: 'ბინის ნომერი / დასახელება',
+        },
+        {
+          name: 'floor',
+          type: 'number',
+          label: 'სართული',
+        },
+        {
+          name: 'area',
+          type: 'number',
+          label: 'საერთო ფართობი (კვ.მ)',
+          required: true,
+        },
+        {
+          name: 'bedrooms',
+          type: 'number',
+          label: 'საძინებლები',
+        },
+        {
+          name: 'price',
+          type: 'number',
+          label: 'ფასი',
+        },
+        {
+          name: 'status',
+          type: 'select',
+          label: 'სტატუსი',
+          options: [
+            { label: 'თავისუფალი', value: 'available' },
+            { label: 'დაჯავშნილი', value: 'booked' },
+            { label: 'გაყიდული', value: 'sold' },
+          ],
+          defaultValue: 'available',
+        },
+        {
+          name: 'planImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'ბინის გეგმარების ფოტო',
+        },
+        {
+          name: 'features',
+          type: 'array',
+          label: 'მახასიათებლები / სერვისები',
+          fields: [
+            {
+              name: 'feature',
+              type: 'text',
+              localized: true,
+            },
+          ],
+        },
+        /* ==========================================================================
+           ახალი ველი 1: ოთახების დეტალური ფართობები (ექსელის ცხრილისთვის)
+           ========================================================================== */
+        {
+          name: 'roomsDetails',
+          type: 'array',
+          label: 'ოთახების დეტალური ფართობები',
+          admin: {
+            description: 'მაგალითად: საძინებელი 1 — 12.26, აბაზანა — 3.91',
+          },
+          fields: [
+            {
+              name: 'roomName',
+              type: 'text',
+              label: 'ოთახის დასახელება',
+              required: true,
+              localized: true,
+            },
+            {
+              name: 'roomArea',
+              type: 'number',
+              label: 'ფართობი (კვ.მ)',
+              required: true,
+            },
+          ],
+        },
+        /* ==========================================================================
+           ახალი ველი 2: ბინის ინდივიდუალური გალერეა
+           ========================================================================== */
+        {
+          name: 'gallery',
+          type: 'array',
+          label: 'ბინის ფოტოგალერეა (რენდერები / ხედები)',
+          fields: [
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
     {
       slug: 'restaurant-page',
       admin: {

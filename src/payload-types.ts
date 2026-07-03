@@ -73,7 +73,9 @@ export interface Config {
     'projects-featured': ProjectsFeatured;
     'blog-page': BlogPage;
     posts: Post;
+    'project-categories': ProjectCategory;
     projects: Project;
+    apartments: Apartment;
     'restaurant-page': RestaurantPage;
     media: Media;
     'contact-info': ContactInfo;
@@ -90,7 +92,9 @@ export interface Config {
     'projects-featured': ProjectsFeaturedSelect<false> | ProjectsFeaturedSelect<true>;
     'blog-page': BlogPageSelect<false> | BlogPageSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    'project-categories': ProjectCategoriesSelect<false> | ProjectCategoriesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    apartments: ApartmentsSelect<false> | ApartmentsSelect<true>;
     'restaurant-page': RestaurantPageSelect<false> | RestaurantPageSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
@@ -289,11 +293,25 @@ export interface Post {
   createdAt: string;
 }
 /**
+ * მშობელი მიმართულებები / კატეგორიები (მაგ: ფიჭვები, რესტორანი)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-categories".
+ */
+export interface ProjectCategory {
+  id: number;
+  name: string;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
   id: number;
+  parentCategory: number | ProjectCategory;
   title: string;
   /**
    * ავტომატურად გენერირდება ინგლისური სათაურიდან
@@ -318,6 +336,47 @@ export interface Project {
   location?: string | null;
   category?: string | null;
   coverImage?: (number | null) | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * პროექტების ბინები და აპარტამენტები
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "apartments".
+ */
+export interface Apartment {
+  id: number;
+  project: number | Project;
+  apartmentNumber: string;
+  floor?: number | null;
+  area: number;
+  bedrooms?: number | null;
+  price?: number | null;
+  status?: ('available' | 'booked' | 'sold') | null;
+  planImage?: (number | null) | Media;
+  features?:
+    | {
+        feature?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * მაგალითად: საძინებელი 1 — 12.26, აბაზანა — 3.91
+   */
+  roomsDetails?:
+    | {
+        roomName: string;
+        roomArea: number;
+        id?: string | null;
+      }[]
+    | null;
   gallery?:
     | {
         image: number | Media;
@@ -440,8 +499,16 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'project-categories';
+        value: number | ProjectCategory;
+      } | null)
+    | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'apartments';
+        value: number | Apartment;
       } | null)
     | ({
         relationTo: 'restaurant-page';
@@ -598,9 +665,20 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-categories_select".
+ */
+export interface ProjectCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
+  parentCategory?: T;
   title?: T;
   slug?: T;
   description?: T;
@@ -608,6 +686,41 @@ export interface ProjectsSelect<T extends boolean = true> {
   location?: T;
   category?: T;
   coverImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "apartments_select".
+ */
+export interface ApartmentsSelect<T extends boolean = true> {
+  project?: T;
+  apartmentNumber?: T;
+  floor?: T;
+  area?: T;
+  bedrooms?: T;
+  price?: T;
+  status?: T;
+  planImage?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  roomsDetails?:
+    | T
+    | {
+        roomName?: T;
+        roomArea?: T;
+        id?: T;
+      };
   gallery?:
     | T
     | {
