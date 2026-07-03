@@ -28,7 +28,9 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
 
   useEffect(() => {
     if (slides.length === 0) return
+
     const timer = setInterval(nextSlide, 6000)
+
     return () => clearInterval(timer)
   }, [currentSlide, slides.length])
 
@@ -37,6 +39,9 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
   }
 
   const current = slides[currentSlide]
+
+  const imageUrl = current.image.url
+  console.log(current.image.url)
 
   return (
     <section className="relative w-full h-[90vh] overflow-hidden bg-[#161616]">
@@ -50,7 +55,7 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
           className="absolute inset-0 z-0"
         >
           <Image
-            src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${current.image.url}`}
+            src={imageUrl}
             alt={current.image.alt ?? current.title}
             fill
             className="object-cover"
@@ -73,7 +78,8 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                 transition={{ duration: 0.6 }}
               >
                 <h1 className="text-white text-6xl md:text-8xl font-black leading-tight font-kirovi mb-8">
-                  {current.title} <br />
+                  {current.title}
+                  <br />
                   <span className="text-white italic font-light">{current.highlight}</span>
                 </h1>
 
@@ -82,9 +88,10 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                 </p>
 
                 <div className="flex flex-wrap gap-6 pt-10 font-kirovi">
-                  <AppButton variant="arrowButton" showArrow={true}>
+                  <AppButton variant="arrowButton" showArrow>
                     {current.primaryButtonText || 'გაიგე მეტი'}
                   </AppButton>
+
                   <AppButton variant="outline">{current.secondaryButtonText || 'ვრცლად'}</AppButton>
                 </div>
               </motion.div>
@@ -99,6 +106,7 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
               >
                 <ChevronLeft size={24} />
               </button>
+
               <button
                 onClick={nextSlide}
                 className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
@@ -109,14 +117,18 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
 
             <div className="flex items-center gap-4">
               <span className="text-white font-bold text-lg">0{currentSlide + 1}</span>
+
               <div className="w-32 h-[2px] bg-white/20 relative">
                 <motion.div
                   className="absolute top-0 left-0 h-full bg-green-primary"
                   initial={{ width: '0%' }}
-                  animate={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
+                  animate={{
+                    width: `${((currentSlide + 1) / slides.length) * 100}%`,
+                  }}
                   transition={{ duration: 0.5 }}
                 />
               </div>
+
               <span className="text-white/40 font-bold text-lg">0{slides.length}</span>
             </div>
           </div>

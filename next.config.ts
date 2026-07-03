@@ -66,6 +66,14 @@ const nextConfig: NextConfig = {
         port: '3000',
         pathname: '/api/media/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.mncgroup.ge',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-e76b160bcb2049f6a5e5cd771af22e3c.r2.dev',
+      },
     ],
   },
   webpack: (webpackConfig) => {

@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -20,6 +21,28 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
+
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          prefix: '',
+          generateFileURL: ({ filename }: { filename: string }) => {
+            return `${process.env.NEXT_PUBLIC_S3_PUBLIC_URL}/media/${filename}`
+          },
+        },
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: 'auto',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
 
   collections: [
     {
