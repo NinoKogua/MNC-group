@@ -65,6 +65,17 @@ export async function POST(req: Request) {
 
     const calendar = getCalendarClient()
 
+    const existingEvents = await calendar.events.list({
+      calendarId: process.env.GOOGLE_CALENDAR_ID,
+      timeMin: startDate.toISOString(),
+      timeMax: endDate.toISOString(),
+      singleEvents: true,
+    })
+
+    if (existingEvents.data.items && existingEvents.data.items.length > 0) {
+      return NextResponse.json({ error: 'This time slot is already booked' }, { status: 409 })
+    }
+
     await calendar.events.insert({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
       requestBody: {
@@ -75,7 +86,7 @@ Phone: ${phone}
 Email: ${email || '-'}
 Guests: ${guests}
 Note: ${note || '-'}
-        `,
+    `,
         start: {
           dateTime: startDate.toISOString(),
           timeZone: 'Asia/Tbilisi',
@@ -87,7 +98,7 @@ Note: ${note || '-'}
       },
     })
 
-    return NextResponse.redirect(new URL(`/${locale}/restaurant?success=true`, req.url))
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: 'Failed to create reservation' }, { status: 500 })

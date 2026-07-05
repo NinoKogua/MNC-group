@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftCircle } from 'lucide-react'
+import GalleryLightbox from '@/app/(frontend)/components/common/GalleryLightbox'
 
 type Props = {
   params: Promise<{ locale: string; slug: string; id: string }>
@@ -50,6 +51,12 @@ export default async function ApartmentDetailPage({ params }: Props) {
   const apartmentProjectId =
     typeof apartment.project === 'object' ? apartment.project?.id : apartment.project
   if (apartmentProjectId !== project.id) return notFound()
+
+  // გალერეის სურათების მომზადება lightbox-ისთვის
+  const galleryImages = (apartment.gallery || [])
+    .map((galleryItem: any) => galleryItem.image)
+    .filter((img: any) => img && typeof img === 'object')
+    .map((img: any) => ({ url: img.url, alt: img.alt }))
 
   return (
     <main className="w-full min-h-screen bg-white">
@@ -178,31 +185,12 @@ export default async function ApartmentDetailPage({ params }: Props) {
       </section>
 
       {/* ბინის შიდა გალერეა */}
-      {apartment.gallery && apartment.gallery.length > 0 && (
+      {galleryImages.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 py-16">
           <p className="text-xs uppercase tracking-[0.3em] text-gray-400 mb-6 border-t border-gray-100 pt-8">
             {locale === 'ka' ? 'ბინის ფოტოები' : 'Apartment Photos'}
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {apartment.gallery.map((galleryItem: any, gIdx: number) => {
-              const img = galleryItem.image
-              if (!img || typeof img !== 'object') return null
-              return (
-                <div
-                  key={gIdx}
-                  className="relative aspect-[4/3] overflow-hidden bg-gray-100 rounded-lg"
-                >
-                  <Image
-                    src={img.url}
-                    alt={img.alt || `Apartment photo ${gIdx + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                    className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              )
-            })}
-          </div>
+          <GalleryLightbox images={galleryImages} />
         </section>
       )}
     </main>

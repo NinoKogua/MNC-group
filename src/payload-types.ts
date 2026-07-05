@@ -314,7 +314,7 @@ export interface Project {
   parentCategory: number | ProjectCategory;
   title: string;
   /**
-   * ავტომატურად გენერირდება ინგლისური სათაურიდან
+   * ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, შეგიძლია ხელით შეცვალო — მას შემდეგ აღარ გადაიწერება ავტომატურად.
    */
   slug?: string | null;
   description?: {

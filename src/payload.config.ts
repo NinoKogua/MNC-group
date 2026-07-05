@@ -350,8 +350,8 @@ export default buildConfig({
           type: 'text',
           unique: true,
           admin: {
-            readOnly: true,
-            description: 'ავტომატურად გენერირდება ინგლისური სათაურიდან',
+            description:
+              'ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, შეგიძლია ხელით შეცვალო — მას შემდეგ აღარ გადაიწერება ავტომატურად.',
           },
         },
         {
@@ -399,9 +399,37 @@ export default buildConfig({
       ],
       hooks: {
         beforeValidate: [
-          ({ data }) => {
+          async ({ data, req, operation, originalDoc }) => {
             if (!data) return data
-            const enTitle = typeof data.title === 'object' ? data.title.en : data.title
+
+            const existingSlug = data.slug ?? originalDoc?.slug
+            if (existingSlug) {
+              data.slug = existingSlug
+              return data
+            }
+
+            let enTitle: string | undefined
+
+            if (typeof data.title === 'object' && data.title !== null) {
+              enTitle = data.title.en
+            } else if (req.locale === 'en') {
+              enTitle = data.title
+            } else if (operation === 'update' && originalDoc?.id) {
+              try {
+                const enDoc = await req.payload.findByID({
+                  collection: 'projects',
+                  id: originalDoc.id,
+                  locale: 'en',
+                  depth: 0,
+                })
+                enTitle = enDoc?.title as string | undefined
+              } catch {
+                enTitle = undefined
+              }
+            } else {
+              enTitle = data.title
+            }
+
             if (enTitle) {
               data.slug = enTitle
                 .toLowerCase()
@@ -410,11 +438,13 @@ export default buildConfig({
                 .replace(/\s+/g, '-')
                 .replace(/-+/g, '-')
             }
+
             return data
           },
         ],
       },
     },
+
     {
       slug: 'apartments',
       admin: {
