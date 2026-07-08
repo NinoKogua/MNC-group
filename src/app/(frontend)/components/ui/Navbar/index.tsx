@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Phone } from 'lucide-react'
-import Logo from '@/app/assets/icons/Logo'
+import LogoEN from '@/app/assets/images/LogoEN.png'
+import LogoKA from '@/app/assets/images/LogoKA.png'
 import Facebook from '@/app/assets/icons/Facebook'
 import Instagram from '@/app/assets/icons/Instagram'
 import CallModal from '@/app/(frontend)/components/Modals'
@@ -119,8 +121,14 @@ export default function Navbar() {
         <div className="max-w-[1440px] mx-auto flex justify-between items-center px-4">
           <Link href={`/${currentLocale}`}>
             <div className="flex items-center gap-2">
-              <Logo />
-              <span className="text-xl font-semibold text-green-primary">ფიჭვები</span>
+              {currentLocale === 'ka' ? (
+                <Image src={LogoKA} alt="MNC Logo" width={43} height={43} />
+              ) : (
+                <Image src={LogoEN} alt="MNC Logo" width={43} height={43} />
+              )}
+              <span className="text-xl font-semibold text-green-primary">
+                {currentLocale === 'ka' ? 'ემენსი' : 'MNC'}
+              </span>
             </div>
           </Link>
 

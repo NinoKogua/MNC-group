@@ -3,10 +3,71 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Loader, Search } from 'lucide-react'
 import AppButton from '@/app/(frontend)/components/ui/AppButton'
 
+type Locale = 'ka' | 'en'
+
+const translations = {
+  ka: {
+    heading: 'იპოვე შენთვის სასურველი ბინა',
+    subheading:
+      'მიუთითეთ სასურველი კვადრატულობა და საძინებლების რაოდენობა. სისტემა მოგიძებნით ბინებს ± 5 კვ.მ-ის ცდომილებით საერთო ფართზე.',
+    totalAreaLabel: 'მთლიანი ფართი (მ²)',
+    totalAreaPlaceholder: 'მაგ: 108',
+    bedroomLabel: 'საძინებლების რაოდენობა',
+    bedroomPlaceholder: 'მაგ: 2',
+    searching: 'მიმდინარეობს ძებნა...',
+    searchButton: 'შესაბამისი ბინების ძებნა',
+    searchError: 'ძებნისას დაფიქსირდა შეცდომა',
+    resultsFound: (count: number) => `ნაპოვნია შესაბამისი აპარტამენტები (${count})`,
+    noResults: 'მოცემული პარამეტრებით ბინები სამწუხაროდ ვერ მოიძებნა. სცადეთ სხვა კვადრატულობა.',
+    noPlanImage: 'გეგმარება არ არის',
+    apartment: 'ბინა',
+    available: 'თავისუფალი',
+    project: 'პროექტი:',
+    totalAreaCard: 'საერთო ფართი',
+    sqm: 'კვ.მ',
+    floor: 'სართული',
+    bedrooms: 'საძინებლები',
+    price: 'ფასი',
+    sqmShort: 'მ²',
+    details: 'ბინის დეტალები →',
+  },
+  en: {
+    heading: 'Find your ideal apartment',
+    subheading:
+      'Enter your preferred total area and number of bedrooms. We\u2019ll find apartments within \u00b1 5 m\u00b2 of the total area.',
+    totalAreaLabel: 'Total area (m²)',
+    totalAreaPlaceholder: 'e.g. 108',
+    bedroomLabel: 'Number of bedrooms',
+    bedroomPlaceholder: 'e.g. 2',
+    searching: 'Searching...',
+    searchButton: 'Search matching apartments',
+    searchError: 'Something went wrong while searching',
+    resultsFound: (count: number) => `Found ${count} matching apartments`,
+    noResults: 'No apartments matched these parameters. Try a different area.',
+    noPlanImage: 'No floor plan available',
+    apartment: 'Apartment',
+    available: 'Available',
+    project: 'Project:',
+    totalAreaCard: 'Total area',
+    sqm: 'm²',
+    floor: 'Floor',
+    bedrooms: 'Bedrooms',
+    price: 'Price',
+    sqmShort: 'm²',
+    details: 'View details →',
+  },
+} as const
+
 export default function ApartmentFinder() {
+  const pathname = usePathname()
+  const segments = pathname.split('/')
+  const locale: Locale = segments[1] === 'en' ? 'en' : 'ka'
+  const t = translations[locale]
+
   const [totalArea, setTotalArea] = useState<string>('')
   const [bedroomCount, setBedroomCount] = useState<string>('')
 
@@ -26,7 +87,7 @@ export default function ApartmentFinder() {
       const data = await res.json()
       setResults(data)
     } catch (error) {
-      alert('ძებნისას დაფიქსირდა შეცდომა')
+      alert(t.searchError)
     } finally {
       setIsSearching(false)
     }
@@ -39,22 +100,19 @@ export default function ApartmentFinder() {
         className="p-8 md:p-10 bg-white shadow-sm border border-gray-100 rounded-xl mb-12"
       >
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2 font-kirovi">
-          იპოვე შენთვის სასურველი ბინა
+          {t.heading}
         </h2>
-        <p className="text-gray-500 mb-8 font-medium text-sm">
-          მიუთითეთ სასურველი კვადრატულობა და საძინებლების რაოდენობა. სისტემა მოგიძებნით ბინებს ± 5
-          კვ.მ-ის ცდომილებით საერთო ფართზე.
-        </p>
+        <p className="text-gray-500 mb-8 font-medium text-sm">{t.subheading}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           {/* მთლიანი ფართობის ინფუთი */}
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
-              მთლიანი ფართი (მ²)
+              {t.totalAreaLabel}
             </label>
             <input
               type="number"
-              placeholder="მაგ: 108"
+              placeholder={t.totalAreaPlaceholder}
               value={totalArea}
               onChange={(e) => setTotalArea(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all"
@@ -64,13 +122,13 @@ export default function ApartmentFinder() {
           {/* საძინებლების რაოდენობის ინფუთი */}
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
-              საძინებლების რაოდენობა
+              {t.bedroomLabel}
             </label>
             <input
               type="number"
               min={0}
               step={1}
-              placeholder="მაგ: 2"
+              placeholder={t.bedroomPlaceholder}
               value={bedroomCount}
               onChange={(e) => setBedroomCount(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all"
@@ -87,12 +145,12 @@ export default function ApartmentFinder() {
           {isSearching ? (
             <>
               <Loader size={20} className="animate-spin" />
-              მიმდინარეობს ძებნა...
+              {t.searching}
             </>
           ) : (
             <>
               <Search size={20} />
-              შესაბამისი ბინების ძებნა
+              {t.searchButton}
             </>
           )}
         </AppButton>
@@ -102,12 +160,12 @@ export default function ApartmentFinder() {
       {results !== null && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h3 className="font-kirovi text-xl text-gray-800 mb-6">
-            ნაპოვნია შესაბამისი აპარტამენტები ({results.length})
+            {t.resultsFound(results.length)}
           </h3>
 
           {results.length === 0 ? (
             <p className="text-gray-500 bg-gray-50 p-12 text-center rounded-lg border border-dashed">
-              მოცემული პარამეტრებით ბინები სამწუხაროდ ვერ მოიძებნა. სცადეთ სხვა კვადრატულობა.
+              {t.noResults}
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -127,7 +185,7 @@ export default function ApartmentFinder() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs uppercase tracking-widest">
-                        გეგმარება არ არის
+                        {t.noPlanImage}
                       </div>
                     )}
                   </div>
@@ -135,40 +193,44 @@ export default function ApartmentFinder() {
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-kirovi text-xl text-gray-900">
-                        ბინა {apt.apartmentNumber}
+                        {t.apartment} {apt.apartmentNumber}
                       </h3>
                       <span className="text-[10px] uppercase tracking-widest font-semibold px-2.5 py-1 rounded bg-green-100 text-green-800">
-                        თავისუფალი
+                        {t.available}
                       </span>
                     </div>
 
                     {apt.project && typeof apt.project === 'object' && (
                       <p className="text-xs text-gray-400 mb-4 uppercase tracking-wider">
-                        პროექტი:{' '}
+                        {t.project}{' '}
                         <span className="text-gray-700 font-medium">{apt.project.title}</span>
                       </p>
                     )}
 
                     <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-gray-600 border-t border-b border-gray-100 py-4 mb-4">
                       <div>
-                        <span className="text-xs text-gray-400 block mb-0.5">საერთო ფართი</span>
-                        <strong className="text-gray-900">{apt.area} კვ.მ</strong>
+                        <span className="text-xs text-gray-400 block mb-0.5">
+                          {t.totalAreaCard}
+                        </span>
+                        <strong className="text-gray-900">
+                          {apt.area} {t.sqm}
+                        </strong>
                       </div>
                       {apt.floor && (
                         <div>
-                          <span className="text-xs text-gray-400 block mb-0.5">სართული</span>
+                          <span className="text-xs text-gray-400 block mb-0.5">{t.floor}</span>
                           <strong className="text-gray-900">{apt.floor}</strong>
                         </div>
                       )}
                       {apt.bedrooms && (
                         <div>
-                          <span className="text-xs text-gray-400 block mb-0.5">საძინებლები</span>
+                          <span className="text-xs text-gray-400 block mb-0.5">{t.bedrooms}</span>
                           <strong className="text-gray-900">{apt.bedrooms}</strong>
                         </div>
                       )}
                       {apt.price && (
                         <div>
-                          <span className="text-xs text-gray-400 block mb-0.5">ფასი</span>
+                          <span className="text-xs text-gray-400 block mb-0.5">{t.price}</span>
                           <strong className="text-[#1a2e2a]">${apt.price.toLocaleString()}</strong>
                         </div>
                       )}
@@ -183,7 +245,9 @@ export default function ApartmentFinder() {
                               className="flex justify-between border-b border-gray-50 pb-1 last:border-0 last:pb-0 text-gray-600"
                             >
                               <span>{room.roomName}</span>
-                              <span className="font-medium text-gray-900">{room.roomArea} მ²</span>
+                              <span className="font-medium text-gray-900">
+                                {room.roomArea} {t.sqmShort}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -194,7 +258,7 @@ export default function ApartmentFinder() {
                       href={`/projects/${apt.project?.slug || ''}/apartments/${apt.id}`}
                       className="mt-auto block text-center text-xs uppercase tracking-widest font-bold text-gray-500 bg-white border border-gray-200 py-3 rounded hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all"
                     >
-                      ბინის დეტალები →
+                      {t.details}
                     </Link>
                   </div>
                 </div>

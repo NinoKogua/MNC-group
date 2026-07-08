@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   },
 }
 
-const locales = ['ka', 'en']
+const locales = ['ka', 'en'] as const
 
 type Props = {
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: 'ka' | 'en' }>
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
@@ -34,7 +34,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body>
         <Navbar />
         <main>{children}</main>
-        <Footer />
+        <Footer locale={locale} />
       </body>
     </html>
   )

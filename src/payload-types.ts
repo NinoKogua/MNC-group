@@ -79,6 +79,7 @@ export interface Config {
     'restaurant-page': RestaurantPage;
     media: Media;
     'contact-info': ContactInfo;
+    footer: Footer;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
     'restaurant-page': RestaurantPageSelect<false> | RestaurantPageSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -451,6 +453,45 @@ export interface ContactInfo {
   createdAt: string;
 }
 /**
+ * საიტის ფუტერის კონტენტი (ლოგოს გვერდით ტექსტი, სექციები, კონტაქტი)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  /**
+   * მხოლოდ ადმინისთვის (მაგ: "მთავარი ფუტერი")
+   */
+  label?: string | null;
+  brandName?: string | null;
+  copyrightText?: string | null;
+  phone?: string | null;
+  addressText?: string | null;
+  socialLinks?:
+    | {
+        platform: 'instagram' | 'facebook';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  sections?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              href: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -521,6 +562,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-info';
         value: number | ContactInfo;
+      } | null)
+    | ({
+        relationTo: 'footer';
+        value: number | Footer;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -787,6 +832,39 @@ export interface ContactInfoSelect<T extends boolean = true> {
   mapEmbed?: T;
   tagline?: T;
   title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  label?: T;
+  brandName?: T;
+  copyrightText?: T;
+  phone?: T;
+  addressText?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  sections?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

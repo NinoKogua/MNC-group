@@ -743,6 +743,95 @@ export default buildConfig({
         },
       ],
     },
+    {
+      slug: 'footer',
+      admin: {
+        useAsTitle: 'label',
+        description: 'საიტის ფუტერის კონტენტი (ლოგოს გვერდით ტექსტი, სექციები, კონტაქტი)',
+      },
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          admin: {
+            description: 'მხოლოდ ადმინისთვის (მაგ: "მთავარი ფუტერი")',
+          },
+        },
+        {
+          name: 'brandName',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'copyrightText',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'phone',
+          type: 'text',
+        },
+        {
+          name: 'addressText',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'socialLinks',
+          type: 'array',
+          label: 'სოც. ქსელების ლინკები',
+          fields: [
+            {
+              name: 'platform',
+              type: 'select',
+              options: [
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'Facebook', value: 'facebook' },
+              ],
+              required: true,
+            },
+            {
+              name: 'url',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'sections',
+          type: 'array',
+          label: 'ფუტერის სექციები',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              localized: true,
+              required: true,
+            },
+            {
+              name: 'links',
+              type: 'array',
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  localized: true,
+                  required: true,
+                },
+                {
+                  name: 'href',
+                  type: 'text',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 
   editor: lexicalEditor({}),
