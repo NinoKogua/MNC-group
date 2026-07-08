@@ -18,16 +18,21 @@ export const metadata: Metadata = {
 }
 
 const locales = ['ka', 'en'] as const
+type Locale = (typeof locales)[number]
+
+function isLocale(value: string): value is Locale {
+  return (locales as readonly string[]).includes(value)
+}
 
 type Props = {
   children: React.ReactNode
-  params: Promise<{ locale: 'ka' | 'en' }>
+  params: Promise<{ locale: string }>
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
 
-  if (!locales.includes(locale)) return notFound()
+  if (!isLocale(locale)) return notFound()
 
   return (
     <html lang={locale}>
