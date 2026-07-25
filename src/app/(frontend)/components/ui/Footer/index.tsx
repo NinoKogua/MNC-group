@@ -11,6 +11,25 @@ interface FooterProps {
   locale: 'ka' | 'en'
 }
 
+const locales = ['ka', 'en']
+
+// ფუტერის ლინკები CMS-ში ინახება ლოკალის გარეშე (მაგ: "/projects"),
+// ამიტომ მიმდინარე ენის პრეფიქსს აქ ვამატებთ
+function localizeHref(href: string, locale: string) {
+  if (!href) return href
+  if (/^(https?:)?\/\//.test(href) || /^(mailto:|tel:|#)/.test(href)) return href
+
+  const path = href.startsWith('/') ? href : `/${href}`
+  const segments = path.split('/')
+
+  if (locales.includes(segments[1])) {
+    segments[1] = locale
+    return segments.join('/')
+  }
+
+  return `/${locale}${path === '/' ? '' : path}`
+}
+
 export default async function Footer({ locale }: FooterProps) {
   const payload = await getPayload({ config })
 
@@ -42,7 +61,7 @@ export default async function Footer({ locale }: FooterProps) {
                 {section.links?.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <Link
-                      href={link.href}
+                      href={localizeHref(link.href, locale)}
                       scroll={true}
                       className="text-base text-gray-300 hover:text-white transition-colors font-medium font-mtavruli"
                     >

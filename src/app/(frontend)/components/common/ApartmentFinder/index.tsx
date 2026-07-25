@@ -255,7 +255,7 @@ export default function ApartmentFinder() {
                     )}
 
                     <Link
-                      href={`/projects/${apt.project?.slug || ''}/apartments/${apt.id}`}
+                      href={`/${locale}/projects/${apt.project?.slug || ''}/apartments/${apt.id}`}
                       className="mt-auto block text-center text-xs uppercase tracking-widest font-bold text-gray-500 bg-white border border-gray-200 py-3 rounded hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all"
                     >
                       {t.details}
