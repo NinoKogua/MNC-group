@@ -16,7 +16,7 @@ export default async function Home({ params, searchParams }: Props) {
     <main className="w-full min-h-screen">
       <Hero locale={locale} />
       <WhyUsSection locale={locale} />
-      <ProjectSection />
+      <ProjectSection locale={locale} />
       <ProjectsGridSection />
       <CalculatorSection searchParams={searchParams} />
     </main>

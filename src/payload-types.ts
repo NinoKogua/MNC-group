@@ -244,7 +244,7 @@ export interface ProjectsFeatured {
    */
   isLarge?: boolean | null;
   /**
-   * თანმიმდევრობა — large card უნდა იყოს 0.
+   * თანმიმდევრობა (large card უნდა იყოს 0).
    */
   order?: number | null;
   updatedAt: string;
@@ -316,7 +316,7 @@ export interface Project {
   parentCategory: number | ProjectCategory;
   title: string;
   /**
-   * ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, შეგიძლია ხელით შეცვალო — მას შემდეგ აღარ გადაიწერება ავტომატურად.
+   * ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, ხელით შეცვალე და მერე ავტომატურად აღარ გადაიწერება.
    */
   slug?: string | null;
   description?: {
@@ -338,12 +338,36 @@ export interface Project {
   location?: string | null;
   category?: string | null;
   coverImage?: (number | null) | Media;
+  /**
+   * მთავარ გვერდზე ბარათის 4 პატარა ფოტო აქედან იღება (პირველი ოთხი). თუ ცარიელს დატოვებ, ავტომატურად ჩაისმევა ბინების რენდერები.
+   */
   gallery?:
     | {
         image: number | Media;
         id?: string | null;
       }[]
     | null;
+  /**
+   * მთავარ გვერდზე ბარათზე გამოსახული ფასი. თუ ცარიელს დატოვებ, აიღება ბინების ყველაზე დაბალი ფასი.
+   */
+  price?: number | null;
+  /**
+   * თუ ცარიელს დატოვებ, ავტომატურად დაითვლება პროექტის ბინებიდან. მაგალითად: საძინებელი 4, კვადრატულობა 1024 M²
+   */
+  highlights?:
+    | {
+        icon?: ('bed' | 'calendar' | 'layers' | 'bath' | 'area' | 'building' | 'key') | null;
+        label: string;
+        value: string;
+        unit?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * მთავარ გვერდზე ერთი პროექტი ჩანს და ეს არჩევანი პრიორიტეტულია. თუ არცერთი არაა მონიშნული, აირჩევა ის პროექტი, რომელსაც ყველაზე მეტი ბინა აქვს.
+   */
+  showOnHomepage?: boolean | null;
+  homepageOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -370,7 +394,7 @@ export interface Apartment {
       }[]
     | null;
   /**
-   * მაგალითად: საძინებელი 1 — 12.26, აბაზანა — 3.91
+   * მაგალითად: საძინებელი 1 (12.26), აბაზანა (3.91)
    */
   roomsDetails?:
     | {
@@ -737,6 +761,18 @@ export interface ProjectsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  price?: T;
+  highlights?:
+    | T
+    | {
+        icon?: T;
+        label?: T;
+        value?: T;
+        unit?: T;
+        id?: T;
+      };
+  showOnHomepage?: T;
+  homepageOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }

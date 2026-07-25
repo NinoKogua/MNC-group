@@ -204,7 +204,7 @@ export default buildConfig({
           type: 'number',
           defaultValue: 0,
           admin: {
-            description: 'თანმიმდევრობა — large card უნდა იყოს 0.',
+            description: 'თანმიმდევრობა (large card უნდა იყოს 0).',
             position: 'sidebar',
           },
         },
@@ -351,7 +351,7 @@ export default buildConfig({
           unique: true,
           admin: {
             description:
-              'ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, შეგიძლია ხელით შეცვალო — მას შემდეგ აღარ გადაიწერება ავტომატურად.',
+              'ავტომატურად გენერირდება ინგლისური სათაურიდან პირველად შენახვისას. თუ გინდა, ხელით შეცვალე და მერე ავტომატურად აღარ გადაიწერება.',
           },
         },
         {
@@ -387,6 +387,10 @@ export default buildConfig({
         {
           name: 'gallery',
           type: 'array',
+          admin: {
+            description:
+              'მთავარ გვერდზე ბარათის 4 პატარა ფოტო აქედან იღება (პირველი ოთხი). თუ ცარიელს დატოვებ, ავტომატურად ჩაისმევა ბინების რენდერები.',
+          },
           fields: [
             {
               name: 'image',
@@ -395,6 +399,79 @@ export default buildConfig({
               required: true,
             },
           ],
+        },
+        {
+          name: 'price',
+          type: 'number',
+          label: 'ფასი (დან)',
+          admin: {
+            description:
+              'მთავარ გვერდზე ბარათზე გამოსახული ფასი. თუ ცარიელს დატოვებ, აიღება ბინების ყველაზე დაბალი ფასი.',
+          },
+        },
+        {
+          name: 'highlights',
+          type: 'array',
+          label: 'მოკლე მახასიათებლები (მთავარი გვერდის ბარათი)',
+          maxRows: 5,
+          admin: {
+            description:
+              'თუ ცარიელს დატოვებ, ავტომატურად დაითვლება პროექტის ბინებიდან. მაგალითად: საძინებელი 4, კვადრატულობა 1024 M²',
+          },
+          fields: [
+            {
+              name: 'icon',
+              type: 'select',
+              label: 'იკონი',
+              defaultValue: 'bed',
+              options: [
+                { label: 'საძინებელი / Bed', value: 'bed' },
+                { label: 'აშენდა / Calendar', value: 'calendar' },
+                { label: 'სართულები / Layers', value: 'layers' },
+                { label: 'სააბაზანო / Bath', value: 'bath' },
+                { label: 'კვადრატულობა / Area', value: 'area' },
+                { label: 'ბინები / Building', value: 'building' },
+                { label: 'თავისუფალი / Key', value: 'key' },
+              ],
+            },
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              localized: true,
+            },
+            {
+              name: 'value',
+              type: 'text',
+              required: true,
+              localized: true,
+            },
+            {
+              name: 'unit',
+              type: 'text',
+              localized: true,
+            },
+          ],
+        },
+        {
+          name: 'showOnHomepage',
+          type: 'checkbox',
+          label: 'გამოჩნდეს მთავარ გვერდზე ("ჩვენი პროექტები")',
+          defaultValue: false,
+          admin: {
+            position: 'sidebar',
+            description:
+              'მთავარ გვერდზე ერთი პროექტი ჩანს და ეს არჩევანი პრიორიტეტულია. თუ არცერთი არაა მონიშნული, აირჩევა ის პროექტი, რომელსაც ყველაზე მეტი ბინა აქვს.',
+          },
+        },
+        {
+          name: 'homepageOrder',
+          type: 'number',
+          label: 'თანმიმდევრობა მთავარ გვერდზე',
+          defaultValue: 0,
+          admin: {
+            position: 'sidebar',
+          },
         },
       ],
       hooks: {
@@ -527,7 +604,7 @@ export default buildConfig({
           type: 'array',
           label: 'ოთახების დეტალური ფართობები',
           admin: {
-            description: 'მაგალითად: საძინებელი 1 — 12.26, აბაზანა — 3.91',
+            description: 'მაგალითად: საძინებელი 1 (12.26), აბაზანა (3.91)',
           },
           fields: [
             {
