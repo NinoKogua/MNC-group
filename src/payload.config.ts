@@ -641,6 +641,265 @@ export default buildConfig({
       ],
     },
     {
+      slug: 'about-page',
+      access: {
+        read: () => true,
+      },
+      admin: {
+        useAsTitle: 'label',
+        description: '"ჩვენ შესახებ" გვერდის მთლიანი კონტენტი. საკმარისია ერთი ჩანაწერი.',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          admin: {
+            description: 'მხოლოდ ადმინისთვის (მაგალითად: "ჩვენ შესახებ").',
+          },
+        },
+
+        /* ჰერო */
+        {
+          name: 'heroBadge',
+          type: 'text',
+          label: 'ზედა პატარა წარწერა',
+          localized: true,
+          admin: {
+            description: 'მაგალითად: ფიჭვები 2010',
+          },
+        },
+        {
+          name: 'heroTitle',
+          type: 'textarea',
+          label: 'ჰეროს სათაური',
+          localized: true,
+          admin: {
+            description: 'ახალი ხაზი იქ გადადის, სადაც Enter-ს დააჭერ.',
+          },
+        },
+        {
+          name: 'heroDescription',
+          type: 'textarea',
+          label: 'ჰეროს ტექსტი',
+          localized: true,
+        },
+        {
+          name: 'heroStats',
+          type: 'array',
+          label: 'ჰეროს ციფრები (ორი ბარათი)',
+          maxRows: 2,
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'ზედა წარწერა (მაგალითად: გამოცდილება)',
+              localized: true,
+              required: true,
+            },
+            {
+              name: 'value',
+              type: 'number',
+              label: 'ციფრი',
+              required: true,
+            },
+            {
+              name: 'suffix',
+              type: 'text',
+              label: 'ციფრის შემდეგ სიმბოლო (მაგალითად: +)',
+              defaultValue: '+',
+            },
+            {
+              name: 'caption',
+              type: 'text',
+              label: 'ქვედა წარწერა (მაგალითად: წელი ბაზარზე)',
+              localized: true,
+            },
+          ],
+        },
+        {
+          name: 'heroImages',
+          type: 'array',
+          label: 'ჰეროს ფოტოები (ორი ცალი)',
+          maxRows: 2,
+          fields: [
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+            },
+          ],
+        },
+
+        /* ისტორია */
+        {
+          name: 'timelineBadge',
+          type: 'text',
+          label: 'ისტორიის სექციის პატარა წარწერა',
+          localized: true,
+        },
+        {
+          name: 'timelineTitle',
+          type: 'text',
+          label: 'ისტორიის სექციის სათაური',
+          localized: true,
+        },
+        {
+          name: 'timeline',
+          type: 'array',
+          label: 'ისტორიის ეტაპები',
+          fields: [
+            {
+              name: 'year',
+              type: 'number',
+              label: 'წელი',
+              required: true,
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'სათაური',
+              localized: true,
+              required: true,
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'აღწერა',
+              localized: true,
+            },
+          ],
+        },
+
+        /* მისია */
+        {
+          name: 'missionTitle',
+          type: 'text',
+          label: 'მისიის სათაური',
+          localized: true,
+        },
+        {
+          name: 'missionTitleHighlight',
+          type: 'text',
+          label: 'მისიის სათაურის ფერადი ნაწილი',
+          localized: true,
+        },
+        {
+          name: 'missionDescription',
+          type: 'textarea',
+          label: 'მისიის ტექსტი',
+          localized: true,
+        },
+        {
+          name: 'missionFeatures',
+          type: 'array',
+          label: 'მისიის ჩამონათვალი',
+          fields: [
+            {
+              name: 'text',
+              type: 'text',
+              localized: true,
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'missionImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'მისიის ფოტო',
+        },
+
+        /* ხედვა */
+        {
+          name: 'visionTitle',
+          type: 'text',
+          label: 'ხედვის სათაური',
+          localized: true,
+        },
+        {
+          name: 'visionTitleHighlight',
+          type: 'text',
+          label: 'ხედვის სათაურის ფერადი ნაწილი',
+          localized: true,
+        },
+        {
+          name: 'visionDescription',
+          type: 'textarea',
+          label: 'ხედვის ტექსტი',
+          localized: true,
+        },
+        {
+          name: 'visionStats',
+          type: 'array',
+          label: 'ხედვის სექციის ციფრები',
+          maxRows: 2,
+          fields: [
+            {
+              name: 'value',
+              type: 'text',
+              label: 'ციფრი (მაგალითად: 500+)',
+              required: true,
+            },
+            {
+              name: 'label',
+              type: 'text',
+              label: 'წარწერა',
+              localized: true,
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'visionImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'ხედვის ფოტო',
+        },
+
+        /* გუნდი */
+        {
+          name: 'teamBadge',
+          type: 'text',
+          label: 'გუნდის სექციის პატარა წარწერა',
+          localized: true,
+        },
+        {
+          name: 'teamTitle',
+          type: 'text',
+          label: 'გუნდის სექციის სათაური',
+          localized: true,
+        },
+        {
+          name: 'team',
+          type: 'array',
+          label: 'გუნდის წევრები',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              label: 'სახელი და გვარი',
+              localized: true,
+              required: true,
+            },
+            {
+              name: 'role',
+              type: 'text',
+              label: 'პოზიცია',
+              localized: true,
+            },
+            {
+              name: 'photo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'ფოტო',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
       slug: 'restaurant-page',
       admin: {
         useAsTitle: 'heroTitle',

@@ -1,11 +1,17 @@
-"use client";
+'use client'
 
-import dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic'
 
 const AboutTeam = dynamic(() => import('./AboutTeam'), {
-    ssr: false
-});
+  ssr: false,
+})
 
-export default function ClientAboutTeam() {
-    return <AboutTeam />;
+type Props = {
+  badge?: string
+  title?: string
+  members?: { name: string; role?: string; image?: string }[]
+}
+
+export default function ClientAboutTeam(props: Props) {
+  return <AboutTeam {...props} />
 }

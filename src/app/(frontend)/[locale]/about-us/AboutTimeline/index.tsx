@@ -1,43 +1,36 @@
 "use client";
 import React, { useState } from "react";
 
-export default function AboutTimeline() {
-  const timelineData = [
-    {
-      year: 2015,
-      title: "დაარსება",
-      description:
-        "კომპანია დაარსდა და დაიწყო პირველი ნაბიჯები სამშენებლო ბაზარზე, ჩამოყალიბდა გუნდი და მთავარი ხედვა.",
-    },
-    {
-      year: 2018,
-      title: "პირველი პროექტი",
-      description:
-        "წარმატებით დასრულდა პირველი საცხოვრებელი კომპლექსი მრავალწლიანი გარანტიით, რომელმაც მაღალი შეფასება დაიმსახურა.",
-    },
-    {
-      year: 2021,
-      title: "გაფართოება",
-      description:
-        "დავიწყეთ მასშტაბური პროექტები რეგიონებში და დავნერგეთ ეკოლოგიურად სუფთა მშენებლობის ახალი სტანდარტები.",
-    },
-    {
-      year: 2025,
-      title: "მომავლის გეგმები",
-      description:
-        "ვგეგმავთ ინოვაციური 'ჭკვიანი სახლების' მშენებლობას და საერთაშორისო სტანდარტების სრულ დანერგვას საქართველოში.",
-    },
-  ];
+type TimelineItem = {
+  year: number;
+  title: string;
+  description?: string | null;
+};
 
-  const [activeIndex, setActiveIndex] = useState(1);
+type Props = {
+  badge?: string;
+  title?: string;
+  items?: TimelineItem[];
+};
+
+export default function AboutTimeline({ badge, title, items }: Props) {
+  const timelineData = items ?? [];
+
+  const [activeIndex, setActiveIndex] = useState(
+    timelineData.length > 1 ? 1 : 0,
+  );
+
+  if (!timelineData.length) return null;
+
+  const activeItem = timelineData[activeIndex] ?? timelineData[0];
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-20 pt-0 text-center font-kirovi">
       <p className="text-green-primary font-bold uppercase text-[20px] tracking-[0.2em] mb-4">
-        ისტორია
+        {badge}
       </p>
       <h2 className="text-4xl font-extrabold text-gray-800 mb-16">
-        გზა წარმატებისკენ
+        {title}
       </h2>
 
       <div className="relative flex justify-between items-center max-w-4xl mx-auto mb-20 px-4">
@@ -45,7 +38,10 @@ export default function AboutTimeline() {
         <div
           className="absolute top-1/2 left-0 h-1 bg-[#006341] -translate-y-1/2 transition-all duration-500"
           style={{
-            width: `${(activeIndex / (timelineData.length - 1)) * 100}%`,
+            width:
+              timelineData.length > 1
+                ? `${(activeIndex / (timelineData.length - 1)) * 100}%`
+                : "100%",
           }}
         />
 
@@ -78,11 +74,11 @@ export default function AboutTimeline() {
           <div className="flex flex-col items-center">
             <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#F8F6F1] border border-green-primary/10 text-green-primary rounded-2xl mb-8 group-hover:scale-105 transition-transform duration-300">
               <span className="text-xl font-black">
-                {timelineData[activeIndex].year}
+                {activeItem.year}
               </span>
               <div className="w-1.5 h-1.5 rounded-full bg-green-primary/30" />
               <span className="font-bold tracking-wide uppercase text-lg">
-                {timelineData[activeIndex].title}
+                {activeItem.title}
               </span>
             </div>
 
@@ -91,7 +87,7 @@ export default function AboutTimeline() {
                 “
               </span>
               <p className="text-gray-600 font-mtavruli leading-relaxed text-xl relative z-10 px-4">
-                {timelineData[activeIndex].description}
+                {activeItem.description}
               </p>
               <span className="absolute -bottom-10 -right-4 text-6xl text-gray-100 font-serif leading-none pointer-events-none select-none">
                 ”

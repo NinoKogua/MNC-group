@@ -25,23 +25,19 @@ const statusLabel = (status: string, locale: string) => {
   return locale === 'ka' ? 'მიმდინარე' : 'Ongoing'
 }
 
-const pattern = `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a2e2a' fill-opacity='0.030'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+const pattern = `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%231a2e2a' fill-opacity='0.030'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
 
 export default function ProjectsClient({ projects, locale }: Props) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  const categories = Array.from(new Set(projects.map((p) => p.category).filter(Boolean))) as string[]
+  const categories = Array.from(
+    new Set(projects.map((p) => p.category).filter(Boolean)),
+  ) as string[]
 
-  const filtered = activeCategory
-    ? projects.filter((p) => p.category === activeCategory)
-    : projects
+  const filtered = activeCategory ? projects.filter((p) => p.category === activeCategory) : projects
 
   return (
-    <main
-      className="w-full min-h-screen bg-[#F8F6F1]"
-      style={{ backgroundImage: pattern }}
-    >
-
+    <main className="w-full min-h-screen bg-[#F8F6F1]" style={{ backgroundImage: pattern }}>
       {/* Header */}
       <section className="max-w-7xl mx-auto px-6 pt-14 pb-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -97,7 +93,9 @@ export default function ProjectsClient({ projects, locale }: Props) {
               className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 hover:shadow-md transition-all duration-300"
             >
               <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100 rounded-t-2xl">
-                {project.coverImage && typeof project.coverImage === 'object' && (project.coverImage as any).url ? (
+                {project.coverImage &&
+                typeof project.coverImage === 'object' &&
+                (project.coverImage as any).url ? (
                   <Image
                     src={(project.coverImage as any).url}
                     alt={(project.coverImage as any).alt || project.title}
@@ -121,11 +119,13 @@ export default function ProjectsClient({ projects, locale }: Props) {
                     <span className="text-xs text-gray-400 font-mono">{project.year}</span>
                   )}
                   {project.status && (
-                    <span className={`text-xs uppercase tracking-widest px-2 pt-[5px] pb-[3px] rounded-md ${
-                      project.status === 'completed'
-                        ? 'bg-green-50 text-green-700'
-                        : 'bg-amber-50 text-amber-700'
-                    }`}>
+                    <span
+                      className={`text-xs uppercase tracking-widest px-2 pt-[5px] pb-[3px] rounded-md ${
+                        project.status === 'completed'
+                          ? 'bg-green-50 text-green-700'
+                          : 'bg-amber-50 text-amber-700'
+                      }`}
+                    >
                       {statusLabel(project.status, locale)}
                     </span>
                   )}

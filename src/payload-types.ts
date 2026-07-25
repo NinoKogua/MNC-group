@@ -76,6 +76,7 @@ export interface Config {
     'project-categories': ProjectCategory;
     projects: Project;
     apartments: Apartment;
+    'about-page': AboutPage;
     'restaurant-page': RestaurantPage;
     media: Media;
     'contact-info': ContactInfo;
@@ -96,6 +97,7 @@ export interface Config {
     'project-categories': ProjectCategoriesSelect<false> | ProjectCategoriesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     apartments: ApartmentsSelect<false> | ApartmentsSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
     'restaurant-page': RestaurantPageSelect<false> | RestaurantPageSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
@@ -413,6 +415,86 @@ export interface Apartment {
   createdAt: string;
 }
 /**
+ * "ჩვენ შესახებ" გვერდის მთლიანი კონტენტი. საკმარისია ერთი ჩანაწერი.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  /**
+   * მხოლოდ ადმინისთვის (მაგალითად: "ჩვენ შესახებ").
+   */
+  label?: string | null;
+  /**
+   * მაგალითად: ფიჭვები 2010
+   */
+  heroBadge?: string | null;
+  /**
+   * ახალი ხაზი იქ გადადის, სადაც Enter-ს დააჭერ.
+   */
+  heroTitle?: string | null;
+  heroDescription?: string | null;
+  heroStats?:
+    | {
+        label: string;
+        value: number;
+        suffix?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  heroImages?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  timelineBadge?: string | null;
+  timelineTitle?: string | null;
+  timeline?:
+    | {
+        year: number;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  missionTitle?: string | null;
+  missionTitleHighlight?: string | null;
+  missionDescription?: string | null;
+  missionFeatures?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  missionImage?: (number | null) | Media;
+  visionTitle?: string | null;
+  visionTitleHighlight?: string | null;
+  visionDescription?: string | null;
+  visionStats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  visionImage?: (number | null) | Media;
+  teamBadge?: string | null;
+  teamTitle?: string | null;
+  team?:
+    | {
+        name: string;
+        role?: string | null;
+        photo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "restaurant-page".
  */
@@ -574,6 +656,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'apartments';
         value: number | Apartment;
+      } | null)
+    | ({
+        relationTo: 'about-page';
+        value: number | AboutPage;
       } | null)
     | ({
         relationTo: 'restaurant-page';
@@ -806,6 +892,74 @@ export interface ApartmentsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  label?: T;
+  heroBadge?: T;
+  heroTitle?: T;
+  heroDescription?: T;
+  heroStats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        suffix?: T;
+        caption?: T;
+        id?: T;
+      };
+  heroImages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  timelineBadge?: T;
+  timelineTitle?: T;
+  timeline?:
+    | T
+    | {
+        year?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  missionTitle?: T;
+  missionTitleHighlight?: T;
+  missionDescription?: T;
+  missionFeatures?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  missionImage?: T;
+  visionTitle?: T;
+  visionTitleHighlight?: T;
+  visionDescription?: T;
+  visionStats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  visionImage?: T;
+  teamBadge?: T;
+  teamTitle?: T;
+  team?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        photo?: T;
         id?: T;
       };
   updatedAt?: T;

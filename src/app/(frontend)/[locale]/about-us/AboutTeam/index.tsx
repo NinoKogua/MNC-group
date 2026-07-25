@@ -3,8 +3,6 @@ import React from 'react'
 import { Share2, AtSign, MessageCircle } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
-import nino from '@/app/assets/images/nino_kogua.jpg'
-import otar from '@/app/assets/images/otar_tsibilashvili.png'
 import Image, { StaticImageData } from 'next/image'
 
 import 'swiper/css'
@@ -12,19 +10,21 @@ import 'swiper/css/pagination'
 
 interface MemberProps {
   name: string
-  role: string
-  image: string | StaticImageData
+  role?: string
+  image?: string | StaticImageData
 }
 
 const TeamMember = ({ name, role, image }: MemberProps) => (
   <div className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-50 group h-full">
-    <div className="h-[300px] overflow-hidden relative">
-      <Image
-        src={image}
-        alt={name}
-        fill
-        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-      />
+    <div className="h-[300px] overflow-hidden relative bg-gray-100">
+      {image && (
+        <Image
+          src={image}
+          alt={name}
+          fill
+          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+        />
+      )}
       <div className="absolute bottom-4 left-4 flex gap-2 z-10">
         {[Share2, AtSign, MessageCircle].map((Icon, i) => (
           <div
@@ -43,41 +43,36 @@ const TeamMember = ({ name, role, image }: MemberProps) => (
   </div>
 )
 
-export default function AboutTeam() {
-  const members = [
-    {
-      name: 'ნინო კოღუა',
-      role: 'მარკეტინგის დირექტორი',
-      image: nino,
-    },
-    {
-      name: 'ოთარ წიბილაშვილი',
-      role: 'გენერალური დირექტორი',
-      image: otar,
-    },
-    {
-      name: 'ნინო არზიანი',
-      role: 'ინტერიერის დიზაინერი',
-      image:
-        'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'გიორგი ქურციკიძე',
-      role: 'არქიტექტორი',
-      image:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80',
-    },
-  ]
+type Member = {
+  name: string
+  role?: string
+  image?: string | StaticImageData
+}
+
+type Props = {
+  badge?: string
+  title?: string
+  members?: Member[]
+}
+
+export default function AboutTeam({ badge, title, members }: Props) {
+  const teamMembers = members ?? []
+
+  if (!teamMembers.length) return null
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-24 pt-0 bg-[#F0F2F0]/30 rounded-[64px] mb-20 font-kirovi">
       <div className="text-center mb-16 px-4">
-        <p className="text-green-primary font-bold uppercase text-[20px] tracking-[0.2em] mb-3">
-          ჩვენი გუნდი
-        </p>
-        <h2 className="text-3xl md:text-4xl leading-none font-extrabold text-gray-800 uppercase">
-          გაიცანით პროფესიონალები
-        </h2>
+        {badge && (
+          <p className="text-green-primary font-bold uppercase text-[20px] tracking-[0.2em] mb-3">
+            {badge}
+          </p>
+        )}
+        {title && (
+          <h2 className="text-3xl md:text-4xl leading-none font-extrabold text-gray-800 uppercase">
+            {title}
+          </h2>
+        )}
       </div>
 
       <div className="team-swiper-container">
@@ -98,7 +93,7 @@ export default function AboutTeam() {
           }}
           className="pb-24"
         >
-          {members.map((m, i) => (
+          {teamMembers.map((m, i) => (
             <SwiperSlide key={i}>
               <TeamMember {...m} />
             </SwiperSlide>

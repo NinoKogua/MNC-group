@@ -3,8 +3,6 @@ import React, { useEffect, useRef } from 'react'
 import { ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { motion, Variants, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
-import restaurantImg from '../../../../assets/restaurant.png'
-import entrance from '@/app/assets/images/entrance.png'
 
 function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const [displayValue, setDisplayValue] = React.useState(0)
@@ -40,7 +38,28 @@ function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
   )
 }
 
-export default function AboutHero() {
+type HeroStat = {
+  label: string
+  value: number
+  suffix?: string | null
+  caption?: string | null
+}
+
+type Props = {
+  badge?: string
+  title?: string
+  description?: string
+  stats?: HeroStat[]
+  images?: string[]
+}
+
+export default function AboutHero({ badge, title, description, stats, images }: Props) {
+  const [firstStat, secondStat] = stats ?? []
+  const [firstImage, secondImage] = images ?? []
+
+  const hasContent =
+    Boolean(badge || title || description) || Boolean(stats?.length) || Boolean(images?.length)
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -57,6 +76,8 @@ export default function AboutHero() {
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as any },
     },
   }
+
+  if (!hasContent) return null
 
   return (
     <section className="relative pt-16 pb-20 px-4 overflow-hidden ">
@@ -82,17 +103,21 @@ export default function AboutHero() {
             className="col-span-12 md:col-span-6 bg-[#161616] rounded-[20px] p-10 flex flex-col justify-between min-h-[450px] text-white relative font-kirovi group overflow-hidden"
           >
             <div className="space-y-6 relative z-10">
-              <motion.span className="text-xs font-bold tracking-widest opacity-50 uppercase block">
-                ფიჭვები - 2010
-              </motion.span>
-              <h1 className="text-5xl md:text-7xl font-extrabold leading-none">
-                ჩვენ <br /> შესახებ
-              </h1>
-              <p className="text-gray-400 text-lg max-w-sm leading-relaxed font-mtavruli">
-                ფიჭვები 2024 - ადგილი სადაც ისტორია და თანამედროვეობა ერწყმის ერთმანეტს. ბუნების
-                წიაღში აღმოცენებული თანამედროვე არქიტექტურა და კომფორტი, თქვენი საკუთარი
-                დასვენებისთვის.
-              </p>
+              {badge && (
+                <motion.span className="text-xs font-bold tracking-widest opacity-50 uppercase block">
+                  {badge}
+                </motion.span>
+              )}
+              {title && (
+                <h1 className="text-5xl md:text-7xl font-extrabold leading-none whitespace-pre-line">
+                  {title}
+                </h1>
+              )}
+              {description && (
+                <p className="text-gray-400 text-lg max-w-sm leading-relaxed font-mtavruli">
+                  {description}
+                </p>
+              )}
             </div>
 
             <motion.div
@@ -111,48 +136,60 @@ export default function AboutHero() {
           </motion.div>
 
           <div className="col-span-12 md:col-span-6 grid grid-cols-2 gap-4 font-kirovi">
-            <motion.div
-              variants={cardVariants}
-              className="bg-green-primary rounded-[20px] p-8 flex flex-col justify-between text-white shadow-xl"
-            >
-              <span className="text-sm font-bold uppercase tracking-widest opacity-70">
-                გამოცდილება
-              </span>
-              <div className="flex flex-col">
-                <span className="text-6xl font-black leading-none">
-                  <Counter value={15} suffix="+" />
+            {firstStat && (
+              <motion.div
+                variants={cardVariants}
+                className="bg-green-primary rounded-[20px] p-8 flex flex-col justify-between text-white shadow-xl"
+              >
+                <span className="text-sm font-bold uppercase tracking-widest opacity-70">
+                  {firstStat.label}
                 </span>
-                <span className="text-xs font-bold uppercase mt-2 opacity-70">წელი ბაზარზე</span>
-              </div>
-            </motion.div>
+                <div className="flex flex-col">
+                  <span className="text-6xl font-black leading-none">
+                    <Counter value={firstStat.value} suffix={firstStat.suffix ?? ''} />
+                  </span>
+                  <span className="text-xs font-bold uppercase mt-2 opacity-70">
+                    {firstStat.caption}
+                  </span>
+                </div>
+              </motion.div>
+            )}
 
-            <motion.div
-              variants={cardVariants}
-              className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
-            >
-              <Image src={entrance} alt="Pool" fill className="object-cover" />
-            </motion.div>
+            {firstImage && (
+              <motion.div
+                variants={cardVariants}
+                className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
+              >
+                <Image src={firstImage} alt={title ?? ''} fill className="object-cover" />
+              </motion.div>
+            )}
 
-            <motion.div
-              variants={cardVariants}
-              className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
-            >
-              <Image src={restaurantImg} alt="Architecture" fill className="object-cover" />
-            </motion.div>
+            {secondImage && (
+              <motion.div
+                variants={cardVariants}
+                className="relative rounded-[20px] overflow-hidden min-h-[180px] shadow-lg"
+              >
+                <Image src={secondImage} alt={title ?? ''} fill className="object-cover" />
+              </motion.div>
+            )}
 
-            {/* მაცხოვრებელი */}
-            <motion.div
-              variants={cardVariants}
-              className="bg-white rounded-[20px] p-8 flex flex-col justify-between border border-gray-100 shadow-sm text-green-primary"
-            >
-              <span className="text-sm font-bold uppercase tracking-widest">მაცხოვრებელი</span>
-              <div className="flex flex-col">
-                <span className="text-6xl font-black leading-none">
-                  <Counter value={200} suffix="+" />
+            {/* მეორე ციფრი */}
+            {secondStat && (
+              <motion.div
+                variants={cardVariants}
+                className="bg-white rounded-[20px] p-8 flex flex-col justify-between border border-gray-100 shadow-sm text-green-primary"
+              >
+                <span className="text-sm font-bold uppercase tracking-widest">
+                  {secondStat.label}
                 </span>
-                <span className="text-xs font-bold uppercase mt-2">ბედნიერი ოჯახი</span>
-              </div>
-            </motion.div>
+                <div className="flex flex-col">
+                  <span className="text-6xl font-black leading-none">
+                    <Counter value={secondStat.value} suffix={secondStat.suffix ?? ''} />
+                  </span>
+                  <span className="text-xs font-bold uppercase mt-2">{secondStat.caption}</span>
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
       </motion.div>
