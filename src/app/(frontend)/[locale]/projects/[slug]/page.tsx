@@ -329,34 +329,6 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* პროექტის მთავარი გალერეა */}
-      {gallery.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 pb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {gallery.map((img: any, i: number) => {
-              const isWide = i === 0 || i % 5 === 0
-              return (
-                <div
-                  key={i}
-                  className={`relative overflow-hidden bg-gray-100 ${
-                    isWide ? 'md:col-span-2 aspect-[16/7]' : 'aspect-[4/3]'
-                  }`}
-                >
-                  <Image
-                    src={img.url!}
-                    alt={img.alt || `${project.title} — ${i + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    unoptimized={process.env.NODE_ENV === 'development'}
-                    className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
       {/* მსგავსი პროექტები */}
       {similar.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 pb-24">
