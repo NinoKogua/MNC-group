@@ -5,7 +5,7 @@ import Footer from '../components/ui/Footer'
 import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Pines',
+  title: 'MNC Group',
   description: 'ფიჭვების პროექტი მაღალმთიანი ტიპის ეკომეგობრული სივრცეების შექმნას ისახავს მიზნად.',
   icons: {
     icon: [
