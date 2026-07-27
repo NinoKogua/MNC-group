@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import logo from '../../../../assets/images/restaurant_imgs/rest_logo.svg'
 import heroImg from '../../../../assets/images/restaurant_imgs/restaurant_page-0008.jpg'
 import paperTexture from '../../../../assets/images/restaurant_imgs/Paper-Texture.jpg'
@@ -153,9 +154,10 @@ export default function RestaurantBookingClient({ locale }: Props) {
         </div>
 
         {/* GRID */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 border border-green-primary lg:h-[580px] overflow-hidden rounded-xl">
+        {/* overflow-hidden-ის ნაცვლად კუთხეები ცალკეულ ბლოკებზეა, რომ დროფდაუნი არ ჩაიჭრას */}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 border border-green-primary lg:h-[580px] rounded-xl">
           {/* IMAGE */}
-          <div className="relative h-[280px] lg:h-full">
+          <div className="relative h-[280px] lg:h-full overflow-hidden rounded-t-xl lg:rounded-t-none lg:rounded-l-xl">
             <Image
               src={heroImg}
               alt="restaurant"
@@ -168,7 +170,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
           {/* RIGHT SIDE: FORM OR SUCCESS MESSAGE */}
           <div className="p-8 md:p-12 flex flex-col justify-center relative">
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none rounded-b-xl lg:rounded-b-none lg:rounded-r-xl"
               style={{
                 backgroundImage: `url('${paperTexture.src}')`,
                 opacity: 0.15,
@@ -251,24 +253,48 @@ export default function RestaurantBookingClient({ locale }: Props) {
 
                 {/* GUESTS + DATE + TIME */}
                 <div className="grid grid-cols-3 gap-3">
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Guests"
-                    value={guests}
-                    onChange={(e) => {
-                      const val = e.target.value
-                      if (val === '' || Number(val) >= 1) {
-                        setGuests(val)
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === '-' || e.key === 'e' || e.key === '+') {
-                        e.preventDefault()
-                      }
-                    }}
-                    className={inputClass(guests)}
-                  />
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="Guests"
+                      value={guests}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        if (val === '' || Number(val) >= 1) {
+                          setGuests(val)
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === '-' || e.key === 'e' || e.key === '+') {
+                          e.preventDefault()
+                        }
+                      }}
+                      className={`${inputClass(guests)} pr-9 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+                    />
+
+                    {/* ბრაუზერის სტანდარტული ისრების ნაცვლად — ჩვენი ჩევრონები */}
+                    <div className="absolute inset-y-0.5 right-0.5 flex flex-col justify-center">
+                      <button
+                        type="button"
+                        tabIndex={-1}
+                        aria-label={locale === 'ka' ? 'სტუმრების მატება' : 'Increase guests'}
+                        onClick={() => setGuests(String(Math.max(1, (Number(guests) || 0) + 1)))}
+                        className="flex items-center justify-center px-1.5 text-gray-400 hover:text-green-700 transition-colors"
+                      >
+                        <ChevronUp size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        tabIndex={-1}
+                        aria-label={locale === 'ka' ? 'სტუმრების კლება' : 'Decrease guests'}
+                        onClick={() => setGuests(String(Math.max(1, (Number(guests) || 1) - 1)))}
+                        className="flex items-center justify-center px-1.5 text-gray-400 hover:text-green-700 transition-colors"
+                      >
+                        <ChevronDown size={14} />
+                      </button>
+                    </div>
+                  </div>
 
                   <input
                     type="date"
@@ -289,21 +315,12 @@ export default function RestaurantBookingClient({ locale }: Props) {
                       }`}
                     >
                       <span>{selectedTime || (locale === 'ka' ? 'დრო' : 'Time')}</span>
-                      <svg
-                        className={`w-4 h-4 ml-1 transition-transform ${
+                      <ChevronDown
+                        size={16}
+                        className={`ml-1 shrink-0 transition-transform ${
                           isTimeOpen ? 'rotate-180' : ''
                         }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
+                      />
                     </button>
 
                     {isTimeOpen && (

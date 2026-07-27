@@ -5,12 +5,17 @@ import config from '@payload-config'
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
 
-  const targetTotalArea = searchParams.get('totalArea')
-    ? Number(searchParams.get('totalArea'))
-    : null
-  const targetBedroomCount = searchParams.get('bedroom')
-    ? Number(searchParams.get('bedroom'))
-    : null
+  // უარყოფითი / არავალიდური მნიშვნელობები იგნორირდება (მინიმუმი 0)
+  const parsePositiveParam = (key: string) => {
+    const raw = searchParams.get(key)
+    if (!raw) return null
+    const value = Number(raw)
+    if (!Number.isFinite(value) || value < 0) return null
+    return value
+  }
+
+  const targetTotalArea = parsePositiveParam('totalArea')
+  const targetBedroomCount = parsePositiveParam('bedroom')
 
   try {
     const payload = await getPayload({ config })

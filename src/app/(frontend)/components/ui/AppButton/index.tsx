@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface AppButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "arrowButton" | "primary" | "outline";
@@ -43,7 +43,7 @@ export default function AppButton({
       <span className="flex items-center gap-2">
         {children}
         {showArrow && (
-          <ArrowRight
+          <ChevronRight
             className="group-hover:translate-x-1 transition-transform"
             size={20}
           />

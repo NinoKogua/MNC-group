@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Loader, Search } from 'lucide-react'
+import { ChevronDown, ChevronUp, Loader, Search } from 'lucide-react'
 import AppButton from '@/app/(frontend)/components/ui/AppButton'
 
 type Locale = 'ka' | 'en'
@@ -17,7 +17,8 @@ const translations = {
     totalAreaLabel: 'მთლიანი ფართი (მ²)',
     totalAreaPlaceholder: 'მაგ: 108',
     bedroomLabel: 'საძინებლების რაოდენობა',
-    bedroomPlaceholder: 'მაგ: 2',
+    bedroomAny: 'ნებისმიერი',
+    bedroomOption: (count: number) => `${count} საძინებელი`,
     searching: 'მიმდინარეობს ძებნა...',
     searchButton: 'შესაბამისი ბინების ძებნა',
     searchError: 'ძებნისას დაფიქსირდა შეცდომა',
@@ -42,7 +43,8 @@ const translations = {
     totalAreaLabel: 'Total area (m²)',
     totalAreaPlaceholder: 'e.g. 108',
     bedroomLabel: 'Number of bedrooms',
-    bedroomPlaceholder: 'e.g. 2',
+    bedroomAny: 'Any',
+    bedroomOption: (count: number) => `${count} ${count === 1 ? 'bedroom' : 'bedrooms'}`,
     searching: 'Searching...',
     searchButton: 'Search matching apartments',
     searchError: 'Something went wrong while searching',
@@ -73,6 +75,61 @@ export default function ApartmentFinder() {
 
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [results, setResults] = useState<any[] | null>(null)
+
+  const [isBedroomOpen, setIsBedroomOpen] = useState<boolean>(false)
+  const [bedroomOptions, setBedroomOptions] = useState<number[]>([])
+  const bedroomDropdownRef = useRef<HTMLDivElement>(null)
+
+  // საძინებლების ვარიანტები ბექენდიდან — მხოლოდ რეალურად არსებული რაოდენობები
+  useEffect(() => {
+    let cancelled = false
+
+    const loadBedroomOptions = async () => {
+      try {
+        const res = await fetch('/api/apartment-filters')
+        if (!res.ok) throw new Error()
+
+        const data = await res.json()
+        if (!cancelled && Array.isArray(data.bedrooms)) {
+          setBedroomOptions(data.bedrooms)
+        }
+      } catch {
+        // ვარიანტების ჩატვირთვის შეცდომისას დროფდაუნი რჩება მხოლოდ "ნებისმიერი"-თ
+      }
+    }
+
+    loadBedroomOptions()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (bedroomDropdownRef.current && !bedroomDropdownRef.current.contains(e.target as Node)) {
+        setIsBedroomOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // უარყოფითი და არასწორი მნიშვნელობების აღკვეთა — მინიმუმი ყოველთვის 0
+  const handleTotalAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (value === '') {
+      setTotalArea('')
+      return
+    }
+    const parsed = Number(value)
+    if (!Number.isFinite(parsed) || parsed < 0) return
+    setTotalArea(value)
+  }
+
+  const stepTotalArea = (delta: number) => {
+    const current = Number(totalArea) || 0
+    setTotalArea(String(Math.max(0, current + delta)))
+  }
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -110,29 +167,98 @@ export default function ApartmentFinder() {
             <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
               {t.totalAreaLabel}
             </label>
-            <input
-              type="number"
-              placeholder={t.totalAreaPlaceholder}
-              value={totalArea}
-              onChange={(e) => setTotalArea(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all"
-            />
+            <div className="relative">
+              <input
+                type="number"
+                min={0}
+                step="any"
+                inputMode="decimal"
+                placeholder={t.totalAreaPlaceholder}
+                value={totalArea}
+                onChange={handleTotalAreaChange}
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e' || e.key === 'E') e.preventDefault()
+                }}
+                className="w-full pl-4 pr-11 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+
+              {/* ბრაუზერის სტანდარტული ისრების ნაცვლად — ჩვენი ჩევრონები */}
+              <div className="absolute inset-y-1 right-1 flex flex-col justify-center">
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  aria-label={t.totalAreaLabel}
+                  onClick={() => stepTotalArea(1)}
+                  className="flex items-center justify-center px-2 text-gray-400 hover:text-[#1A7550] transition-colors"
+                >
+                  <ChevronUp size={16} />
+                </button>
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  aria-label={t.totalAreaLabel}
+                  onClick={() => stepTotalArea(-1)}
+                  className="flex items-center justify-center px-2 text-gray-400 hover:text-[#1A7550] transition-colors"
+                >
+                  <ChevronDown size={16} />
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* საძინებლების რაოდენობის ინფუთი */}
+          {/* საძინებლების რაოდენობის დროფდაუნი */}
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
               {t.bedroomLabel}
             </label>
-            <input
-              type="number"
-              min={0}
-              step={1}
-              placeholder={t.bedroomPlaceholder}
-              value={bedroomCount}
-              onChange={(e) => setBedroomCount(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all"
-            />
+            <div className="relative" ref={bedroomDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsBedroomOpen((prev) => !prev)}
+                className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border rounded-lg transition-all hover:border-[#1A7550] focus:outline-none focus:border-[#1A7550] focus:bg-white ${
+                  bedroomCount
+                    ? 'border-[#1A7550] text-gray-800 bg-white'
+                    : 'border-gray-200 text-gray-400'
+                }`}
+              >
+                <span>{bedroomCount ? t.bedroomOption(Number(bedroomCount)) : t.bedroomAny}</span>
+                <ChevronDown
+                  size={20}
+                  className={`text-gray-500 transition-transform duration-300 ${
+                    isBedroomOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {isBedroomOpen && (
+                <div
+                  className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto
+                  [&::-webkit-scrollbar]:w-1.5
+                  [&::-webkit-scrollbar-track]:bg-gray-100
+                  [&::-webkit-scrollbar-track]:rounded-lg
+                  [&::-webkit-scrollbar-thumb]:bg-[#1A7550]
+                  [&::-webkit-scrollbar-thumb]:rounded-lg"
+                >
+                  {['', ...bedroomOptions.map(String)].map((option) => (
+                    <button
+                      key={option || 'any'}
+                      type="button"
+                      onClick={() => {
+                        setBedroomCount(option)
+                        setIsBedroomOpen(false)
+                      }}
+                      className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-green-50 ${
+                        bedroomCount === option
+                          ? 'bg-green-100 font-semibold text-[#1A7550]'
+                          : 'text-gray-700'
+                      }`}
+                    >
+                      {option ? t.bedroomOption(Number(option)) : t.bedroomAny}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

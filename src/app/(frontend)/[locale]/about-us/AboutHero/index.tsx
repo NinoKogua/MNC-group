@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
-import { ArrowDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import { motion, Variants, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
 
@@ -125,7 +125,7 @@ export default function AboutHero({ badge, title, description, stats, images }: 
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               className="w-14 h-14 mt-12 border border-white/20 rounded-[20px] flex items-center justify-center relative z-10"
             >
-              <ArrowDown className="text-white" size={24} />
+              <ChevronDown className="text-white" size={24} />
             </motion.div>
 
             <motion.div
