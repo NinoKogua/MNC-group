@@ -49,6 +49,7 @@ function getCalendarDays(viewDate: Date): (Date | null)[] {
 export default function RestaurantBookingClient({ locale }: Props) {
   const searchParams = useSearchParams()
   const [showSuccess, setShowSuccess] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
 
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
@@ -116,10 +117,12 @@ export default function RestaurantBookingClient({ locale }: Props) {
         : 'border-brown-primary/40 focus:border-green-primary'
     }`
 
-  // ✅ show success banner if redirected with ?success=true
+  // ✅ show success banner if redirected with ?success=true, and scroll it into view
+  // (a full page reload resets scroll to top, which is above this section)
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
       setShowSuccess(true)
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [searchParams])
 
@@ -210,7 +213,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
   }
 
   return (
-    <section className="w-full py-16 px-4 md:px-12 relative bg-[#f5f0e8]">
+    <section ref={sectionRef} className="w-full py-16 px-4 md:px-12 relative bg-[#f5f0e8]">
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{

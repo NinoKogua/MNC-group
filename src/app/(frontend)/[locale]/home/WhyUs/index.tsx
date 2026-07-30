@@ -5,16 +5,16 @@ import FeatureCard from '../../../components/common/FeaturedCard'
 import CtaBanner from '../../../components/common/CtaBanner'
 import HomeIcon from '@/app/assets/icons/Home'
 import ShieldIcon from '@/app/assets/icons/Shield'
-import CubeIcon from '@/app/assets/icons/Cube'
-import StarsIcon from '@/app/assets/icons/Stars'
+import GraduationCapIcon from '@/app/assets/icons/GraduationCap'
+import MessageIcon from '@/app/assets/icons/Message'
 
 type IconType = ComponentType<{ size?: number; className?: string }>
 
 const iconMap: Record<string, IconType> = {
   home: HomeIcon,
   shield: ShieldIcon,
-  cube: CubeIcon,
-  stars: StarsIcon,
+  cube: GraduationCapIcon,
+  stars: MessageIcon,
 }
 
 export default async function WhyUsSection({ locale }: { locale: string }) {

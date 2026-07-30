@@ -168,7 +168,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* დეტალები + აღწერა */}
       <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* მარცხენა - metadata */}
-        <div className="lg:col-span-3 flex-col-span gap-7 border-t border-gray-100 pt-8">
+        <div className="lg:col-span-3 flex flex-col gap-7 border-t border-gray-100 pt-8">
           {project.status && (
             <div>
               <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
