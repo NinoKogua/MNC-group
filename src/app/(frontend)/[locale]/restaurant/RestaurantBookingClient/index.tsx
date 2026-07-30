@@ -3,13 +3,47 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, ChevronLeft, Calendar as CalendarIcon } from 'lucide-react'
 import logo from '../../../../assets/images/restaurant_imgs/rest_logo.svg'
 import heroImg from '../../../../assets/images/restaurant_imgs/restaurant_page-0008.jpg'
 import paperTexture from '../../../../assets/images/restaurant_imgs/Paper-Texture.jpg'
 
 type Props = {
   locale: 'en' | 'ka'
+}
+
+const WEEKDAYS_EN = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+const WEEKDAYS_KA = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვ']
+
+function toISODate(date: Date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function isSameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
+}
+
+function getCalendarDays(viewDate: Date): (Date | null)[] {
+  const year = viewDate.getFullYear()
+  const month = viewDate.getMonth()
+  const firstDay = new Date(year, month, 1)
+  const lastDay = new Date(year, month + 1, 0)
+  const leadingBlanks = (firstDay.getDay() + 6) % 7 // Monday-first offset
+
+  const days: (Date | null)[] = Array(leadingBlanks).fill(null)
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    days.push(new Date(year, month, d))
+  }
+  while (days.length % 7 !== 0) days.push(null)
+
+  return days
 }
 
 export default function RestaurantBookingClient({ locale }: Props) {
@@ -30,7 +64,43 @@ export default function RestaurantBookingClient({ locale }: Props) {
   const [isTimeOpen, setIsTimeOpen] = useState(false)
   const timeDropdownRef = useRef<HTMLDivElement>(null)
 
+  const [isDateOpen, setIsDateOpen] = useState(false)
+  const [viewDate, setViewDate] = useState(() => {
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth(), 1)
+  })
+  const dateDropdownRef = useRef<HTMLDivElement>(null)
+
   const timeSlots = ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00']
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const weekDays = locale === 'ka' ? WEEKDAYS_KA : WEEKDAYS_EN
+  const calendarDays = getCalendarDays(viewDate)
+  const isPrevMonthDisabled =
+    viewDate.getFullYear() === today.getFullYear() && viewDate.getMonth() === today.getMonth()
+
+  const monthLabel = viewDate.toLocaleDateString(locale === 'ka' ? 'ka-GE' : 'en-US', {
+    month: 'long',
+    year: 'numeric',
+  })
+
+  const formattedSelectedDate = selectedDate
+    ? new Date(`${selectedDate}T00:00:00`).toLocaleDateString(locale === 'ka' ? 'ka-GE' : 'en-US', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : ''
+
+  const openDatePicker = () => {
+    if (selectedDate) {
+      const d = new Date(`${selectedDate}T00:00:00`)
+      setViewDate(new Date(d.getFullYear(), d.getMonth(), 1))
+    }
+    setIsDateOpen((prev) => !prev)
+  }
 
   const isFormValid =
     name.trim() !== '' &&
@@ -40,8 +110,10 @@ export default function RestaurantBookingClient({ locale }: Props) {
     selectedTime !== ''
 
   const inputClass = (value: string) =>
-    `bg-transparent border rounded-lg px-3 pt-[8px] pb-[4px] outline-none transition-colors text-gray-800 placeholder:text-gray-300 text-sm w-full ${
-      value.trim() !== '' ? 'border-green-700' : 'border-gray-300 focus:border-green-800'
+    `bg-transparent border-2 rounded-lg px-3 pt-[8px] pb-[4px] outline-none transition-colors text-black-primary placeholder:text-brown-primary/50 text-sm w-full ${
+      value.trim() !== ''
+        ? 'border-green-primary'
+        : 'border-brown-primary/40 focus:border-green-primary'
     }`
 
   // ✅ show success banner if redirected with ?success=true
@@ -51,11 +123,14 @@ export default function RestaurantBookingClient({ locale }: Props) {
     }
   }, [searchParams])
 
-  // 🖱️ close dropdown on outside click
+  // 🖱️ close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (timeDropdownRef.current && !timeDropdownRef.current.contains(e.target as Node)) {
         setIsTimeOpen(false)
+      }
+      if (dateDropdownRef.current && !dateDropdownRef.current.contains(e.target as Node)) {
+        setIsDateOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -180,7 +255,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
             {showSuccess ? (
               // ✅ SUCCESS STATE
               <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-green-700 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-green-primary flex items-center justify-center">
                   <svg
                     className="w-8 h-8 text-white"
                     fill="none"
@@ -212,7 +287,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
                     setShowSuccess(false)
                     window.history.replaceState(null, '', `/${locale}/restaurant`)
                   }}
-                  className="mt-2 text-sm text-green-700 underline hover:text-green-800"
+                  className="mt-2 text-sm text-green-primary underline hover:text-green-primary/70"
                 >
                   {locale === 'ka' ? 'ახალი ჯავშანი' : 'Make another booking'}
                 </button>
@@ -228,7 +303,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
                 {error && <p className="text-red-600 text-sm">{error}</p>}
 
                 {/* NAME + PHONE */}
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <input
                     placeholder={locale === 'ka' ? 'სახელი' : 'Name'}
                     value={name}
@@ -248,16 +323,16 @@ export default function RestaurantBookingClient({ locale }: Props) {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border rounded-lg px-3 py-2 w-full"
+                  className={inputClass(email)}
                 />
 
                 {/* GUESTS + DATE + TIME */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="relative">
                     <input
                       type="number"
                       min="1"
-                      placeholder="Guests"
+                      placeholder={locale === 'ka' ? 'სტუმრები' : 'Guests'}
                       value={guests}
                       onChange={(e) => {
                         const val = e.target.value
@@ -270,48 +345,134 @@ export default function RestaurantBookingClient({ locale }: Props) {
                           e.preventDefault()
                         }
                       }}
-                      className={`${inputClass(guests)} pr-9 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+                      className={`${inputClass(guests)} pr-10 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
                     />
 
                     {/* ბრაუზერის სტანდარტული ისრების ნაცვლად — ჩვენი ჩევრონები */}
-                    <div className="absolute inset-y-0.5 right-0.5 flex flex-col justify-center">
+                    <div className="absolute inset-y-[2px] right-[2px] flex flex-col w-8 divide-y divide-brown-primary/20 overflow-hidden rounded-r-[5px]">
                       <button
                         type="button"
                         tabIndex={-1}
                         aria-label={locale === 'ka' ? 'სტუმრების მატება' : 'Increase guests'}
-                        onClick={() => setGuests(String(Math.max(1, (Number(guests) || 0) + 1)))}
-                        className="flex items-center justify-center px-1.5 text-gray-400 hover:text-green-700 transition-colors"
+                        onClick={() => setGuests(String((Number(guests) || 0) + 1))}
+                        className="flex flex-1 items-center justify-center text-brown-primary hover:text-white hover:bg-green-primary transition-colors"
                       >
-                        <ChevronUp size={14} />
+                        <ChevronUp size={13} />
                       </button>
                       <button
                         type="button"
                         tabIndex={-1}
                         aria-label={locale === 'ka' ? 'სტუმრების კლება' : 'Decrease guests'}
-                        onClick={() => setGuests(String(Math.max(1, (Number(guests) || 1) - 1)))}
-                        className="flex items-center justify-center px-1.5 text-gray-400 hover:text-green-700 transition-colors"
+                        onClick={() => setGuests(String(Math.max(1, (Number(guests) || 0) - 1)))}
+                        className="flex flex-1 items-center justify-center text-brown-primary hover:text-white hover:bg-green-primary transition-colors"
                       >
-                        <ChevronDown size={14} />
+                        <ChevronDown size={13} />
                       </button>
                     </div>
                   </div>
 
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="border rounded-lg px-3 py-2"
-                  />
+                  {/* DATE (CUSTOM CALENDAR DROPDOWN) */}
+                  <div className="relative" ref={dateDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={openDatePicker}
+                      className={`w-full flex items-center justify-between gap-1 border-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+                        selectedDate
+                          ? 'border-green-primary text-black-primary'
+                          : 'border-brown-primary/40 text-brown-primary/70 hover:border-green-primary'
+                      }`}
+                    >
+                      <span className="truncate">
+                        {selectedDate ? formattedSelectedDate : locale === 'ka' ? 'თარიღი' : 'Date'}
+                      </span>
+                      <CalendarIcon size={16} className="ml-1 shrink-0" />
+                    </button>
+
+                    {isDateOpen && (
+                      <div className="absolute z-20 mt-1 w-[calc(100vw-4rem)] max-w-72 sm:w-72 bg-[#f5f0e8] border-2 border-green-primary rounded-lg shadow-xl p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <button
+                            type="button"
+                            disabled={isPrevMonthDisabled}
+                            onClick={() =>
+                              setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))
+                            }
+                            className="flex items-center justify-center w-7 h-7 rounded-full text-brown-primary hover:bg-green-primary hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-brown-primary disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ChevronLeft size={16} />
+                          </button>
+
+                          <span className="text-sm font-semibold text-black-primary capitalize">
+                            {monthLabel}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))
+                            }
+                            className="flex items-center justify-center w-7 h-7 rounded-full text-brown-primary hover:bg-green-primary hover:text-white transition-colors"
+                          >
+                            <ChevronDown size={16} className="-rotate-90" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-7 gap-y-1 mb-1">
+                          {weekDays.map((d) => (
+                            <span
+                              key={d}
+                              className="text-[11px] text-center text-brown-primary/70 font-semibold"
+                            >
+                              {d}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="grid grid-cols-7 gap-y-1">
+                          {calendarDays.map((day, i) => {
+                            if (!day) return <span key={`blank-${i}`} />
+
+                            const isPast = day < today
+                            const isSelected = selectedDate === toISODate(day)
+                            const isToday = isSameDay(day, today)
+
+                            return (
+                              <button
+                                key={toISODate(day)}
+                                type="button"
+                                disabled={isPast}
+                                onClick={() => {
+                                  setSelectedDate(toISODate(day))
+                                  setIsDateOpen(false)
+                                }}
+                                className={`h-8 w-8 mx-auto flex items-center justify-center rounded-full text-sm transition-colors ${
+                                  isPast
+                                    ? 'text-brown-primary/80 cursor-not-allowed'
+                                    : isSelected
+                                      ? 'bg-green-primary text-white font-semibold'
+                                      : isToday
+                                        ? 'border-2 border-green-primary text-green-primary font-semibold'
+                                        : 'text-black-primary hover:bg-green-primary/15'
+                                }`}
+                              >
+                                {day.getDate()}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   {/* TIME SELECT (CUSTOM DROPDOWN) */}
                   <div className="relative" ref={timeDropdownRef}>
                     <button
                       type="button"
                       onClick={() => setIsTimeOpen((prev) => !prev)}
-                      className={`w-full flex items-center justify-between border rounded-lg px-3 py-2 text-sm transition-colors ${
+                      className={`w-full flex items-center justify-between border-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                         selectedTime
-                          ? 'border-green-700 text-gray-800'
-                          : 'border-gray-300 text-gray-400 hover:border-green-800'
+                          ? 'border-green-primary text-black-primary'
+                          : 'border-brown-primary/40 text-brown-primary/70 hover:border-green-primary'
                       }`}
                     >
                       <span>{selectedTime || (locale === 'ka' ? 'დრო' : 'Time')}</span>
@@ -325,8 +486,8 @@ export default function RestaurantBookingClient({ locale }: Props) {
 
                     {isTimeOpen && (
                       <div
-                        className="absolute z-20 mt-1 w-full bg-[#f5f0e8] border border-green-primary rounded-lg shadow-lg max-h-56 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-green-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-green-800"
-                        style={{ scrollbarWidth: 'thin', scrollbarColor: '#15803d transparent' }}
+                        className="absolute z-20 mt-1 w-full bg-[#f5f0e8] border-2 border-green-primary rounded-lg shadow-xl max-h-56 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-green-primary [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-green-primary/70"
+                        style={{ scrollbarWidth: 'thin', scrollbarColor: '#006341 transparent' }}
                       >
                         {timeSlots.map((t) => {
                           const isBooked = bookedSlots.includes(t)
@@ -342,16 +503,16 @@ export default function RestaurantBookingClient({ locale }: Props) {
                               }}
                               className={`w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
                                 isBooked
-                                  ? 'text-gray-300 cursor-not-allowed line-through'
+                                  ? 'text-brown-primary/30 cursor-not-allowed line-through'
                                   : isSelected
-                                    ? 'bg-green-700 text-white'
-                                    : 'text-gray-700 hover:bg-green-100'
+                                    ? 'bg-green-primary text-white font-semibold'
+                                    : 'text-black-primary hover:bg-green-primary/15'
                               }`}
                             >
                               <span>{t}</span>
                               {isBooked && (
                                 <svg
-                                  className="w-4 h-4 text-gray-400"
+                                  className="w-4 h-4 text-brown-primary/40"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -375,14 +536,14 @@ export default function RestaurantBookingClient({ locale }: Props) {
                 {/* NOTE */}
                 <textarea
                   placeholder={locale === 'ka' ? 'კომენტარი' : 'Note'}
-                  className="border rounded-lg px-3 py-2 w-full"
+                  className="bg-transparent border-2 border-brown-primary/40 focus:border-green-primary rounded-lg px-3 py-2 w-full text-sm text-black-primary placeholder:text-brown-primary/50 outline-none transition-colors"
                 />
 
                 {/* BUTTON */}
                 <button
                   type="submit"
                   disabled={!isFormValid || loading}
-                  className="w-full bg-[#1a2e2a] text-white py-2 rounded-xl disabled:bg-gray-400"
+                  className="w-full bg-green-primary hover:bg-green-primary/85 text-white py-2.5 rounded-xl font-semibold transition-colors disabled:bg-brown-primary/30 disabled:cursor-not-allowed"
                 >
                   {loading ? '...' : locale === 'ka' ? 'დაჯავშნა' : 'Book Now'}
                 </button>

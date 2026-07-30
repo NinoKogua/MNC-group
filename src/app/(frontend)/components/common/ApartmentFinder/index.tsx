@@ -34,7 +34,7 @@ const translations = {
     bedrooms: 'საძინებლები',
     price: 'ფასი',
     sqmShort: 'მ²',
-    details: 'ბინის დეტალები →',
+    details: 'დეტალურად',
   },
   en: {
     heading: 'Find your ideal apartment',
@@ -60,7 +60,7 @@ const translations = {
     bedrooms: 'Bedrooms',
     price: 'Price',
     sqmShort: 'm²',
-    details: 'View details →',
+    details: 'View details',
   },
 } as const
 

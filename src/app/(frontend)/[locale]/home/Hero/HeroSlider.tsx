@@ -22,6 +22,7 @@ type Slide = {
 
 export default function HeroSlider({ slides }: { slides: Slide[] }) {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
@@ -33,6 +34,10 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
 
     return () => clearInterval(timer)
   }, [currentSlide, slides.length])
+
+  useEffect(() => {
+    setIsDescriptionExpanded(false)
+  }, [currentSlide])
 
   if (slides.length === 0) {
     return <section className="relative w-full h-[90vh] bg-[#161616]" />
@@ -77,22 +82,31 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-white text-6xl md:text-8xl font-black leading-tight font-kirovi mb-8">
+                <h1 className="text-white text-5xl md:text-8xl font-black leading-tight font-kirovi mb-4 sm:mb-8">
                   {current.title}
                   <br />
                   <span className="text-white italic font-light">{current.highlight}</span>
                 </h1>
 
-                <p className="text-white text-lg md:text-xl max-w-xl leading-relaxed font-mtavruli opacity-90">
+                <p
+                  className={`text-white text-lg md:text-xl max-w-xl leading-relaxed font-mtavruli opacity-90 md:line-clamp-none ${
+                    isDescriptionExpanded ? '' : 'line-clamp-3'
+                  }`}
+                >
                   {current.description}
                 </p>
 
-                <div className="flex flex-wrap gap-6 pt-10 font-kirovi">
+                <div className="flex gap-6 pt-10 font-kirovi">
                   <AppButton variant="arrowButton" showArrow>
                     {current.primaryButtonText || 'გაიგე მეტი'}
                   </AppButton>
 
-                  <AppButton variant="outline">{current.secondaryButtonText || 'ვრცლად'}</AppButton>
+                  <AppButton
+                    variant="outline"
+                    onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+                  >
+                    {current.secondaryButtonText || 'ვრცლად'}
+                  </AppButton>
                 </div>
               </motion.div>
             </AnimatePresence>
