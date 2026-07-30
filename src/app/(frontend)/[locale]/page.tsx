@@ -1,12 +1,60 @@
+import type { Metadata } from 'next'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import Hero from './home/Hero'
 import WhyUsSection from './home/WhyUs'
 import ProjectSection from '../components/common/ProjectSection'
 import ProjectsGridSection from './home/ProjectGridSection'
 import CalculatorSection from './home/Calculator'
+import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'hero-slides',
+    locale: currentLocale,
+    sort: 'order',
+    limit: 1,
+    depth: 1,
+  })
+
+  const slide = docs[0]
+  const title =
+    currentLocale === 'ka' ? 'ემენსი ჯგუფი | MNC Group' : 'MNC Group - Real Estate in Georgia'
+  const description =
+    slide?.description ||
+    (currentLocale === 'ka'
+      ? 'ფიჭვების პროექტი მაღალმთიანი ტიპის ეკომეგობრული სივრცეების შექმნას ისახავს მიზნად.'
+      : 'MNC Group builds eco-friendly high-altitude residential and hospitality spaces in Georgia.')
+  const image = (slide?.image as { url?: string } | undefined)?.url
+
+  const alternates = buildAlternates(currentLocale, '')
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  }
 }
 
 export default async function Home({ params, searchParams }: Props) {

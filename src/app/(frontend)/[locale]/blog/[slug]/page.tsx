@@ -1,11 +1,61 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import { buildAlternates, lexicalToPlainText, type Locale as SiteLocale } from '@/utilities/seo'
+import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
+import { getBaseUrl } from '@/utilities/getBaseUrl'
+import JsonLd from '@/app/(frontend)/components/common/JsonLd'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'posts',
+    locale: currentLocale,
+    where: {
+      slug: { equals: slug },
+      status: { equals: 'published' },
+    },
+    limit: 1,
+  })
+
+  const post = docs[0]
+  if (!post) {
+    return { title: currentLocale === 'ka' ? 'სტატია ვერ მოიძებნა' : 'Article not found' }
+  }
+
+  const description = post.excerpt || lexicalToPlainText(post.content)
+  const image = (post.coverImage as { url?: string } | undefined)?.url
+  const alternates = buildAlternates(currentLocale, `blog/${slug}`)
+
+  return {
+    title: post.title,
+    description,
+    alternates,
+    openGraph: {
+      title: post.title,
+      description,
+      url: alternates.canonical,
+      type: 'article',
+      locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      publishedTime: post.publishedAt || undefined,
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      title: post.title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  }
 }
 
 type LexicalNode = {
@@ -196,8 +246,22 @@ export default async function BlogPostPage({ params }: Props) {
   }
   const shortTitle = truncateWords(post.title, 5)
 
+  const baseUrl = getBaseUrl()
+  const blogPostingJsonLd = buildBlogPostingJsonLd(locale as SiteLocale, {
+    ...post,
+    coverImage:
+      post.coverImage && typeof post.coverImage === 'object' ? post.coverImage : undefined,
+  })
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: locale === 'ka' ? 'მთავარი' : 'Home', url: `${baseUrl}/${locale}` },
+    { name: locale === 'ka' ? 'სიახლეები' : 'News', url: `${baseUrl}/${locale}/blog` },
+    { name: post.title, url: `${baseUrl}/${locale}/blog/${slug}` },
+  ])
+
   return (
     <main className="w-full min-h-screen bg-white pb-20">
+      <JsonLd data={blogPostingJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       {/* Breadcrumbs ნავიგაცია */}
       <div className="max-w-[1408px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         <div className="text-sm md:text-base text-gray-500 font-medium truncate">

@@ -33,8 +33,7 @@ export default function RestaurantHero() {
     return () => clearInterval(t)
   }, [])
 
-  const go = (dir: number) =>
-    setCur((c) => (c + dir + slides.length) % slides.length)
+  const go = (dir: number) => setCur((c) => (c + dir + slides.length) % slides.length)
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
@@ -80,7 +79,7 @@ export default function RestaurantHero() {
         />
       </div>
 
-      {/* ისრები — მხოლოდ md+ ზე */}
+      {/* ისრები - მხოლოდ md+ ზე */}
       <button
         onClick={() => go(-1)}
         className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 text-beige-primary opacity-70 hover:opacity-100 transition-opacity"

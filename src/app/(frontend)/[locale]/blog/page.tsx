@@ -1,8 +1,48 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import cover from '@/app/assets/images/for_news.jpg'
+import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+
+type MetadataProps = {
+  params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: MetadataProps): Promise<Metadata> {
+  const { locale } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'blog-page',
+    locale: currentLocale,
+    fallbackLocale: false,
+    limit: 1,
+  })
+
+  const title = docs[0]?.heroTitle || (currentLocale === 'ka' ? 'სიახლეები' : 'News')
+  const description =
+    currentLocale === 'ka'
+      ? 'სიახლეები და სტატიები MNC Group-ის პროექტებზე, მშენებლობასა და ბაზარზე.'
+      : "News and articles about MNC Group's projects, construction, and the market."
+
+  const alternates = buildAlternates(currentLocale, 'blog')
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+    },
+    twitter: { title, description },
+  }
+}
 
 // ვამატებთ ხატულებს List და Grid ხედვისთვის
 const GridIcon = () => (

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Image from 'next/image'
@@ -5,9 +6,67 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftCircle } from 'lucide-react'
 import GalleryLightbox from '@/app/(frontend)/components/common/GalleryLightbox'
+import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import { buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
+import { getBaseUrl } from '@/utilities/getBaseUrl'
+import JsonLd from '@/app/(frontend)/components/common/JsonLd'
 
 type Props = {
   params: Promise<{ locale: string; slug: string; id: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug, id } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
+
+  const payload = await getPayload({ config })
+
+  const [{ docs: projectDocs }, apartment] = await Promise.all([
+    payload.find({
+      collection: 'projects' as any,
+      locale: currentLocale,
+      where: { slug: { equals: slug } },
+      depth: 0,
+      limit: 1,
+    }),
+    payload
+      .findByID({ collection: 'apartments' as any, id, locale: currentLocale, depth: 0 })
+      .catch(() => null),
+  ])
+
+  const project = projectDocs[0] as any
+  if (!project || !apartment) {
+    return { title: currentLocale === 'ka' ? 'ბინა ვერ მოიძებნა' : 'Apartment not found' }
+  }
+
+  const apt = apartment as any
+  const unitLabel = currentLocale === 'ka' ? 'ბინა' : 'Apt.'
+  const title = `${unitLabel} ${apt.apartmentNumber} - ${project.title}`
+  const description =
+    currentLocale === 'ka'
+      ? `${apt.area} კვ.მ${apt.bedrooms ? `, ${apt.bedrooms} საძინებელი` : ''} - ${project.title}-ში, ${project.location || ''}.`
+      : `${apt.area} m²${apt.bedrooms ? `, ${apt.bedrooms} bedrooms` : ''} at ${project.title}${project.location ? `, ${project.location}` : ''}.`
+  const image = (apt.planImage as { url?: string } | undefined)?.url
+
+  const alternates = buildAlternates(currentLocale, `projects/${slug}/apartments/${id}`)
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  }
 }
 
 const apartmentStatusLabel = (status: string, locale: string) => {
@@ -58,8 +117,21 @@ export default async function ApartmentDetailPage({ params }: Props) {
     .filter((img: any) => img && typeof img === 'object')
     .map((img: any) => ({ url: img.url, alt: img.alt }))
 
+  const baseUrl = getBaseUrl()
+  const unitLabel = locale === 'ka' ? 'ბინა' : 'Apt.'
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: locale === 'ka' ? 'მთავარი' : 'Home', url: `${baseUrl}/${locale}` },
+    { name: locale === 'ka' ? 'პროექტები' : 'Projects', url: `${baseUrl}/${locale}/projects` },
+    { name: project.title, url: `${baseUrl}/${locale}/projects/${slug}` },
+    {
+      name: `${unitLabel} ${apartment.apartmentNumber}`,
+      url: `${baseUrl}/${locale}/projects/${slug}/apartments/${id}`,
+    },
+  ])
+
   return (
     <main className="w-full min-h-screen bg-white">
+      <JsonLd data={breadcrumbJsonLd} />
       {/* Breadcrumb / უკან დაბრუნება */}
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <Link
@@ -70,7 +142,7 @@ export default async function ApartmentDetailPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* Hero — მთავარი გეგმარების სურათი */}
+      {/* Hero - მთავარი გეგმარების სურათი */}
       <section className="max-w-7xl mx-auto px-6 pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* გეგმარება */}

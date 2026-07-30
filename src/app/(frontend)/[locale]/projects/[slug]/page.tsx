@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Image from 'next/image'
@@ -5,9 +6,60 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { SerializedEditorState } from 'lexical'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { buildAlternates, lexicalToPlainText, type Locale as SiteLocale } from '@/utilities/seo'
+import { buildRealEstateListingJsonLd, buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
+import { getBaseUrl } from '@/utilities/getBaseUrl'
+import JsonLd from '@/app/(frontend)/components/common/JsonLd'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'projects' as any,
+    locale: currentLocale,
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
+  })
+
+  const project = docs[0] as any
+  if (!project) {
+    return { title: currentLocale === 'ka' ? 'პროექტი ვერ მოიძებნა' : 'Project not found' }
+  }
+
+  const title = project.location ? `${project.title} - ${project.location}` : project.title
+  const description =
+    lexicalToPlainText(project.description) ||
+    (currentLocale === 'ka'
+      ? `${project.title} - MNC Group-ის საცხოვრებელი პროექტი.`
+      : `${project.title} - a residential project by MNC Group.`)
+  const image = (project.coverImage as { url?: string } | undefined)?.url
+
+  const alternates = buildAlternates(currentLocale, `projects/${slug}`)
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  }
 }
 
 const statusLabel = (status: string, locale: string) => {
@@ -57,8 +109,21 @@ export default async function ProjectPage({ params }: Props) {
     where: { slug: { not_equals: slug } },
   })
 
+  const baseUrl = getBaseUrl()
+  const realEstateJsonLd = buildRealEstateListingJsonLd(locale as SiteLocale, project)
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: locale === 'ka' ? 'მთავარი' : 'Home', url: `${baseUrl}/${locale}` },
+    {
+      name: locale === 'ka' ? 'პროექტები' : 'Projects',
+      url: `${baseUrl}/${locale}/projects`,
+    },
+    { name: project.title, url: `${baseUrl}/${locale}/projects/${slug}` },
+  ])
+
   return (
     <main className="w-full min-h-screen bg-white">
+      <JsonLd data={realEstateJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       {/* Hero */}
       <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
         {project.coverImage && typeof project.coverImage === 'object' ? (
@@ -102,7 +167,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* დეტალები + აღწერა */}
       <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* მარცხენა — metadata */}
+        {/* მარცხენა - metadata */}
         <div className="lg:col-span-3 flex-col-span gap-7 border-t border-gray-100 pt-8">
           {project.status && (
             <div>
@@ -154,7 +219,7 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </div>
 
-        {/* მარჯვენა — აღწერა */}
+        {/* მარჯვენა - აღწერა */}
         <div className="lg:col-span-9 border-t border-gray-100 pt-8">
           {project.description && (
             <div className="prose prose-lg text-gray-600 leading-relaxed max-w-3xl">
@@ -309,7 +374,7 @@ export default async function ProjectPage({ params }: Props) {
                     )}
                   </div>
 
-                  {/* მახასიათებლები (სერვისები) — ყოველთვის ბოლოში რჩება */}
+                  {/* მახასიათებლები (სერვისები) - ყოველთვის ბოლოში რჩება */}
                   {apt.features && apt.features.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-auto pt-2 border-t border-gray-100/50">
                       {apt.features.map((f: any, idx: number) => (

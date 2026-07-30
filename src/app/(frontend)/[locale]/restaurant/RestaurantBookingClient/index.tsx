@@ -348,7 +348,7 @@ export default function RestaurantBookingClient({ locale }: Props) {
                       className={`${inputClass(guests)} pr-10 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
                     />
 
-                    {/* ბრაუზერის სტანდარტული ისრების ნაცვლად — ჩვენი ჩევრონები */}
+                    {/* ბრაუზერის სტანდარტული ისრების ნაცვლად - ჩვენი ჩევრონები */}
                     <div className="absolute inset-y-[2px] right-[2px] flex flex-col w-8 divide-y divide-brown-primary/20 overflow-hidden rounded-r-[5px]">
                       <button
                         type="button"

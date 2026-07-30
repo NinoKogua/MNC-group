@@ -29,8 +29,8 @@ const ContactHero = async ({ locale }: Props) => {
         <p className="text-gray-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
           {info?.heroDescription ||
             (locale === 'ka'
-              ? 'გვიკავშირდით ნებისმიერ კითხვაზე — სიამოვნებით დაგეხმარებით.'
-              : 'Get in touch with us — we are happy to help.')}
+              ? 'გვიკავშირდით ნებისმიერ კითხვაზე - სიამოვნებით დაგეხმარებით.'
+              : 'Get in touch with us - we are happy to help.')}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-10">
@@ -46,9 +46,7 @@ const ContactHero = async ({ locale }: Props) => {
             </a>
           )}
 
-          {info?.phone && info?.email && (
-            <div className="hidden sm:block h-8 w-px bg-gray-300" />
-          )}
+          {info?.phone && info?.email && <div className="hidden sm:block h-8 w-px bg-gray-300" />}
 
           {info?.email && (
             <a href={`mailto:${info.email}`} className="flex flex-col items-center gap-1 group">
@@ -62,9 +60,7 @@ const ContactHero = async ({ locale }: Props) => {
             </a>
           )}
 
-          {info?.email && info?.address && (
-            <div className="hidden sm:block h-8 w-px bg-gray-300" />
-          )}
+          {info?.email && info?.address && <div className="hidden sm:block h-8 w-px bg-gray-300" />}
 
           {info?.address && (
             <div className="flex flex-col items-center gap-1">

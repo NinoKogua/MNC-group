@@ -80,7 +80,7 @@ export default function ApartmentFinder() {
   const [bedroomOptions, setBedroomOptions] = useState<number[]>([])
   const bedroomDropdownRef = useRef<HTMLDivElement>(null)
 
-  // საძინებლების ვარიანტები ბექენდიდან — მხოლოდ რეალურად არსებული რაოდენობები
+  // საძინებლების ვარიანტები ბექენდიდან - მხოლოდ რეალურად არსებული რაოდენობები
   useEffect(() => {
     let cancelled = false
 
@@ -114,7 +114,7 @@ export default function ApartmentFinder() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // უარყოფითი და არასწორი მნიშვნელობების აღკვეთა — მინიმუმი ყოველთვის 0
+  // უარყოფითი და არასწორი მნიშვნელობების აღკვეთა - მინიმუმი ყოველთვის 0
   const handleTotalAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     if (value === '') {
@@ -182,7 +182,7 @@ export default function ApartmentFinder() {
                 className="w-full pl-4 pr-11 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:border-[#1A7550] focus:bg-white transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
 
-              {/* ბრაუზერის სტანდარტული ისრების ნაცვლად — ჩვენი ჩევრონები */}
+              {/* ბრაუზერის სტანდარტული ისრების ნაცვლად - ჩვენი ჩევრონები */}
               <div className="absolute inset-y-1 right-1 flex flex-col justify-center">
                 <button
                   type="button"

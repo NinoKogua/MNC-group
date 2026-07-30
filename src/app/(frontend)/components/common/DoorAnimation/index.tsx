@@ -10,7 +10,7 @@ export default function DoorAnimation({ children }: { children: React.ReactNode 
   const [showText, setShowText] = useState(false)
 
   useEffect(() => {
-    // ტექსტი ვიდეოს შემდეგ გამოჩნდება — 800ms დაყოვნებით
+    // ტექსტი ვიდეოს შემდეგ გამოჩნდება - 800ms დაყოვნებით
     const t = setTimeout(() => setShowText(true), 800)
     return () => clearTimeout(t)
   }, [])
@@ -25,7 +25,6 @@ export default function DoorAnimation({ children }: { children: React.ReactNode 
 
   return (
     <div className="relative">
-
       {!showContent && (
         <div
           className="sticky top-0 z-40 bg-white transition-opacity duration-500 pointer-events-none"
@@ -49,7 +48,7 @@ export default function DoorAnimation({ children }: { children: React.ReactNode 
             <source src="/video.mp4" type="video/mp4" />
           </video>
 
-          {/* ტექსტი — ვიდეოს შემდეგ fade-in */}
+          {/* ტექსტი - ვიდეოს შემდეგ fade-in */}
           <div
             className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none transition-opacity duration-1000"
             style={{ opacity: showText ? 1 : 0 }}
@@ -70,13 +69,9 @@ export default function DoorAnimation({ children }: { children: React.ReactNode 
         </div>
       )}
 
-      <div
-        className="transition-opacity duration-700"
-        style={{ opacity: showContent ? 1 : 0 }}
-      >
+      <div className="transition-opacity duration-700" style={{ opacity: showContent ? 1 : 0 }}>
         {children}
       </div>
-
     </div>
   )
 }
