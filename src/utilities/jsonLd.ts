@@ -173,3 +173,93 @@ export function buildBreadcrumbJsonLd(items: { name: string; url: string }[]) {
     })),
   }
 }
+
+/** RealEstateListing schema for an individual apartment/unit page, wrapping an Apartment `about` entity. */
+export function buildApartmentListingJsonLd(
+  locale: Locale,
+  params: {
+    projectSlug: string
+    apartmentId: number | string
+    projectTitle: string
+    apartmentNumber: string
+    location?: string | null
+    area: number
+    bedrooms?: number | null
+    price?: number | null
+    status?: string | null
+    image?: string | null
+  },
+) {
+  const baseUrl = getBaseUrl()
+  const url = `${baseUrl}/${locale}/projects/${params.projectSlug}/apartments/${params.apartmentId}`
+  const name = `${params.apartmentNumber} - ${params.projectTitle}`
+
+  const availability =
+    params.status === 'sold'
+      ? 'https://schema.org/SoldOut'
+      : params.status === 'booked'
+        ? 'https://schema.org/PreOrder'
+        : 'https://schema.org/InStock'
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name,
+    url,
+    ...(params.image ? { image: params.image } : {}),
+    ...(params.location
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: params.location,
+            addressCountry: 'GE',
+          },
+        }
+      : {}),
+    about: {
+      '@type': 'Apartment',
+      name,
+      floorSize: { '@type': 'QuantitativeValue', value: params.area, unitCode: 'MTK' },
+      ...(params.bedrooms ? { numberOfRooms: params.bedrooms } : {}),
+    },
+    ...(params.price
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: params.price,
+            priceCurrency: 'USD',
+            availability,
+            url,
+          },
+        }
+      : {}),
+  }
+}
+
+/** AboutPage schema, linked back to the sitewide Organization entity. */
+export function buildAboutPageJsonLd(locale: Locale, name: string, description?: string) {
+  const baseUrl = getBaseUrl()
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    url: `${baseUrl}/${locale}/about-us`,
+    name,
+    description,
+    mainEntity: { '@id': `${baseUrl}/#organization` },
+  }
+}
+
+/** ContactPage schema, linked back to the sitewide Organization entity. */
+export function buildContactPageJsonLd(locale: Locale, name: string, description?: string) {
+  const baseUrl = getBaseUrl()
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    url: `${baseUrl}/${locale}/contact-us`,
+    name,
+    description,
+    mainEntity: { '@id': `${baseUrl}/#organization` },
+  }
+}

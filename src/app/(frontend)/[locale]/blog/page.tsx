@@ -4,7 +4,12 @@ import config from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import cover from '@/app/assets/images/for_news.jpg'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
 
 type MetadataProps = {
   params: Promise<{ locale: string }>
@@ -29,18 +34,25 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
       : "News and articles about MNC Group's projects, construction, and the market."
 
   const alternates = buildAlternates(currentLocale, 'blog')
+  const keywords = buildKeywords(
+    currentLocale,
+    currentLocale === 'ka' ? ['სიახლეები', 'სტატიები'] : ['news', 'articles'],
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(cover.src, title),
     },
-    twitter: { title, description },
+    twitter: { title, description, images: [cover.src] },
   }
 }
 

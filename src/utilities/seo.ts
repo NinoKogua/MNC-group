@@ -1,6 +1,35 @@
+import type { Metadata } from 'next'
 import { getBaseUrl } from './getBaseUrl'
 
 export type Locale = 'en' | 'ka'
+
+type OgImages = NonNullable<NonNullable<Metadata['openGraph']>['images']>
+
+/** Recommended OG:image size for Facebook/LinkedIn/Twitter link previews. */
+export const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const
+
+/** Square variant, used by some clients (WhatsApp, Slack) as a fallback preview size. */
+export const OG_IMAGE_SIZE_SQUARE = { width: 1200, height: 1200 } as const
+
+/** Builds an openGraph.images array with explicit dimensions so crawlers don't have to fetch the image to size it. */
+export function buildOgImages(url?: string, alt?: string): OgImages | undefined {
+  if (!url) return undefined
+  return [
+    { url, width: OG_IMAGE_SIZE.width, height: OG_IMAGE_SIZE.height, alt },
+    { url, width: OG_IMAGE_SIZE_SQUARE.width, height: OG_IMAGE_SIZE_SQUARE.height, alt },
+  ]
+}
+
+/** Base keywords shared across all pages, extended per-page with more specific terms. */
+export const SITE_KEYWORDS: Record<Locale, string[]> = {
+  en: ['MNC Group', 'real estate Georgia', 'new buildings Georgia', 'Pines project'],
+  ka: ['MNC Group', 'უძრავი ქონება საქართველოში', 'ახალაშენებული კორპუსი', 'ფიჭვების პროექტი'],
+}
+
+/** Merges page-specific keywords with the site-wide defaults, de-duplicated. */
+export function buildKeywords(locale: Locale, pageKeywords: string[] = []): string[] {
+  return Array.from(new Set([...pageKeywords, ...SITE_KEYWORDS[locale]]))
+}
 
 type Alternates = {
   canonical: string

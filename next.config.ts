@@ -76,6 +76,26 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: '/admin/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+      {
+        source: '/api/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+      {
+        source: '/:locale(en|ka)/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'index, follow' }],
+      },
+      {
+        source: '/:locale(en|ka)',
+        headers: [{ key: 'X-Robots-Tag', value: 'index, follow' }],
+      },
+    ]
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

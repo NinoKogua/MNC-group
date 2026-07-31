@@ -1,0 +1,19 @@
+# MNC Group
+
+> MNC Group builds eco-friendly, high-altitude residential and hospitality spaces in Georgia. Its flagship development, the Pines project, focuses on eco-friendly high-altitude residential and hospitality spaces.
+
+MNC Group operates in Georgian (ka) and English (en); every page below is available under both `/ka/...` and `/en/...`.
+
+## Key pages
+
+- [Home](https://mncgroup.ge/en): company overview and featured projects
+- [Projects](https://mncgroup.ge/en/projects): all residential and hospitality projects, ongoing and completed
+- [Restaurant](https://mncgroup.ge/en/restaurant): on-site restaurant, menu, and table booking
+- [About Us](https://mncgroup.ge/en/about-us): company history, mission, and team
+- [Blog](https://mncgroup.ge/en/blog): news and articles about MNC Group's projects, construction, and the market
+- [Contact Us](https://mncgroup.ge/en/contact-us): contact details and inquiry form
+
+## Notes
+
+- Individual project and apartment pages are listed in the [sitemap](https://mncgroup.ge/sitemap.xml).
+- Structured data (schema.org JSON-LD) is present on all listed pages for Organization, RealEstateListing, BlogPosting, Restaurant, and BreadcrumbList entities.

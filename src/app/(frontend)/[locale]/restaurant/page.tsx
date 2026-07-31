@@ -4,7 +4,13 @@ import config from '@payload-config'
 import RestaurantBookingClient from './RestaurantBookingClient'
 import RestaurantHero from '../../components/common/RestaurantHero/index'
 import RestaurantMenus from '../../components/common/RestaurantMenus/index'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import restaurantCover from '../../../assets/images/restaurant_imgs/restaurantt.jpg'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
 import { buildRestaurantJsonLd } from '@/utilities/jsonLd'
 import JsonLd from '../../components/common/JsonLd'
 
@@ -33,18 +39,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : "Book a table at MNC Group's restaurant.")
 
   const alternates = buildAlternates(currentLocale, 'restaurant')
+  const keywords = buildKeywords(
+    currentLocale,
+    currentLocale === 'ka' ? ['რესტორანი', 'მაგიდის დაჯავშნა'] : ['restaurant', 'table booking'],
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(restaurantCover.src, title),
     },
-    twitter: { title, description },
+    twitter: { title, description, images: [restaurantCover.src] },
   }
 }
 

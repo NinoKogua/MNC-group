@@ -6,7 +6,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { SerializedEditorState } from 'lexical'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { buildAlternates, lexicalToPlainText, type Locale as SiteLocale } from '@/utilities/seo'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  lexicalToPlainText,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
 import { buildRealEstateListingJsonLd, buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
 import { getBaseUrl } from '@/utilities/getBaseUrl'
 import JsonLd from '@/app/(frontend)/components/common/JsonLd'
@@ -30,7 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const project = docs[0] as any
   if (!project) {
-    return { title: currentLocale === 'ka' ? 'პროექტი ვერ მოიძებნა' : 'Project not found' }
+    return {
+      title: currentLocale === 'ka' ? 'პროექტი ვერ მოიძებნა' : 'Project not found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const title = project.location ? `${project.title} - ${project.location}` : project.title
@@ -42,17 +51,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = (project.coverImage as { url?: string } | undefined)?.url
 
   const alternates = buildAlternates(currentLocale, `projects/${slug}`)
+  const keywords = buildKeywords(
+    currentLocale,
+    [project.title, project.location].filter(Boolean),
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
-      images: image ? [{ url: image }] : undefined,
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(image, title),
     },
     twitter: {
       title,

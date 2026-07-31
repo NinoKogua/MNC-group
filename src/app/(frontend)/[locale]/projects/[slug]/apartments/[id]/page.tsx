@@ -6,8 +6,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftCircle } from 'lucide-react'
 import GalleryLightbox from '@/app/(frontend)/components/common/GalleryLightbox'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
-import { buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
+import { buildApartmentListingJsonLd, buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
 import { getBaseUrl } from '@/utilities/getBaseUrl'
 import JsonLd from '@/app/(frontend)/components/common/JsonLd'
 
@@ -36,7 +41,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const project = projectDocs[0] as any
   if (!project || !apartment) {
-    return { title: currentLocale === 'ka' ? 'ბინა ვერ მოიძებნა' : 'Apartment not found' }
+    return {
+      title: currentLocale === 'ka' ? 'ბინა ვერ მოიძებნა' : 'Apartment not found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const apt = apartment as any
@@ -49,17 +57,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = (apt.planImage as { url?: string } | undefined)?.url
 
   const alternates = buildAlternates(currentLocale, `projects/${slug}/apartments/${id}`)
+  const keywords = buildKeywords(
+    currentLocale,
+    [project.title, project.location].filter(Boolean),
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
-      images: image ? [{ url: image }] : undefined,
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(image, title),
     },
     twitter: {
       title,
@@ -119,6 +133,18 @@ export default async function ApartmentDetailPage({ params }: Props) {
 
   const baseUrl = getBaseUrl()
   const unitLabel = locale === 'ka' ? 'ბინა' : 'Apt.'
+  const apartmentListingJsonLd = buildApartmentListingJsonLd(locale as SiteLocale, {
+    projectSlug: slug,
+    apartmentId: id,
+    projectTitle: project.title,
+    apartmentNumber: apartment.apartmentNumber,
+    location: project.location,
+    area: apartment.area,
+    bedrooms: apartment.bedrooms,
+    price: apartment.price,
+    status: apartment.status,
+    image: apartment.planImage && typeof apartment.planImage === 'object' ? apartment.planImage.url : undefined,
+  })
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: locale === 'ka' ? 'მთავარი' : 'Home', url: `${baseUrl}/${locale}` },
     { name: locale === 'ka' ? 'პროექტები' : 'Projects', url: `${baseUrl}/${locale}/projects` },
@@ -131,6 +157,7 @@ export default async function ApartmentDetailPage({ params }: Props) {
 
   return (
     <main className="w-full min-h-screen bg-white">
+      <JsonLd data={apartmentListingJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       {/* Breadcrumb / უკან დაბრუნება */}
       <div className="max-w-7xl mx-auto px-6 pt-8">

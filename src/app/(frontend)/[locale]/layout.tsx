@@ -7,6 +7,7 @@ import Footer from '../components/ui/Footer'
 import { notFound } from 'next/navigation'
 import { getBaseUrl } from '@/utilities/getBaseUrl'
 import { buildOrganizationJsonLd } from '@/utilities/jsonLd'
+import { SITE_KEYWORDS } from '@/utilities/seo'
 import JsonLd from '../components/common/JsonLd'
 
 const DEFAULT_DESCRIPTION =
@@ -19,15 +20,31 @@ export const metadata: Metadata = {
     template: '%s | MNC Group',
   },
   description: DEFAULT_DESCRIPTION,
+  keywords: [...SITE_KEYWORDS.ka, ...SITE_KEYWORDS.en],
+  publisher: 'MNC Group',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   icons: {
     icon: [{ url: '/favicon.ico' }],
   },
   openGraph: {
     siteName: 'MNC Group',
     type: 'website',
+    alternateLocale: ['en_US', 'ka_GE'],
+    images: [{ url: '/Logo.png', width: 1080, height: 1080, alt: 'MNC Group' }],
   },
   twitter: {
     card: 'summary_large_image',
+    images: ['/Logo.png'],
   },
 }
 

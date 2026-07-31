@@ -4,7 +4,13 @@ import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { buildAlternates, lexicalToPlainText, type Locale as SiteLocale } from '@/utilities/seo'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  lexicalToPlainText,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd } from '@/utilities/jsonLd'
 import { getBaseUrl } from '@/utilities/getBaseUrl'
 import JsonLd from '@/app/(frontend)/components/common/JsonLd'
@@ -30,16 +36,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = docs[0]
   if (!post) {
-    return { title: currentLocale === 'ka' ? 'სტატია ვერ მოიძებნა' : 'Article not found' }
+    return {
+      title: currentLocale === 'ka' ? 'სტატია ვერ მოიძებნა' : 'Article not found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const description = post.excerpt || lexicalToPlainText(post.content)
   const image = (post.coverImage as { url?: string } | undefined)?.url
   const alternates = buildAlternates(currentLocale, `blog/${slug}`)
+  const keywords = buildKeywords(currentLocale, [post.title])
 
   return {
     title: post.title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title: post.title,
@@ -47,8 +58,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: alternates.canonical,
       type: 'article',
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
       publishedTime: post.publishedAt || undefined,
-      images: image ? [{ url: image }] : undefined,
+      images: buildOgImages(image, post.title),
     },
     twitter: {
       title: post.title,

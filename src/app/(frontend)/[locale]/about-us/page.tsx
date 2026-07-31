@@ -7,7 +7,14 @@ import AboutTimeline from './AboutTimeline'
 import AboutMission from './AboutMission'
 import ClientAboutTeam from './ClientAboutTeam'
 import type { AboutPage as AboutPageDoc, Media } from '@/payload-types'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
+import { buildAboutPageJsonLd } from '@/utilities/jsonLd'
+import JsonLd from '@/app/(frontend)/components/common/JsonLd'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -22,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     collection: 'about-page',
     locale: currentLocale,
     limit: 1,
-    depth: 0,
+    depth: 1,
   })
 
   const data = docs[0]
@@ -32,20 +39,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     (currentLocale === 'ka'
       ? 'გაეცანით MNC Group-ის ისტორიას, მისიას და გუნდს.'
       : "Learn about MNC Group's history, mission, and team.")
+  const image = mediaUrl(data?.heroImages?.[0]?.image)
 
   const alternates = buildAlternates(currentLocale, 'about-us')
+  const keywords = buildKeywords(
+    currentLocale,
+    currentLocale === 'ka' ? ['ჩვენ შესახებ', 'კომპანიის ისტორია'] : ['about us', 'company history'],
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(image, title),
     },
-    twitter: { title, description },
+    twitter: { title, description, images: image ? [image] : undefined },
   }
 }
 
@@ -59,6 +74,7 @@ function mediaUrl(image: unknown): string | undefined {
 
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params
+  const currentLocale = (locale === 'ka' ? 'ka' : 'en') as SiteLocale
   const payload = await getPayload({ config: configPromise })
 
   const { docs } = await payload.find({
@@ -69,9 +85,15 @@ export default async function AboutPage({ params }: Props) {
   })
 
   const data = (docs?.[0] ?? {}) as Partial<AboutPageDoc>
+  const aboutPageJsonLd = buildAboutPageJsonLd(
+    currentLocale,
+    data.heroTitle || (currentLocale === 'ka' ? 'ჩვენ შესახებ' : 'About Us'),
+    data.heroDescription ?? undefined,
+  )
 
   return (
     <div className="w-full min-h-screen bg-[#F8F6F1]">
+      <JsonLd data={aboutPageJsonLd} />
       <AboutHero
         badge={data.heroBadge ?? undefined}
         title={data.heroTitle ?? undefined}

@@ -3,7 +3,12 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import DoorAnimation from '../../components/common/DoorAnimation/index'
 import ProjectsClient from './ProjectsClient'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import {
+  buildAlternates,
+  buildKeywords,
+  buildOgImages,
+  type Locale as SiteLocale,
+} from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -20,18 +25,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : "Explore MNC Group's ongoing and completed residential projects across Georgia."
 
   const alternates = buildAlternates(currentLocale, 'projects')
+  const keywords = buildKeywords(
+    currentLocale,
+    currentLocale === 'ka' ? ['საცხოვრებელი პროექტები'] : ['residential projects'],
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages('/Logo.png', title),
     },
-    twitter: { title, description },
+    twitter: { title, description, images: ['/Logo.png'] },
   }
 }
 

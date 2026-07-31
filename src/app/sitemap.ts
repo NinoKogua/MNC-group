@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getBaseUrl } from '@/utilities/getBaseUrl'
-import type { Project, Post } from '@/payload-types'
+import type { Project, Post, Apartment } from '@/payload-types'
 
 const locales = ['ka', 'en'] as const
 
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const [{ docs: projects }, { docs: posts }] = await Promise.all([
+  const [{ docs: projects }, { docs: posts }, { docs: apartments }] = await Promise.all([
     payload.find({
       collection: 'projects',
       depth: 0,
@@ -44,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       depth: 0,
       limit: 1000,
       where: { status: { equals: 'published' } },
+      fallbackLocale: false,
+    }),
+    payload.find({
+      collection: 'apartments',
+      depth: 1,
+      limit: 1000,
       fallbackLocale: false,
     }),
   ])
@@ -66,6 +72,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
+      })
+    }
+
+    for (const apartment of apartments as Apartment[]) {
+      const project = apartment.project
+      if (!project || typeof project !== 'object' || !project.slug) continue
+      entries.push({
+        url: `${baseUrl}/${locale}/projects/${project.slug}/apartments/${apartment.id}`,
+        lastModified: apartment.updatedAt ? new Date(apartment.updatedAt) : new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.5,
       })
     }
   }

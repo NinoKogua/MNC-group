@@ -6,7 +6,7 @@ import WhyUsSection from './home/WhyUs'
 import ProjectSection from '../components/common/ProjectSection'
 import ProjectsGridSection from './home/ProjectGridSection'
 import CalculatorSection from './home/Calculator'
-import { buildAlternates, type Locale as SiteLocale } from '@/utilities/seo'
+import { buildAlternates, buildKeywords, buildOgImages, type Locale as SiteLocale } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -37,17 +37,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = (slide?.image as { url?: string } | undefined)?.url
 
   const alternates = buildAlternates(currentLocale, '')
+  const keywords = buildKeywords(
+    currentLocale,
+    currentLocale === 'ka'
+      ? ['საცხოვრებელი კომპლექსი', 'ბინების გაყიდვა']
+      : ['residential complex Georgia', 'apartments for sale Georgia'],
+  )
 
   return {
     title,
     description,
+    keywords,
     alternates,
     openGraph: {
       title,
       description,
       url: alternates.canonical,
       locale: currentLocale === 'ka' ? 'ka_GE' : 'en_US',
-      images: image ? [{ url: image }] : undefined,
+      alternateLocale: currentLocale === 'ka' ? 'en_US' : 'ka_GE',
+      images: buildOgImages(image, title),
     },
     twitter: {
       title,
