@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Home, ArrowRight } from 'lucide-react'
+import { Home, ChevronRight } from 'lucide-react'
 
 export default function NotFound() {
   const params = useParams<{ locale?: string }>()
@@ -43,7 +43,7 @@ export default function NotFound() {
             className="group flex items-center gap-2 border-2 border-green-primary text-green-primary font-bold px-8 py-3 rounded-xl hover:bg-green-primary hover:text-white transition-all"
           >
             {projectsLabel}
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
