@@ -23,8 +23,9 @@ export default async function Hero({ locale }: { locale: string }) {
       alt: (doc.image as { url: string; alt?: string })?.alt,
     },
     primaryButtonText: doc.primaryButtonText as string | undefined,
+    primaryButtonLink: doc.primaryButtonLink as string | undefined,
     secondaryButtonText: doc.secondaryButtonText as string | undefined,
   }))
 
-  return <HeroSlider slides={slides} />
+  return <HeroSlider slides={slides} locale={locale} />
 }

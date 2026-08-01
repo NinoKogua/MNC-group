@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     page?.heroDescription ||
     (currentLocale === 'ka'
-      ? 'დაჯავშნეთ მაგიდა MNC Group-ის რესტორანში.'
-      : "Book a table at MNC Group's restaurant.")
+      ? 'დაჯავშნეთ მაგიდა აემანი-ს რესტორანში.'
+      : "Book a table at Aemani's restaurant.")
 
   const alternates = buildAlternates(currentLocale, 'restaurant')
   const keywords = buildKeywords(
@@ -74,7 +74,12 @@ export default async function RestaurantPage({ params }: Props) {
       fallbackLocale: false,
       limit: 1,
     }),
-    payload.find({ collection: 'contact-info', locale: currentLocale, fallbackLocale: false, limit: 1 }),
+    payload.find({
+      collection: 'contact-info',
+      locale: currentLocale,
+      fallbackLocale: false,
+      limit: 1,
+    }),
   ])
 
   const page = docs[0]

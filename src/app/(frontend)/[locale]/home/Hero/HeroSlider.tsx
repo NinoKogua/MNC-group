@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import FloatingCallButton from '../../../components/common/FloatingCallButoon.tsx'
@@ -17,10 +18,16 @@ type Slide = {
     alt?: string
   }
   primaryButtonText?: string
+  primaryButtonLink?: string
   secondaryButtonText?: string
 }
 
-export default function HeroSlider({ slides }: { slides: Slide[] }) {
+function resolveHref(link: string, locale: string) {
+  if (/^https?:\/\//.test(link)) return link
+  return `/${locale}${link.startsWith('/') ? link : `/${link}`}`
+}
+
+export default function HeroSlider({ slides, locale }: { slides: Slide[]; locale: string }) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
@@ -97,9 +104,17 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                 </p>
 
                 <div className="flex gap-6 pt-10 font-kirovi">
-                  <AppButton variant="arrowButton" showArrow>
-                    {current.primaryButtonText || 'გაიგე მეტი'}
-                  </AppButton>
+                  {current.primaryButtonLink ? (
+                    <Link href={resolveHref(current.primaryButtonLink, locale)}>
+                      <AppButton variant="arrowButton" showArrow>
+                        {current.primaryButtonText || 'გაიგე მეტი'}
+                      </AppButton>
+                    </Link>
+                  ) : (
+                    <AppButton variant="arrowButton" showArrow>
+                      {current.primaryButtonText || 'გაიგე მეტი'}
+                    </AppButton>
+                  )}
 
                   <AppButton
                     variant="outline"

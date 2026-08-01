@@ -9,7 +9,14 @@ const AboutTeam = dynamic(() => import('./AboutTeam'), {
 type Props = {
   badge?: string
   title?: string
-  members?: { name: string; role?: string; image?: string }[]
+  members?: {
+    name: string
+    role?: string
+    image?: string
+    facebookUrl?: string
+    instagramUrl?: string
+    whatsappUrl?: string
+  }[]
 }
 
 export default function ClientAboutTeam(props: Props) {

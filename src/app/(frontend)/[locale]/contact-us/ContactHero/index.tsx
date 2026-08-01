@@ -22,7 +22,7 @@ const ContactHero = async ({ locale }: Props) => {
   return (
     <div className="w-full bg-[#F8F6F1]">
       <div className="max-w-7xl mx-auto px-4 pt-20 pb-20 text-center">
-        <h1 className="font-kirovi text-6xl md:text-8xl text-green-primary leading-tight mb-6">
+        <h1 className="font-kirovi text-4xl sm:text-5xl md:text-8xl text-green-primary leading-tight mb-6">
           {info?.heroTitle || (locale === 'ka' ? 'კონტაქტი' : 'Contact')}
         </h1>
 
@@ -39,7 +39,7 @@ const ContactHero = async ({ locale }: Props) => {
               <span className="text-xs uppercase tracking-widest text-gray-400">
                 {locale === 'ka' ? 'ტელეფონი' : 'Phone'}
               </span>
-              <span className="flex items-center gap-2 text-[#1a2e2a] font-medium group-hover:text-green-primary transition-colors">
+              <span className="flex items-center gap-2 text-sm sm:text-base text-[#1a2e2a] font-medium group-hover:text-green-primary transition-colors">
                 <Phone size={15} />
                 {info.phone}
               </span>
@@ -53,7 +53,7 @@ const ContactHero = async ({ locale }: Props) => {
               <span className="text-xs uppercase tracking-widest text-gray-400">
                 {locale === 'ka' ? 'ელ-ფოსტა' : 'Email'}
               </span>
-              <span className="flex items-center gap-2 text-[#1a2e2a] font-medium group-hover:text-green-primary transition-colors">
+              <span className="flex items-center gap-2 text-sm sm:text-base text-[#1a2e2a] font-medium group-hover:text-green-primary transition-colors">
                 <Mail size={15} className="text-green-primary" />
                 {info.email}
               </span>
@@ -67,7 +67,7 @@ const ContactHero = async ({ locale }: Props) => {
               <span className="text-xs uppercase tracking-widest text-gray-400">
                 {locale === 'ka' ? 'მისამართი' : 'Address'}
               </span>
-              <span className="flex items-center gap-2 text-[#1a2e2a] font-medium">
+              <span className="flex items-center gap-2 text-sm sm:text-base text-[#1a2e2a] font-medium">
                 <MapPin size={15} className="text-green-primary" />
                 {info.address}
               </span>

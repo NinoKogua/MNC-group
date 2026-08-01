@@ -97,6 +97,13 @@ export default buildConfig({
           localized: true,
         },
         {
+          name: 'primaryButtonLink',
+          type: 'text',
+          admin: {
+            description: 'ბმული სადაც გადავა "გაიგე მეტი" ღილაკზე დაჭერისას (მაგ. /projects)',
+          },
+        },
+        {
           name: 'secondaryButtonText',
           type: 'text',
           localized: true,
@@ -893,6 +900,21 @@ export default buildConfig({
               type: 'upload',
               relationTo: 'media',
               label: 'ფოტო',
+            },
+            {
+              name: 'facebookUrl',
+              type: 'text',
+              label: 'Facebook ბმული',
+            },
+            {
+              name: 'instagramUrl',
+              type: 'text',
+              label: 'Instagram ბმული',
+            },
+            {
+              name: 'whatsappUrl',
+              type: 'text',
+              label: 'WhatsApp/მესენჯერის ბმული',
             },
           ],
         },

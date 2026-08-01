@@ -129,6 +129,9 @@ export default async function AboutPage({ params }: Props) {
             name: member.name,
             role: member.role ?? '',
             image: mediaUrl(member.photo),
+            facebookUrl: member.facebookUrl ?? undefined,
+            instagramUrl: member.instagramUrl ?? undefined,
+            whatsappUrl: member.whatsappUrl ?? undefined,
           }))}
         />
       </div>

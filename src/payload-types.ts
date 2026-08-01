@@ -181,6 +181,10 @@ export interface HeroSlide {
    */
   order?: number | null;
   primaryButtonText?: string | null;
+  /**
+   * ბმული სადაც გადავა "გაიგე მეტი" ღილაკზე დაჭერისას (მაგ. /projects)
+   */
+  primaryButtonLink?: string | null;
   secondaryButtonText?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -488,6 +492,9 @@ export interface AboutPage {
         name: string;
         role?: string | null;
         photo?: (number | null) | Media;
+        facebookUrl?: string | null;
+        instagramUrl?: string | null;
+        whatsappUrl?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -752,6 +759,7 @@ export interface HeroSlidesSelect<T extends boolean = true> {
   image?: T;
   order?: T;
   primaryButtonText?: T;
+  primaryButtonLink?: T;
   secondaryButtonText?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -960,6 +968,9 @@ export interface AboutPageSelect<T extends boolean = true> {
         name?: T;
         role?: T;
         photo?: T;
+        facebookUrl?: T;
+        instagramUrl?: T;
+        whatsappUrl?: T;
         id?: T;
       };
   updatedAt?: T;
