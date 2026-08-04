@@ -8,11 +8,17 @@ import img2 from '../../../../assets/images/restaurant_imgs/restaurant_page-0006
 import img3 from '../../../../assets/images/restaurant_imgs/restaurant_page-0007.jpg'
 import img4 from '../../../../assets/images/restaurant_imgs/restaurant_page-0004.jpg'
 import img5 from '../../../../assets/images/restaurant_imgs/restaurant_page-0005.jpg'
-import logo from '../../../../assets/images/restaurant_imgs/rest_logo.svg'
+import logoKa from '../../../../assets/images/restaurant_imgs/rest_logo_ka.svg'
+import logoEn from '../../../../assets/images/restaurant_imgs/rest_logo_en.svg'
 
 const slides = [img1.src, img2.src, img3.src, img4.src, img5.src]
 
-export default function RestaurantHero() {
+type Props = {
+  locale: 'en' | 'ka'
+}
+
+export default function RestaurantHero({ locale }: Props) {
+  const logo = locale === 'ka' ? logoKa : logoEn
   const colorRef = useRef<HTMLDivElement>(null)
   const [cur, setCur] = useState(0)
   const [zoomed, setZoomed] = useState(false)
@@ -33,8 +39,7 @@ export default function RestaurantHero() {
     return () => clearInterval(t)
   }, [])
 
-  const go = (dir: number) =>
-    setCur((c) => (c + dir + slides.length) % slides.length)
+  const go = (dir: number) => setCur((c) => (c + dir + slides.length) % slides.length)
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX

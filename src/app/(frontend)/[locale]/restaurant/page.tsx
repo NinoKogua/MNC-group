@@ -23,7 +23,7 @@ export default async function RestaurantPage({ params }: Props) {
 
   return (
     <main className="w-full min-h-screen bg-[#F8F6F1]">
-      <RestaurantHero />
+      <RestaurantHero locale={currentLocale} />
       <RestaurantMenus locale={currentLocale} />
       <RestaurantBookingClient locale={currentLocale} />
     </main>

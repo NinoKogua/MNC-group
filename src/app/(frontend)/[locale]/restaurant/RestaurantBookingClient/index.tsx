@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import logo from '../../../../assets/images/restaurant_imgs/rest_logo.svg'
+import logoKa from '../../../../assets/images/restaurant_imgs/rest_logo_ka.svg'
+import logoEn from '../../../../assets/images/restaurant_imgs/rest_logo_en.svg'
 import heroImg from '../../../../assets/images/restaurant_imgs/restaurant_page-0008.jpg'
 import paperTexture from '../../../../assets/images/restaurant_imgs/Paper-Texture.jpg'
 
@@ -13,6 +14,7 @@ type Props = {
 }
 
 export default function RestaurantBookingClient({ locale }: Props) {
+  const logo = locale === 'ka' ? logoKa : logoEn
   const searchParams = useSearchParams()
   const [showSuccess, setShowSuccess] = useState(false)
 
