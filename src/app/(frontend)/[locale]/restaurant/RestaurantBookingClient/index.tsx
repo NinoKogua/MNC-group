@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import { ChevronDown, ChevronUp, ChevronLeft, Calendar as CalendarIcon } from 'lucide-react'
-import logo from '../../../../assets/images/restaurant_imgs/rest_logo.svg'
+import { ChevronDown, ChevronUp, CalendarIcon, ChevronLeft } from 'lucide-react'
+import logoKa from '../../../../assets/images/restaurant_imgs/rest_logo_ka.svg'
+import logoEn from '../../../../assets/images/restaurant_imgs/rest_logo_en.svg'
 import heroImg from '../../../../assets/images/restaurant_imgs/restaurant_page-0008.jpg'
 import paperTexture from '../../../../assets/images/restaurant_imgs/Paper-Texture.jpg'
 
@@ -47,6 +48,7 @@ function getCalendarDays(viewDate: Date): (Date | null)[] {
 }
 
 export default function RestaurantBookingClient({ locale }: Props) {
+  const logo = locale === 'ka' ? logoKa : logoEn
   const searchParams = useSearchParams()
   const [showSuccess, setShowSuccess] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
