@@ -8,6 +8,9 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   images: {
+    loader: 'custom',
+    loaderFile: './cf-image-loader.ts',
+
     localPatterns: [
       {
         pathname: '/api/media/file/**',
