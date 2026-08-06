@@ -2,12 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export default function DoorAnimation({ children }: { children: React.ReactNode }) {
+export default function DoorAnimation({
+  children,
+  locale,
+}: {
+  children: React.ReactNode
+  locale: string
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoEnded, setVideoEnded] = useState(false)
   const [showContent, setShowContent] = useState(false)
   const [whiteOut, setWhiteOut] = useState(false)
   const [showText, setShowText] = useState(false)
+  const isKa = locale === 'ka'
 
   useEffect(() => {
     // ტექსტი ვიდეოს შემდეგ გამოჩნდება - 800ms დაყოვნებით
@@ -63,7 +70,7 @@ export default function DoorAnimation({ children }: { children: React.ReactNode 
               className="font-kirovi text-white/50 leading-none tracking-[0.45em] select-none mt-3"
               style={{ fontSize: 'clamp(16px, 2.5vw, 32px)' }}
             >
-              ჩვენი პროექტები
+              {isKa ? 'ჩვენი პროექტები' : 'Our Projects'}
             </span>
           </div>
         </div>
