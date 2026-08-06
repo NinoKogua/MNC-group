@@ -7,7 +7,7 @@ export default function cloudflareLoader({
   width: number
   quality?: number
 }) {
-  const params = [`width=${width}`, `quality=${quality || 75}`, 'format=auto']
+  const params = [`width=${width}`, `quality=${quality || 75}`, 'format=auto', 'onerror=redirect']
 
   if (src.startsWith('https://cdn.mncgroup.ge')) {
     const path = src.replace('https://cdn.mncgroup.ge', '')
