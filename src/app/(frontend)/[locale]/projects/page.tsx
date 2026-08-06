@@ -59,7 +59,7 @@ export default async function ProjectsPage({ params }: Props) {
   })) as unknown as { docs: any[] }
 
   return (
-    <DoorAnimation>
+    <DoorAnimation locale={locale as 'en' | 'ka'}>
       <ProjectsClient projects={projects} locale={locale} />
     </DoorAnimation>
   )

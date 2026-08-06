@@ -7,7 +7,7 @@ export default function DoorAnimation({
   locale,
 }: {
   children: React.ReactNode
-  locale: string
+  locale: 'en' | 'ka'
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoEnded, setVideoEnded] = useState(false)
@@ -62,9 +62,9 @@ export default function DoorAnimation({
           >
             <span
               className="font-kirovi text-white leading-none tracking-[0.15em] select-none"
-              style={{ fontSize: 'clamp(72px, 13vw, 160px)' }}
+              style={{ fontSize: 'clamp(40px, 9vw, 160px)' }}
             >
-              MNC GROUP
+              {isKa ? 'ემენსი ჯგუფი' : 'MNC GROUP'}
             </span>
             <span
               className="font-kirovi text-white/50 leading-none tracking-[0.45em] select-none mt-3"
