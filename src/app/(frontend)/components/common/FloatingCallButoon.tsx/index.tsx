@@ -28,6 +28,7 @@ export default function FloatingCallButton() {
       >
         <button
           onClick={() => setIsModalOpen(true)}
+          aria-label="დაგვირეკეთ"
           className="relative flex items-center justify-center w-16 h-16 rounded-full bg-green-primary text-beige-primary shadow-2xl transition-transform hover:scale-110 active:scale-95 group"
         >
           <span className="absolute inset-0 rounded-full bg-green-primary opacity-40 animate-ping group-hover:duration-700" />

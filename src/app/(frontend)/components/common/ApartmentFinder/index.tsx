@@ -164,7 +164,7 @@ export default function ApartmentFinder() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           {/* მთლიანი ფართობის ინფუთი */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
+            <label className="text-xs uppercase tracking-widest text-gray-500 font-bold">
               {t.totalAreaLabel}
             </label>
             <div className="relative">
@@ -208,7 +208,7 @@ export default function ApartmentFinder() {
 
           {/* საძინებლების რაოდენობის დროფდაუნი */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs uppercase tracking-widest text-gray-400 font-bold">
+            <label className="text-xs uppercase tracking-widest text-gray-500 font-bold">
               {t.bedroomLabel}
             </label>
             <div className="relative" ref={bedroomDropdownRef}>
@@ -218,7 +218,7 @@ export default function ApartmentFinder() {
                 className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border rounded-lg transition-all hover:border-[#1A7550] focus:outline-none focus:border-[#1A7550] focus:bg-white ${
                   bedroomCount
                     ? 'border-[#1A7550] text-gray-800 bg-white'
-                    : 'border-gray-200 text-gray-400'
+                    : 'border-gray-200 text-gray-500'
                 }`}
               >
                 <span>{bedroomCount ? t.bedroomOption(Number(bedroomCount)) : t.bedroomAny}</span>

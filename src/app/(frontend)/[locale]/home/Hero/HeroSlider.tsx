@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import FloatingCallButton from '../../../components/common/FloatingCallButoon.tsx'
@@ -105,11 +104,13 @@ export default function HeroSlider({ slides, locale }: { slides: Slide[]; locale
 
                 <div className="flex gap-6 pt-10 font-kirovi">
                   {current.primaryButtonLink ? (
-                    <Link href={resolveHref(current.primaryButtonLink, locale)}>
-                      <AppButton variant="arrowButton" showArrow>
-                        {current.primaryButtonText || 'გაიგე მეტი'}
-                      </AppButton>
-                    </Link>
+                    <AppButton
+                      variant="arrowButton"
+                      showArrow
+                      href={resolveHref(current.primaryButtonLink, locale)}
+                    >
+                      {current.primaryButtonText || 'გაიგე მეტი'}
+                    </AppButton>
                   ) : (
                     <AppButton variant="arrowButton" showArrow>
                       {current.primaryButtonText || 'გაიგე მეტი'}
@@ -131,6 +132,7 @@ export default function HeroSlider({ slides, locale }: { slides: Slide[]; locale
             <div className="flex gap-4">
               <button
                 onClick={prevSlide}
+                aria-label={locale === 'ka' ? 'წინა სლაიდი' : 'Previous slide'}
                 className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
               >
                 <ChevronLeft size={24} />
@@ -138,6 +140,7 @@ export default function HeroSlider({ slides, locale }: { slides: Slide[]; locale
 
               <button
                 onClick={nextSlide}
+                aria-label={locale === 'ka' ? 'შემდეგი სლაიდი' : 'Next slide'}
                 className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
               >
                 <ChevronRight size={24} />

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 
 interface AppButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -8,6 +9,7 @@ interface AppButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   showArrow?: boolean
   isFullWidth?: boolean
   isLarge?: boolean
+  href?: string
   children: React.ReactNode
 }
 
@@ -16,6 +18,7 @@ export default function AppButton({
   showArrow = false,
   isFullWidth = false,
   isLarge = false,
+  href,
   children,
   className = '',
   ...props
@@ -34,14 +37,26 @@ export default function AppButton({
     }`,
   }
 
+  const content = (
+    <span className="flex items-center gap-2">
+      {children}
+      {showArrow && (
+        <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
+      )}
+    </span>
+  )
+
+  if (href) {
+    return (
+      <Link href={href} className={`${baseStyles} ${widthStyle} ${variants[variant]} ${className}`}>
+        {content}
+      </Link>
+    )
+  }
+
   return (
     <button className={`${baseStyles} ${widthStyle} ${variants[variant]} ${className}`} {...props}>
-      <span className="flex items-center gap-2">
-        {children}
-        {showArrow && (
-          <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
-        )}
-      </span>
+      {content}
     </button>
   )
 }

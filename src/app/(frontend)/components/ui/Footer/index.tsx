@@ -90,12 +90,12 @@ export default async function Footer({ locale }: FooterProps) {
           </div>
 
           {footer.copyrightText && (
-            <div className="text-center md:text-left text-sm text-beige-primary order-1 md:order-2">
+            <div className="text-center md:text-left text-sm text-gray-200 order-1 md:order-2">
               <p className="font-mtavruli">{footer.copyrightText}</p>
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-4 text-sm text-beige-primary order-3">
+          <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-200 order-3">
             {footer.phone && <span className="font-semibold">{footer.phone}</span>}
             {footer.phone && footer.addressText && <span className="hidden sm:inline">|</span>}
             {footer.addressText && <span>{footer.addressText}</span>}

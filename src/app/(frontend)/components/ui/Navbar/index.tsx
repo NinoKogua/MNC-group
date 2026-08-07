@@ -102,6 +102,7 @@ export default function Navbar() {
             href="https://www.facebook.com/profile.php?id=61580922035190"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Facebook"
             className="hover:opacity-80"
           >
             <Facebook />
@@ -110,6 +111,7 @@ export default function Navbar() {
             href="https://www.instagram.com/pinesmanglisi"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Instagram"
             className="hover:opacity-80"
           >
             <Instagram />
@@ -147,7 +149,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={openModal}
-              className="bg-green-primary hidden md:flex text-beige-primary px-4 py-2 rounded-xl items-center gap-2 font-kirovi lg:px-3 transition-all hover:opacity-90"
+              className="bg-green-primary hidden md:flex text-white px-4 py-2 rounded-xl items-center gap-2 font-kirovi lg:px-3 transition-all hover:opacity-90"
             >
               <Phone size={18} />
               <span className="hidden lg:inline">
@@ -176,7 +178,7 @@ export default function Navbar() {
           ))}
           <button
             onClick={openModal}
-            className="bg-green-primary text-beige-primary px-4 py-2 rounded-xl flex items-center gap-2 font-kirovi transition-all hover:opacity-90"
+            className="bg-green-primary text-white px-4 py-2 rounded-xl flex items-center gap-2 font-kirovi transition-all hover:opacity-90"
           >
             <Phone size={18} />
             <span>{currentLocale === 'ka' ? 'შეუკვეთე ზარი' : 'Call Us'}</span>

@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Bed, Calendar, Layers, Bath, AreaChart, Building2, KeyRound, LucideIcon } from 'lucide-react'
 import AppButton from '@/app/(frontend)/components/ui/AppButton'
 
@@ -61,13 +60,12 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
   )
 
   const CtaButton = () => {
-    const button = <AppButton variant="primary">{ctaLabel ?? 'სრულად'}</AppButton>
     return href ? (
-      <Link href={href} className="block w-full">
-        {button}
-      </Link>
+      <AppButton variant="primary" href={href} className="w-full">
+        {ctaLabel ?? 'სრულად'}
+      </AppButton>
     ) : (
-      button
+      <AppButton variant="primary">{ctaLabel ?? 'სრულად'}</AppButton>
     )
   }
 
