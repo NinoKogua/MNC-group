@@ -2,8 +2,10 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import menuFood from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0001.jpg'
-import menuDrink from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0002.jpg'
+import menuFoodKa from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0001.jpg'
+import menuDrinkKa from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0002.jpg'
+import menuFoodEn from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0001-en.jpg'
+import menuDrinkEn from '../../../../assets/images/restaurant_imgs/menus_pages-to-jpg-0002-en.jpg'
 
 type Props = {
   locale: 'en' | 'ka'
@@ -12,6 +14,8 @@ type Props = {
 export default function RestaurantMenus({ locale }: Props) {
   const [hoverFood, setHoverFood] = useState(false)
   const [hoverDrink, setHoverDrink] = useState(false)
+  const menuFood = locale === 'ka' ? menuFoodKa : menuFoodEn
+  const menuDrink = locale === 'ka' ? menuDrinkKa : menuDrinkEn
 
   return (
     <section className="w-full bg-[#F8F6F1] py-16 px-4">
