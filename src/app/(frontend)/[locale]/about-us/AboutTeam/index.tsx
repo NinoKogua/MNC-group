@@ -29,14 +29,13 @@ const TeamMember = ({ name, role, image, facebookUrl, instagramUrl, whatsappUrl 
   return (
     <div className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-50 group h-full">
       <div className="h-[300px] overflow-hidden relative bg-gray-100">
-        {image && (
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-          />
-        )}
+        <Image
+          src={image || '/avatar.svg'}
+          alt={name}
+          fill
+          unoptimized={!image}
+          className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
+        />
         {socials.length > 0 && (
           <div className="absolute bottom-4 left-4 flex gap-2 z-10">
             {socials.map(({ url, Icon, label }) => (
@@ -113,7 +112,7 @@ export default function AboutTeam({ badge, title, members }: Props) {
             640: { slidesPerView: 2, centeredSlides: false },
             1024: { slidesPerView: 4, centeredSlides: false, allowTouchMove: false },
           }}
-          className="pb-24"
+          className="pb-4"
         >
           {teamMembers.map((m, i) => (
             <SwiperSlide key={i}>
@@ -126,9 +125,12 @@ export default function AboutTeam({ badge, title, members }: Props) {
       <style jsx global>{`
         .team-swiper-container {
           position: relative;
+          padding-bottom: 16px;
         }
         .team-swiper-container .swiper-pagination {
-          bottom: 10px !important;
+          position: relative !important;
+          bottom: auto !important;
+          margin-top: 32px;
         }
         .team-swiper-container .swiper-pagination-bullet {
           width: 12px;
