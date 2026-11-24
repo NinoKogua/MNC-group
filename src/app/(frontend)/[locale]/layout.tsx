@@ -48,6 +48,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 300
+
 const locales = ['ka', 'en'] as const
 type Locale = (typeof locales)[number]
 

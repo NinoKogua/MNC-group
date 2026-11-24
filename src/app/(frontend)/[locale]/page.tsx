@@ -10,8 +10,9 @@ import { buildAlternates, buildKeywords, buildOgImages, type Locale as SiteLocal
 
 type Props = {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
+
+export const revalidate = 300
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
@@ -65,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function Home({ params, searchParams }: Props) {
+export default async function Home({ params }: Props) {
   const { locale } = await params
 
   return (
@@ -74,7 +75,7 @@ export default async function Home({ params, searchParams }: Props) {
       <WhyUsSection locale={locale} />
       <ProjectSection locale={locale} />
       <ProjectsGridSection />
-      <CalculatorSection searchParams={searchParams} />
+      <CalculatorSection />
     </main>
   )
 }
