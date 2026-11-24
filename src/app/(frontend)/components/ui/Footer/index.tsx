@@ -101,6 +101,15 @@ export default async function Footer({ locale }: FooterProps) {
             {footer.addressText && <span>{footer.addressText}</span>}
           </div>
         </div>
+
+        <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-sm text-gray-300">
+          <Link href={`/${locale}/privacy-policy`} className="hover:text-white transition-colors">
+            {locale === 'ka' ? 'კონფიდენციალურობის პოლიტიკა' : 'Privacy Policy'}
+          </Link>
+          <Link href={`/${locale}/cookie-policy`} className="hover:text-white transition-colors">
+            {locale === 'ka' ? 'ქუქი-ფაილების პოლიტიკა' : 'Cookie Policy'}
+          </Link>
+        </div>
       </div>
     </footer>
   )

@@ -13,6 +13,8 @@ const staticRoutes: { path: string; priority: number; changeFrequency: MetadataR
   { path: 'blog', priority: 0.7, changeFrequency: 'weekly' },
   { path: 'about-us', priority: 0.6, changeFrequency: 'monthly' },
   { path: 'contact-us', priority: 0.6, changeFrequency: 'monthly' },
+  { path: 'privacy-policy', priority: 0.2, changeFrequency: 'yearly' },
+  { path: 'cookie-policy', priority: 0.2, changeFrequency: 'yearly' },
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
